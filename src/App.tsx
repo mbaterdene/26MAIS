@@ -9,9 +9,9 @@ import { AcademicsPage } from './features/academics/AcademicsPage';
 import { CourseCatalogPage } from './features/academics/CourseCatalogPage';
 import { AdmissionsPage } from './features/admissions/AdmissionsPage';
 import { ApplyPage } from './features/admissions/ApplyPage';
-import { StudentLifePage } from './features/studentLife/StudentLifePage';
+import { StudentLifePage } from './features/student-life/StudentLifePage';
 import { EventsPage } from './features/events/EventsPage';
-import { StudentSupportPage } from './features/support/StudentSupportPage';
+import { StudentSupportPage } from './features/student-support/StudentSupportPage';
 import { NewsPage } from './features/news/NewsPage';
 
 // Admin Imports
