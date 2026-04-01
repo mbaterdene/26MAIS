@@ -1,30 +1,9 @@
-// ─── about.ts ────────────────────────────────────────────────────────────────
-// Structured content for the About page.
-// Swap exports for CMS fetch calls without touching component code.
-
-export interface LeadershipMember {
+export interface NewsItem {
   id: string;
-  name: string;
   title: string;
-  initials: string;
-  accentBg: string;  // Tailwind bg class for avatar
-  accentText: string;
-}
-
-export interface MissionPillar {
-  id: string;
-  num: string;
-  heading: string;
-  body: string;
-  accentColor: string; // Tailwind text color
-  barColor: string;    // Tailwind bg color for bar
-}
-
-export interface StatItem {
-  id: string;
-  value: string;
-  label: string;
-  color: string;
+  category: string;
+  date: string;
+  imageUrl: string;
 }
 
 export interface AboutPageContent {
@@ -33,34 +12,25 @@ export interface AboutPageContent {
     title: string;
     titleAccent: string;
     subtitle: string;
+    bgImage: string;
   };
   mission: {
     sectionLabel: string;
     heading: string;
     body: string;
-    pillars: MissionPillar[];
+    pillars: any[];
   };
-  stats: {
-    heading: string;
-    items: StatItem[];
-  };
-  history: {
+  news: {
     sectionLabel: string;
     heading: string;
-    paragraphs: string[];
-    quote: string;
-    quoteAttr: string;
-  };
-  leadership: {
-    sectionLabel: string;
-    heading: string;
-    body: string;
-    members: LeadershipMember[];
+    items: NewsItem[];
   };
   tour: {
+    sectionLabel: string;
     heading: string;
     body: string;
-    ctaLabel: string;
+    videoPlaceholderUrl: string;
+    galleryImages: string[];
   };
 }
 
@@ -69,108 +39,51 @@ export const aboutContent: AboutPageContent = {
     eyebrow: 'About Stanford OHS',
     title: 'Redefining What',
     titleAccent: 'School Can Be.',
-    subtitle:
-      'Stanford Online High School is a selective, diploma-granting independent school for exceptional students worldwide — built on the belief that rigorous academics and deep community belong together.',
+    subtitle: 'Stanford Online High School is a selective, diploma-granting independent school for exceptional students worldwide — built on the belief that rigorous academics and deep community belong together.',
+    bgImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80',
   },
-
   mission: {
     sectionLabel: 'Our Mission',
     heading: 'Why We Exist',
     body: 'Stanford OHS was founded on a single conviction: that intellectually exceptional students, wherever they are born, deserve an education that truly challenges and connects them.',
     pillars: [
       {
-        id: 'intellect',
-        num: '01',
-        heading: 'Intellectual Rigor',
-        body: 'We offer a university-style curriculum anchored by our Core philosophy sequence, pushing students to think more clearly and argue more honestly than anywhere else.',
-        accentColor: 'text-cardinal-red',
-        barColor: 'bg-cardinal-red',
+        id: 'intellect', num: '01', heading: 'Intellectual Rigor',
+        body: 'We offer a university-style curriculum anchored by our Core philosophy sequence.',
+        accentColor: 'text-cardinal-red', barColor: 'bg-cardinal-red',
       },
       {
-        id: 'access',
-        num: '02',
-        heading: 'Global Access',
-        body: 'By removing geography from the equation, we unite the brightest young minds across 50+ countries into one vibrant, diverse academic community.',
-        accentColor: 'text-digital-blue',
-        barColor: 'bg-digital-blue',
+        id: 'access', num: '02', heading: 'Global Access',
+        body: 'Uniting the brightest young minds across 50+ countries into one vibrant community.',
+        accentColor: 'text-digital-blue', barColor: 'bg-digital-blue',
       },
       {
-        id: 'whole',
-        num: '03',
-        heading: 'The Whole Student',
-        body: 'Academic excellence cannot come at the cost of wellbeing. Our counselors, advisors, and community structures ensure every student thrives as a human being.',
-        accentColor: 'text-sand',
-        barColor: 'bg-sand',
+        id: 'whole', num: '03', heading: 'The Whole Student',
+        body: 'Ensuring every student thrives as a human being with our dedicated support structures.',
+        accentColor: 'text-sand', barColor: 'bg-sand',
       },
     ],
   },
-
-  stats: {
-    heading: 'OHS by the Numbers',
+  news: {
+    sectionLabel: 'Community News',
+    heading: 'Latest Updates',
     items: [
-      { id: 'founded', value: '2006', label: 'Year Founded', color: 'text-cardinal-red' },
-      { id: 'countries', value: '50+', label: 'Countries Represented', color: 'text-digital-blue' },
-      { id: 'courses', value: '100+', label: 'Courses Offered', color: 'text-sand' },
-      { id: 'grads', value: '2,000+', label: 'Alumni Worldwide', color: 'text-white' },
+      { id: '1', title: 'Stanford OHS Robotics Team Wins Regionals', category: 'Student Life', date: 'March 15, 2026', imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80' },
+      { id: '2', title: 'New Astronomy Course Added to Curriculum', category: 'Academics', date: 'March 10, 2026', imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80' },
+      { id: '3', title: 'Alumni Spotlight: Building the Future in Silicon Valley', category: 'Alumni', date: 'March 5, 2026', imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80' },
+      { id: '4', title: 'Global Homeroom Retreat Highlights', category: 'Community', date: 'February 28, 2026', imageUrl: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80' },
     ],
   },
-
-  history: {
-    sectionLabel: 'Our History',
-    heading: 'A School Born from Stanford',
-    paragraphs: [
-      'Stanford Online High School grew out of the Stanford University Education Program for Gifted Youth (EPGY), which had for years served academically talented students through distance learning.',
-      'In 2006, EPGY launched OHS as a fully accredited diploma-granting secondary school — the first of its kind to offer rigorous live, online seminars at the university level. From the beginning, the vision was not merely to replicate a traditional school online, but to build something fundamentally better.',
-      'Today, OHS is an independent, non-profit school accredited by the Western Association of Schools and Colleges, housed on the Stanford University campus and staffed by world-class faculty.',
-    ],
-    quote:
-      '"OHS is not an online version of a traditional school. It is a new model for what a school can be — more rigorous, more connected, and more humane."',
-    quoteAttr: '— OHS Founding Vision Document, 2006',
-  },
-
-  leadership: {
-    sectionLabel: 'Leadership',
-    heading: 'Guided by Experts',
-    body: 'Our faculty and leadership team bring deep expertise from Stanford University and leading institutions worldwide.',
-    members: [
-      {
-        id: 'director',
-        name: 'Dr. Liz Kohler',
-        title: 'Executive Director',
-        initials: 'LK',
-        accentBg: 'bg-cardinal-red',
-        accentText: 'text-white',
-      },
-      {
-        id: 'academic',
-        name: 'Dr. Scott Eberle',
-        title: 'Dean of Academics',
-        initials: 'SE',
-        accentBg: 'bg-digital-blue',
-        accentText: 'text-white',
-      },
-      {
-        id: 'student',
-        name: 'Dr. Nadia Rahman',
-        title: 'Dean of Student Life',
-        initials: 'NR',
-        accentBg: 'bg-black',
-        accentText: 'text-white',
-      },
-      {
-        id: 'admission',
-        name: 'Jessica Torres',
-        title: 'Director of Admissions',
-        initials: 'JT',
-        accentBg: 'bg-sand',
-        accentText: 'text-black',
-      },
-    ],
-  },
-
   tour: {
-    heading: 'See OHS in Action',
-    body: 'Experience a live seminar, explore our virtual campus, and meet the community that makes Stanford OHS unlike any school on earth.',
-    ctaLabel: 'Take the Tour',
-  },
+    sectionLabel: 'Take the Tour',
+    heading: 'Experience Our Campus',
+    body: 'Explore our digital classrooms and global community through an immersive virtual tour.',
+    videoPlaceholderUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1510531704581-5b2870972060?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&q=80'
+    ]
+  }
 };

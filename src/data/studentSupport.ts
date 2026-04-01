@@ -1,179 +1,91 @@
-// ─── studentSupport.ts ────────────────────────────────────────────────────────
-// Structured content for the Student Support page.
-// Swap exports for CMS fetch calls without touching component code.
+
 
 export interface SupportService {
   id: string;
-  num: string;
   title: string;
-  tagline: string;
+  iconId: string;
   description: string;
-  bullets: string[];
-  accentColor: string; // Tailwind text color class
-  gradientFrom: string; // Tailwind from-[] class for card gradient
-  gradientTo: string;
-  iconId: string;      // maps to icon in component
+  features: string[];
+  ctaLabel: string;
+  ctaLink: string;
+  imageUrl: string;
+  accentBg: string;
+  accentText: string;
 }
 
-export interface TestimonialItem {
-  id: string;
-  quote: string;
-  author: string;
-  role: string;
-  accentBorder: string; // Tailwind border-l color
-}
-
-export interface StudentSupportPageContent {
+export interface StudentSupportContent {
   hero: {
     eyebrow: string;
     title: string;
-    titleAccent: string;
     subtitle: string;
   };
-  overview: {
+  services: {
     sectionLabel: string;
     heading: string;
     body: string;
-  };
-  services: SupportService[];
-  testimonials: {
-    sectionLabel: string;
-    heading: string;
-    items: TestimonialItem[];
-  };
-  cta: {
-    heading: string;
-    body: string;
-    primaryLabel: string;
-    secondaryLabel: string;
+    items: SupportService[];
   };
 }
 
-export const studentSupportContent: StudentSupportPageContent = {
+export const studentSupportContent: StudentSupportContent = {
   hero: {
     eyebrow: 'Student Support',
-    title: 'You\'re Never',
-    titleAccent: 'Navigating Alone.',
-    subtitle:
-      'From course planning to college applications, mental wellness to writing craft — our dedicated support network ensures every student has the tools to thrive inside the most rigorous academic program in online education.',
+    title: 'Guidance Every Step',
+    subtitle: 'From navigating coursework to college admissions and personal wellness, our comprehensive support network ensures every student thrives.',
   },
-
-  overview: {
-    sectionLabel: 'Overview',
-    heading: 'A Full Ecosystem of Support',
-    body: 'Stanford OHS pairs world-class academic challenge with a comprehensive student support infrastructure. Every student — regardless of where they are in the world — has personalized access to advisors, counselors, and specialist tutors who know them by name.',
-  },
-
-  services: [
-    {
-      id: 'advising',
-      num: '01',
-      title: 'Academic Advising',
-      tagline: 'Your roadmap, built with you.',
-      description:
-        'Our academic advisors work one-on-one with every student to craft a personalized multi-year course plan that balances intellectual ambition with sustainable workload management.',
-      bullets: [
-        'Individual advising sessions each semester',
-        'Course selection and sequence planning',
-        'Load management and study strategies',
-        'Coordination with faculty on academic concerns',
-      ],
-      accentColor: 'text-digital-blue',
-      gradientFrom: 'from-[#006CB8]',
-      gradientTo: 'to-[#0A84D0]',
-      iconId: 'advising',
-    },
-    {
-      id: 'college',
-      num: '02',
-      title: 'College Counseling',
-      tagline: 'From OHS to the world\'s best universities.',
-      description:
-        'Our dedicated college counselors have deep expertise in elite university admissions worldwide. We begin early — building authentic narratives and compelling applications that reflect each student\'s unique story.',
-      bullets: [
-        'Dedicated counselor assigned in 10th grade',
-        'Essay brainstorming and revision support',
-        'School list building and strategic guidance',
-        'Interview preparation and decision support',
-      ],
-      accentColor: 'text-cardinal-red',
-      gradientFrom: 'from-[#8C1515]',
-      gradientTo: 'to-[#B1040E]',
-      iconId: 'college',
-    },
-    {
-      id: 'wellness',
-      num: '03',
-      title: 'Counseling & Wellness',
-      tagline: 'Thriving, not just surviving.',
-      description:
-        'Licensed counselors specializing in Social-Emotional Learning (SEL) support student mental health, resilience, and balance. In a high-achieving environment, we actively protect every student\'s wellbeing.',
-      bullets: [
-        'Licensed SEL and mental health counselors',
-        'Individual and group support sessions',
-        'Crisis intervention protocols',
-        'Mindfulness and stress-management workshops',
-      ],
-      accentColor: 'text-emerald-400',
-      gradientFrom: 'from-[#064E3B]',
-      gradientTo: 'to-[#065F46]',
-      iconId: 'wellness',
-    },
-    {
-      id: 'tutoring',
-      num: '04',
-      title: 'Writing & Tutoring Center',
-      tagline: 'From draft to distinction.',
-      description:
-        'Peer tutors and expert instructors support every academic discipline — from essay argumentation and mathematical proofs to reading strategies and lab report writing.',
-      bullets: [
-        'Peer and instructor-led tutoring sessions',
-        'Writing workshops and one-on-one feedback',
-        'Math support across all levels',
-        'Study skills and research methodology',
-      ],
-      accentColor: 'text-amber-400',
-      gradientFrom: 'from-[#78350F]',
-      gradientTo: 'to-[#92400E]',
-      iconId: 'tutoring',
-    },
-  ],
-
-  testimonials: {
-    sectionLabel: 'Student Voices',
-    heading: 'What Our Students Say',
+  services: {
+    sectionLabel: 'Our Services',
+    heading: 'Dedicated Support Network',
+    body: 'Select a service below to learn how we help our students achieve their academic and personal goals.',
     items: [
       {
-        id: 't1',
-        quote:
-          '"My academic advisor helped me design a course plan that challenged me without burning me out. She remembered every detail about my goals and checked in every semester."',
-        author: 'Maya K.',
-        role: 'OHS Class of 2024 · Now at MIT',
-        accentBorder: 'border-l-digital-blue',
+        id: 'academic-advising',
+        title: 'Academic Advising',
+        iconId: 'book',
+        description: 'Every student at Stanford OHS is assigned a dedicated Academic Advisor who provides individualized guidance on course selection, study skills, and long-term academic planning.',
+        features: ['Personalized course planning', 'Time management coaching', 'Academic performance monitoring', 'Homeroom and regional community building'],
+        ctaLabel: 'Book Advising Appointment',
+        ctaLink: '#book-advising',
+        imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80',
+        accentBg: 'bg-digital-blue',
+        accentText: 'text-digital-blue',
       },
       {
-        id: 't2',
-        quote:
-          '"The college counseling team was extraordinary. They helped me craft a narrative I\'m genuinely proud of — one that got me into my first-choice school."',
-        author: 'James L.',
-        role: 'OHS Class of 2023 · Now at Yale',
-        accentBorder: 'border-l-cardinal-red',
+        id: 'college-counseling',
+        title: 'College Counseling',
+        iconId: 'grad-cap',
+        description: 'Our expert College Counselors guide students and families through the complex university admissions process, from identifying right-fit colleges to polishing personal statements.',
+        features: ['One-on-one college list development', 'Application essay writing workshops', 'University representative visits', 'Alumni networking and panels'],
+        ctaLabel: 'Schedule College Counseling',
+        ctaLink: '#book-college',
+        imageUrl: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80',
+        accentBg: 'bg-cardinal-red',
+        accentText: 'text-cardinal-red',
       },
       {
-        id: 't3',
-        quote:
-          '"The Writing Center transformed how I approach essays. The tutors didn\'t just correct my work — they taught me to think like a writer."',
-        author: 'Priya S.',
-        role: 'OHS Class of 2025',
-        accentBorder: 'border-l-sand',
+        id: 'counseling-wellness',
+        title: 'Counseling & Wellness',
+        iconId: 'heart',
+        description: 'We prioritize the holistic well-being of our students. Our Counseling & Wellness team offers confidential, short-term personal counseling, psychoeducation, and wellness initiatives.',
+        features: ['Confidential emotional support', 'Stress management workshops', 'Crisis intervention and referrals', 'Parent/guardian educational webinars'],
+        ctaLabel: 'Contact Wellness Team',
+        ctaLink: '#contact-wellness',
+        imageUrl: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&q=80',
+        accentBg: 'bg-sand',
+        accentText: 'text-black',
       },
-    ],
-  },
-
-  cta: {
-    heading: 'Ready to experience the OHS difference?',
-    body: 'Explore admissions, request a consultation with our team, or take a virtual tour of our support ecosystem.',
-    primaryLabel: 'Apply Now',
-    secondaryLabel: 'Contact Us',
-  },
+      {
+        id: 'writing-tutoring',
+        title: 'Writing & Tutoring Center',
+        iconId: 'pen',
+        description: 'The Writing and Tutoring Center (WTC) provides peer and professional tutoring across all subjects. Whether you need help brainstorming an essay or solving a physics problem, the WTC is here to help.',
+        features: ['Drop-in peer tutoring', 'Scheduled professional writing feedback', 'Math and science problem-solving sessions', 'Study groups and collaborative reviews'],
+        ctaLabel: 'Visit the WTC',
+        ctaLink: '#visit-wtc',
+        imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80',
+        accentBg: 'bg-black',
+        accentText: 'text-black',
+      },
+    ]
+  }
 };

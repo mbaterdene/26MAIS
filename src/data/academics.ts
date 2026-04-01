@@ -1,153 +1,102 @@
-// ─── academics.ts ─────────────────────────────────────────────────────────────
-// Structured content for the Academics page.
-// Replace these mock exports with real CMS API calls (e.g. Contentful, Sanity)
-// without touching any component code.
-
-export interface CurriculumItem {
+export interface CourseItem {
   id: string;
   title: string;
-  description: string;
-  accentColor: string; // Tailwind border-l color class
-  hoverColor: string;  // Tailwind group-hover text color class
+  category: string;
+  level: string;
 }
 
-export interface PedagogyStep {
+export interface GraduationRequirement {
   id: string;
-  step: number;
-  title: string;
-  description: string;
-  accentBg: string;  // Tailwind bg class for the step circle
-}
-
-export interface GraduationStat {
-  id: string;
-  value: string;
-  label: string;
-  description: string;
-  color: string;       // Tailwind text color class
-  offset?: string;     // Optional: md:-translate-y-N
+  subject: string;
+  years: number;
 }
 
 export interface AcademicsPageContent {
   hero: {
+    eyebrow: string;
     title: string;
     subtitle: string;
   };
-  curriculum: {
+  middleSchool: {
     sectionLabel: string;
     heading: string;
     body: string;
-    items: CurriculumItem[];
+    imageUrl: string;
   };
-  pedagogy: {
+  philosophy: {
     sectionLabel: string;
     heading: string;
     body: string;
-    steps: PedagogyStep[];
+    imageUrl: string;
   };
-  graduation: {
+  catalog: {
+    sectionLabel: string;
     heading: string;
-    stats: GraduationStat[];
+    courses: CourseItem[];
+    categories: string[];
+  };
+  schedule: {
+    sectionLabel: string;
+    heading: string;
+    body: string;
+  };
+  requirements: {
+    sectionLabel: string;
+    heading: string;
+    totalCredits: number;
+    items: GraduationRequirement[];
   };
 }
 
-// ─── Mock Data (swap for CMS fetch) ───────────────────────────────────────────
 export const academicsContent: AcademicsPageContent = {
   hero: {
-    title: 'Academics',
-    subtitle: 'A challenging, discussion-based curriculum designed for passionate learners.',
+    eyebrow: 'Academics',
+    title: 'Intellectual Rigor',
+    subtitle: 'A university-style curriculum pushing students to think more clearly and argue more honestly.',
   },
-
-  curriculum: {
-    sectionLabel: 'Curriculum',
-    heading: 'The Curriculum',
-    body: 'Our core subjects interlock, creating a profound, university-level academic journey from early middle school to post-AP graduation.',
+  middleSchool: {
+    sectionLabel: 'Middle School',
+    heading: 'Grade 7-8 Program',
+    body: 'The Middle School curriculum introduces younger students to vibrant intellectual discourse through foundational courses in literature, logic, and scientific inquiry, preparing them for the rigors of our high school program.',
+    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80',
+  },
+  philosophy: {
+    sectionLabel: 'Core Philosophy',
+    heading: 'The Core Sequence',
+    body: 'Central to the OHS experience is the Core sequence, required of all diploma students. Spanning multiple years, it immerses students in the history of science, methodology, political theory, and philosophical inquiry.',
+    imageUrl: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&q=80',
+  },
+  catalog: {
+    sectionLabel: 'Course Catalog',
+    heading: '40+ College-Level & Post-AP Courses',
+    categories: ['Math', 'Science', 'Humanities', 'Core'],
+    courses: [
+      { id: 'math1', title: 'Multivariable Calculus', category: 'Math', level: 'Post-AP' },
+      { id: 'math2', title: 'Linear Algebra', category: 'Math', level: 'Post-AP' },
+      { id: 'sci1', title: 'Advanced Topics in Biological Research', category: 'Science', level: 'Post-AP' },
+      { id: 'sci2', title: 'Modern Physics', category: 'Science', level: 'Post-AP' },
+      { id: 'hum1', title: 'Advanced Literature Seminar', category: 'Humanities', level: 'College-Level' },
+      { id: 'hum2', title: 'Global Historical Perspectives', category: 'Humanities', level: 'College-Level' },
+      { id: 'core1', title: 'Methodology of Science', category: 'Core', level: 'Foundational' },
+      { id: 'core2', title: 'History of Philosophy', category: 'Core', level: 'Advanced' },
+    ],
+  },
+  schedule: {
+    sectionLabel: 'Schedule',
+    heading: 'College-Style Format',
+    body: 'Flipped classrooms and live online seminars. Real-time intellectual engagement with PhD-level instructors.',
+  },
+  requirements: {
+    sectionLabel: 'Graduation',
+    heading: 'Diploma Requirements',
+    totalCredits: 20,
     items: [
-      {
-        id: 'core-sequence',
-        title: 'Core Sequence',
-        description: 'A rigorous sequence rooted in philosophy, teaching students to think critically, argue effectively, and write clearly.',
-        accentColor: 'border-l-cardinal-red',
-        hoverColor: 'group-hover:text-cardinal-red',
-      },
-      {
-        id: 'college-courses',
-        title: '40+ College Courses',
-        description: 'Go beyond High School. Access specialized and advanced subjects rarely offered elsewhere.',
-        accentColor: 'border-l-digital-blue',
-        hoverColor: 'group-hover:text-digital-blue',
-      },
-      {
-        id: 'post-ap',
-        title: 'Post-AP & University',
-        description: 'Opportunities for dual enrollment and ultra-advanced study in math, science, and humanities.',
-        accentColor: 'border-l-black',
-        hoverColor: 'group-hover:text-gray-700',
-      },
-      {
-        id: 'middle-school',
-        title: 'Middle School (7–8)',
-        description: 'Building foundations for exceptional academic achievement with a specialized curriculum for younger students.',
-        accentColor: 'border-l-sand',
-        hoverColor: 'group-hover:text-sand',
-      },
-    ],
-  },
-
-  pedagogy: {
-    sectionLabel: 'Pedagogy',
-    heading: 'Pedagogy',
-    body: 'Our pedagogical approach flips the traditional classroom model to maximize the value of instructional time.',
-    steps: [
-      {
-        id: 'flipped',
-        step: 1,
-        title: 'Flipped Classroom Model',
-        description: 'Students consume lectures and read materials independently before class, ensuring they arrive prepared to engage.',
-        accentBg: 'bg-cardinal-red',
-      },
-      {
-        id: 'seminars',
-        step: 2,
-        title: 'Live Discussion Seminars',
-        description: 'Classes are exclusively discussion-based. Real-time online seminars with small class sizes foster active debate and collaboration.',
-        accentBg: 'bg-digital-blue',
-      },
-      {
-        id: 'reasoning',
-        step: 3,
-        title: 'Critical Reasoning',
-        description: 'We train students to dismantle arguments, assess evidence, and articulate truth — not merely memorize facts.',
-        accentBg: 'bg-black',
-      },
-    ],
-  },
-
-  graduation: {
-    heading: 'Graduation Requirements',
-    stats: [
-      {
-        id: 'courses',
-        value: '20',
-        label: 'Full-Year Courses',
-        description: 'Total continuous credits required over four years of rigorous secondary education.',
-        color: 'text-cardinal-red',
-      },
-      {
-        id: 'core-years',
-        value: '4',
-        label: 'Years Core Class',
-        description: 'Annual enrollment in our foundational multi-disciplinary philosophy sequence.',
-        color: 'text-sand',
-        offset: 'md:-translate-y-8',
-      },
-      {
-        id: 'discipline',
-        value: '1+',
-        label: 'Discipline Unit',
-        description: 'Strict specific minimums distributed across science, humanities, and critical languages.',
-        color: 'text-digital-blue',
-      },
+      { id: 'eng', subject: 'English', years: 4 },
+      { id: 'math', subject: 'Mathematics', years: 3 },
+      { id: 'sci', subject: 'Laboratory Science', years: 3 },
+      { id: 'hist', subject: 'History / Social Science', years: 3 },
+      { id: 'lang', subject: 'Foreign Language', years: 3 },
+      { id: 'core', subject: 'Core Philosophy', years: 4 },
     ],
   },
 };

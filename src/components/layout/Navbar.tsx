@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const utilityLinks = [
-  { label: 'Gateway', href: '#', external: true },
-  { label: 'Alumni', href: '#', external: true },
-  { label: 'Support Us', href: '#', external: true },
-  { label: 'Questions?', href: '#', external: false },
-  { label: 'Contact Us', href: '#', external: false },
+  { label: 'Gateway', href: '/placeholder', external: true },
+  { label: 'Alumni', href: '/placeholder', external: true },
+  { label: 'Support Us', href: '/placeholder', external: true },
+  { label: 'Questions?', href: '/placeholder', external: false },
+  { label: 'Contact Us', href: '/placeholder', external: false },
 ];
 
 interface NavItem {
@@ -25,8 +25,8 @@ const navItems: NavItem[] = [
     href: '/about',
     children: [
       { label: 'About Us', href: '/about', desc: 'Our mission, history, and leadership.' },
-      { label: 'Community News', href: '/about', desc: 'Latest stories from our global community.' },
-      { label: 'Take the Tour', href: '/about', desc: 'See OHS in action with a virtual walkthrough.' },
+      { label: 'Community News', href: '/news', desc: 'Latest stories from our global community.' },
+      { label: 'Take the Tour', href: '/tour', desc: 'See OHS in action with a virtual walkthrough.' },
     ],
   },
   {
@@ -34,8 +34,8 @@ const navItems: NavItem[] = [
     href: '/admissions',
     children: [
       { label: 'Overview', href: '/admissions', desc: 'Everything you need to know about applying.' },
-      { label: 'Apply', href: '/admissions', desc: 'Start your application today.' },
-      { label: 'Events', href: '/admissions', desc: 'Open houses and info sessions.' },
+      { label: 'Apply', href: '/apply', desc: 'Start your application today.' },
+      { label: 'Events', href: '/events', desc: 'Open houses and info sessions.' },
       { label: 'Enrollment Options', href: '/admissions', desc: 'Full-time, part-time, and single courses.' },
       { label: 'Tuition', href: '/admissions', desc: 'Pricing and payment information.' },
       { label: 'Financial Aid', href: '/admissions', desc: 'Need-based awards for all students.' },
@@ -47,7 +47,7 @@ const navItems: NavItem[] = [
     href: '/academics',
     children: [
       { label: 'Overview', href: '/academics', desc: 'Our philosophy and approach to learning.' },
-      { label: 'Course Catalog', href: '/academics', desc: 'Browse 40+ college-level courses.' },
+      { label: 'Course Catalog', href: '/course-catalog', desc: 'Browse 40+ college-level courses.' },
       { label: 'Middle School', href: '/academics', desc: 'Grades 7–8 specialized curriculum.' },
       { label: 'Graduation Requirements', href: '/academics', desc: '20 full-year credits to graduate.' },
       { label: 'College-Style Schedule', href: '/academics', desc: 'Flexible, university-style timetable.' },
@@ -59,7 +59,7 @@ const navItems: NavItem[] = [
     href: '/student-life',
     children: [
       { label: 'Clubs & Community', href: '/student-life', desc: '60+ student-run clubs and societies.' },
-      { label: 'Events', href: '/student-life', desc: 'Summer @ Stanford, retreats, and more.' },
+      { label: 'Events', href: '/events', desc: 'Summer @ Stanford, retreats, and more.' },
     ],
   },
   {

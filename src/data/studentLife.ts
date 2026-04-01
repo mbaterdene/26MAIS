@@ -1,189 +1,92 @@
-// ─── studentLife.ts ────────────────────────────────────────────────────────────
-// Structured content for the Student Life & Support page.
-// Replace these mock exports with real CMS API calls (e.g. Contentful, Sanity)
-// without touching any component code.
-
-export interface CommunityItem {
+export interface Club {
   id: string;
-  label: string;
-  description: string;
-  accentBg: string;    // Tailwind bg class for icon container
-  textColor: string;   // Tailwind text color for heading
-  shadowColor: string; // Tailwind shadow class (default)
-  shadowHover: string; // Tailwind hover shadow class
+  name: string;
+  category: string;
+  image: string;
 }
 
-export interface EventItem {
+export interface EventTimeline {
   id: string;
   title: string;
-  tag: string;
+  season: string;
   description: string;
-  gradient: string; // Tailwind bg-gradient-to-br value
-  stat: string;
-  statLabel: string;
-}
-
-export interface SupportService {
-  id: string;
-  num: string;
-  title: string;
-  description: string;
-  accentColor: string; // Tailwind text color
-  barColor: string;    // Tailwind bg color for animated bar
+  imageUrl: string;
+  accentBg: string;
+  accentText: string;
 }
 
 export interface StudentLifePageContent {
   hero: {
+    eyebrow: string;
     title: string;
-    titleAccent: string;
     subtitle: string;
   };
-  community: {
+  clubs: {
     sectionLabel: string;
     heading: string;
     body: string;
-    stat: { value: string; label: string };
-    items: CommunityItem[];
+    items: Club[];
   };
   events: {
     sectionLabel: string;
     heading: string;
-    body: string;
-    items: EventItem[];
-  };
-  support: {
-    sectionLabel: string;
-    heading: string;
-    body: string;
-    services: SupportService[];
+    timeline: EventTimeline[];
   };
 }
 
-// ─── Mock Data (swap for CMS fetch) ───────────────────────────────────────────
 export const studentLifeContent: StudentLifePageContent = {
   hero: {
-    title: 'More Than a School.',
-    titleAccent: 'A Community.',
-    subtitle: 'A vibrant, global community where students connect, lead, celebrate, and support one another — across every time zone.',
+    eyebrow: 'Student Life',
+    title: 'Vibrant & Digital Native',
+    subtitle: 'Being online never means being alone. Discover our dynamic virtual campus and robust global community.',
   },
-
-  community: {
-    sectionLabel: 'Community',
-    heading: 'Built on Real Human Connection',
-    body: 'Despite spanning the globe, OHS students build some of the deepest friendships in education — united by curiosity, ambition, and a shared digital home.',
-    stat: { value: '60+', label: 'Student-Run Clubs' },
+  clubs: {
+    sectionLabel: 'Clubs & Community',
+    heading: '60+ Student-run Clubs',
+    body: 'From Student Government to Model UN, our students lead over 60 active clubs, fostering leadership and shared passions across borders.',
     items: [
-      {
-        id: 'clubs',
-        label: '60+ Student-Run Clubs',
-        description: 'From Model UN to robotics, literary magazines, and cultural societies — students lead what they love.',
-        accentBg: 'bg-cardinal-red',
-        textColor: 'text-cardinal-red',
-        shadowColor: 'shadow-[0_0_0_0_rgba(140,21,21,0)]',
-        shadowHover: 'hover:shadow-[0_4px_32px_rgba(140,21,21,0.18)]',
-      },
-      {
-        id: 'gov',
-        label: 'Student Government',
-        description: 'Elected representatives who shape school policy, advocate for peers, and build OHS culture.',
-        accentBg: 'bg-digital-blue',
-        textColor: 'text-digital-blue',
-        shadowColor: 'shadow-[0_0_0_0_rgba(0,108,184,0)]',
-        shadowHover: 'hover:shadow-[0_4px_32px_rgba(0,108,184,0.18)]',
-      },
-      {
-        id: 'homeroom',
-        label: 'Weekly Homeroom',
-        description: "A dedicated weekly session for community connection, announcements, and advisory support — the heartbeat of OHS.",
-        accentBg: 'bg-sand',
-        textColor: 'text-black',
-        shadowColor: 'shadow-[0_0_0_0_rgba(210,194,149,0)]',
-        shadowHover: 'hover:shadow-[0_4px_32px_rgba(210,194,149,0.28)]',
-      },
+      { id: '1', name: 'Model United Nations', category: 'Academic', image: 'https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?auto=format&fit=crop&q=80' },
+      { id: '2', name: 'Student Government', category: 'Leadership', image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80' },
+      { id: '3', name: 'Robotics & Engineering', category: 'STEM', image: 'https://images.unsplash.com/photo-1561557944-6e7860d1a7eb?auto=format&fit=crop&q=80' },
+      { id: '4', name: 'Literary Magazine', category: 'Arts', image: 'https://images.unsplash.com/photo-1455390582262-044cdead27d8?auto=format&fit=crop&q=80' },
+      { id: '5', name: 'Astronomy Club', category: 'STEM', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80' },
+      { id: '6', name: 'Debate Society', category: 'Academic', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80' },
     ],
   },
-
   events: {
-    sectionLabel: 'Events',
-    heading: 'Where the World Meets',
-    body: "From the Stanford campus to forests, cities, and beyond — OHS events bring our digital community into stunning physical reality.",
-    items: [
+    sectionLabel: 'Annual Traditions',
+    heading: 'Events Timeline',
+    timeline: [
       {
-        id: 'summer',
-        title: 'Summer @ Stanford',
-        tag: 'Residential',
-        description: 'An exclusive on-campus residential program at Stanford University — where our global community finally meets in person. Coursework, exploration, and memories that last a lifetime.',
-        gradient: 'from-[#8C1515] via-[#B1040E] to-[#D2654E]',
-        stat: '4 Weeks',
-        statLabel: 'On Campus',
+        id: '1', title: 'Summer @ Stanford', season: 'August',
+        description: 'Students from around the world gather on the Stanford University campus for two weeks of intensive study, bonding, and residential campus living before the academic year begins.',
+        imageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80',
+        accentBg: 'bg-cardinal-red', accentText: 'text-white'
       },
       {
-        id: 'retreats',
-        title: 'Homeroom Retreats',
-        tag: 'Community',
-        description: 'Multi-day retreats where homeroom groups gather in nature, strengthening bonds beyond the screen through shared experiences and collaborative challenges.',
-        gradient: 'from-[#006CB8] via-[#0A84D0] to-[#38B6FF]',
-        stat: '3× / Year',
-        statLabel: 'Per Group',
+        id: '2', title: 'Homeroom Retreats', season: 'October',
+        description: 'Regional gatherings organized by academic advisors, where students in the same geographical area meet in person for weekend team-building and exploration.',
+        imageUrl: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80',
+        accentBg: 'bg-digital-blue', accentText: 'text-white'
       },
       {
-        id: 'spirit',
-        title: 'Spirit Week & Graduation',
-        tag: 'Celebration',
-        description: "An electrifying week of school-wide pride culminating in a joyful in-person graduation ceremony — caps, gowns, confetti, and cheers from a global family.",
-        gradient: 'from-[#2E2D29] via-[#4A4843] to-[#6B6966]',
-        stat: 'Annual',
-        statLabel: 'Tradition',
+        id: '3', title: 'Spirit Week', season: 'February',
+        description: 'A beloved virtual tradition featuring digital escape rooms, costume contests over video, esports tournaments, and competitive house cup challenges.',
+        imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80',
+        accentBg: 'bg-cardinal-red', accentText: 'text-white'
       },
       {
-        id: 'travel',
-        title: 'Student Travel',
-        tag: 'Global',
-        description: "Organized trips spanning continents — student-led cultural immersions, study tours, and adventures that bring OHS's global identity to life.",
-        gradient: 'from-[#5C4A1E] via-[#8B6914] to-[#D2A531]',
-        stat: '30+ Countries',
-        statLabel: 'Represented',
-      },
-    ],
-  },
-
-  support: {
-    sectionLabel: 'Support Services',
-    heading: 'Every Student, Fully Supported',
-    body: 'Rigorous academics demand serious support. Our comprehensive network of advisors, counselors, and tutors ensures no student navigates their journey alone.',
-    services: [
-      {
-        id: 'advising',
-        num: '01',
-        title: 'Academic Advising',
-        description: 'Personalized one-on-one guidance to craft the right course sequence, manage workload, and build a cohesive long-term academic roadmap.',
-        accentColor: 'text-digital-blue',
-        barColor: 'bg-digital-blue',
+        id: '4', title: 'Student Travel', season: 'Spring Break',
+        description: 'Faculty-led academic excursions across the globe, from studying biodiversity in Costa Rica to exploring classical history in Greece and Italy.',
+        imageUrl: 'https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?auto=format&fit=crop&q=80',
+        accentBg: 'bg-digital-blue', accentText: 'text-white'
       },
       {
-        id: 'counseling',
-        num: '02',
-        title: 'College Counseling',
-        description: 'Dedicated college counselors with deep expertise in elite university admissions — starting early to shape a compelling, authentic application narrative.',
-        accentColor: 'text-cardinal-red',
-        barColor: 'bg-cardinal-red',
-      },
-      {
-        id: 'wellness',
-        num: '03',
-        title: 'Wellness & SEL Counseling',
-        description: 'Licensed counselors specializing in Social-Emotional Learning, supporting mental health, resilience, and balance in a high-achieving environment.',
-        accentColor: 'text-sand',
-        barColor: 'bg-sand',
-      },
-      {
-        id: 'tutoring',
-        num: '04',
-        title: 'Writing & Tutoring Center',
-        description: 'Peer and instructor-led sessions covering essay craft, mathematical problem sets, reading strategies, and every academic challenge in between.',
-        accentColor: 'text-white',
-        barColor: 'bg-white',
-      },
-    ],
-  },
+        id: '5', title: 'Graduation', season: 'June',
+        description: 'The spectacular culminating event where seniors and their families travel to Stanford University for the formal commencement ceremony.',
+        imageUrl: 'https://images.unsplash.com/photo-1525926477800-7a3b10316ac6?auto=format&fit=crop&q=80',
+        accentBg: 'bg-black', accentText: 'text-white'
+      }
+    ]
+  }
 };

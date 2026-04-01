@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "title": "Stanford OHS Robotics Team Wins Regionals",
+    "category": "Student Life",
+    "status": "Published",
+    "date": "Mar 15, 2026",
+    "description": "The robotics team secured first place in the Northern California regional championship.",
+    "content": "Full article content goes here..."
+  },
+  {
+    "id": "2",
+    "title": "New Astronomy Course Added to Curriculum",
+    "category": "Academics",
+    "status": "Draft",
+    "date": "Mar 10, 2026",
+    "description": "We are excited to announce a new university-level astronomy course.",
+    "content": "Full article content goes here..."
+  },
+  {
+    "id": "3",
+    "title": "Alumni Spotlight: Building the Future in Silicon Valley",
+    "category": "Alumni",
+    "status": "Published",
+    "date": "Mar 5, 2026",
+    "description": "An interview with a recent graduate who founded a successful AI startup.",
+    "content": "Full article content goes here..."
+  },
+  {
+    "id": "4",
+    "title": "Global Homeroom Retreat Highlights",
+    "category": "Community",
+    "status": "Published",
+    "date": "Feb 28, 2026",
+    "description": "Students from 40 different countries met up for our global homeroom retreats.",
+    "content": "Full article content goes here..."
+  },
+  {
+    "id": "5",
+    "title": "Spring Admissions Deadline Approaching",
+    "category": "Admissions",
+    "status": "Draft",
+    "date": "Feb 12, 2026",
+    "description": "A reminder for prospective students about the upcoming application deadline.",
+    "content": "Full article content goes here..."
+  }
+]
