@@ -6,9 +6,10 @@ import { useLanguage } from '../../context/LanguageContext';
 import { getHomeData, getAlumniStats } from '../../lib/api';
 import type { HomeData, AlumniStatsData } from '../../lib/api';
 import { bil, formatDate, formatNumber, truncateWords } from '../../lib/utils';
-import { jsonCourses } from '../../data/contentJson';
+import { jsonCourses, jsonAlumni } from '../../data/contentJson';
 import { pageText } from '../../data/pageText';
 import type { Course } from '../../lib/types';
+import WorldMap from '../../components/WorldMap';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -339,6 +340,9 @@ export function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ── Global Alumni Network ──────────────────────────────────── */}
+      <WorldMap />
 
       {/* ── Featured Courses ─────────────────────────────────────────── */}
       {featuredCourses.length > 0 && (
