@@ -3,7 +3,6 @@ import express from "express";
 import cors from "cors";
 import { z } from "zod";
 import { config } from "./config.js";
-import { connectDB } from "./db.js";
 import {
   ADMIN_ROLES,
   createAdmin,
@@ -656,9 +655,6 @@ app.post("/api/content/delete", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLE
 
 async function start() {
   try {
-    // Connect to MongoDB first
-    await connectDB();
-
     const seeded = await ensureInitialSuperAdmin();
     if (seeded) {
       // eslint-disable-next-line no-console

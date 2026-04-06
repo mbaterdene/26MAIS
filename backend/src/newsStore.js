@@ -1,4 +1,39 @@
-import { News, getNextNewsId } from "./models/News.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const NEWS_FILE = path.join(__dirname, "..", "data", "news.json");
+const COUNTER_FILE = path.join(__dirname, "..", "data", "news-counter.json");
+
+// Helper to read news data
+function readNewsData() {
+  try {
+    const data = fs.readFileSync(NEWS_FILE, "utf8");
+    return JSON.parse(data || "[]");
+  } catch {
+    return [];
+  }
+}
+
+// Helper to write news data
+function writeNewsData(data) {
+  fs.writeFileSync(NEWS_FILE, JSON.stringify(data, null, 2));
+}
+
+// Helper to get next ID
+function getNextNewsId() {
+  try {
+    const counter = JSON.parse(fs.readFileSync(COUNTER_FILE, "utf8"));
+    counter.nextId += 1;
+    fs.writeFileSync(COUNTER_FILE, JSON.stringify(counter, null, 2));
+    return counter.nextId - 1;
+  } catch {
+    const counter = { nextId: 2 };
+    fs.writeFileSync(COUNTER_FILE, JSON.stringify(counter, null, 2));
+    return 1;
+  }
+}
 
 function generateSlug(text) {
   return text
@@ -11,10 +46,13 @@ function generateSlug(text) {
 
 export async function getNewsByStatus(status) {
   try {
+    const news = readNewsData();
     if (status === "all") {
-      return await News.find().sort({ created_at: -1 }).lean();
+      return news.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
-    return await News.find({ status }).sort({ created_at: -1 }).lean();
+    return news
+      .filter((n) => n.status === status)
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   } catch (error) {
     console.error("Error fetching news by status:", error);
     throw error;
@@ -23,7 +61,8 @@ export async function getNewsByStatus(status) {
 
 export async function getAllNews() {
   try {
-    return await News.find().sort({ created_at: -1 }).lean();
+    const news = readNewsData();
+    return news.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   } catch (error) {
     console.error("Error fetching all news:", error);
     throw error;
@@ -32,9 +71,10 @@ export async function getAllNews() {
 
 export async function getNewsById(id) {
   try {
-    return await News.findOne({ id }).lean();
+    const news = readNewsData();
+    return news.find((n) => n.id === id);
   } catch (error) {
-    console.error("Error fetching news by ID:", error);
+    console.error("Error fetching news by id:", error);
     throw error;
   }
 }
@@ -58,11 +98,12 @@ export async function createNews(data) {
   }
 
   try {
-    const id = await getNextNewsId();
+    const news = readNewsData();
+    const id = getNextNewsId();
     const slug = generateSlug(title_en);
     const now = new Date().toISOString();
 
-    const newArticle = new News({
+    const newArticle = {
       id,
       slug,
       title_mn,
@@ -78,10 +119,11 @@ export async function createNews(data) {
       approvedAt: null,
       created_at: now,
       updated_at: now,
-    });
+    };
 
-    const saved = await newArticle.save();
-    return saved.toObject();
+    news.push(newArticle);
+    writeNewsData(news);
+    return newArticle;
   } catch (error) {
     console.error("Error creating news:", error);
     throw error;
@@ -90,21 +132,21 @@ export async function createNews(data) {
 
 export async function updateNews(id, data) {
   try {
-    const existing = await News.findOne({ id });
-    if (!existing) {
+    const news = readNewsData();
+    const index = news.findIndex((n) => n.id === id);
+
+    if (index === -1) {
       throw new Error(`News with id ${id} not found`);
     }
 
-    const updated = await News.findOneAndUpdate(
-      { id },
-      {
-        ...data,
-        updated_at: new Date().toISOString(),
-      },
-      { new: true, lean: true }
-    );
+    news[index] = {
+      ...news[index],
+      ...data,
+      updated_at: new Date().toISOString(),
+    };
 
-    return updated;
+    writeNewsData(news);
+    return news[index];
   } catch (error) {
     console.error("Error updating news:", error);
     throw error;
@@ -113,10 +155,15 @@ export async function updateNews(id, data) {
 
 export async function deleteNews(id) {
   try {
-    const deleted = await News.findOneAndDelete({ id }, { lean: true });
-    if (!deleted) {
+    const news = readNewsData();
+    const index = news.findIndex((n) => n.id === id);
+
+    if (index === -1) {
       throw new Error(`News with id ${id} not found`);
     }
+
+    const deleted = news.splice(index, 1)[0];
+    writeNewsData(news);
     return deleted;
   } catch (error) {
     console.error("Error deleting news:", error);
@@ -126,12 +173,11 @@ export async function deleteNews(id) {
 
 export async function updateNewsStatus(id, newStatus, approverId) {
   try {
-    const updated = await updateNews(id, {
+    return await updateNews(id, {
       status: newStatus,
       approvedBy: newStatus === "published" ? approverId : null,
       approvedAt: newStatus === "published" ? new Date().toISOString() : null,
     });
-    return updated;
   } catch (error) {
     console.error("Error updating news status:", error);
     throw error;
@@ -188,31 +234,16 @@ export async function rejectNews(id) {
 
 export async function searchNews(query) {
   try {
-    // Use text search if possible, fallback to regex
-    const newsResults = await News.find(
-      { $text: { $search: query } },
-      { score: { $meta: "textScore" } }
-    )
-      .sort({ score: { $meta: "textScore" } })
-      .lean();
-
-    if (newsResults.length > 0) {
-      return newsResults;
-    }
-
-    // Fallback to regex search
-    const regex = new RegExp(query, "i");
-    return await News.find({
-      $or: [
-        { title_mn: regex },
-        { title_en: regex },
-        { author: regex },
-        { content_mn: regex },
-        { content_en: regex },
-      ],
-    })
-      .sort({ created_at: -1 })
-      .lean();
+    const news = readNewsData();
+    const lowerQuery = query.toLowerCase();
+    return news.filter(
+      (n) =>
+        n.title_en.toLowerCase().includes(lowerQuery) ||
+        n.title_mn.toLowerCase().includes(lowerQuery) ||
+        n.author.toLowerCase().includes(lowerQuery) ||
+        n.content_en.toLowerCase().includes(lowerQuery) ||
+        n.content_mn.toLowerCase().includes(lowerQuery)
+    );
   } catch (error) {
     console.error("Error searching news:", error);
     throw error;
