@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const NEWS_FILE = path.join(__dirname, "..", "data", "news.json");
+const NEWS_FILE = path.join(__dirname, "..", "..", "src", "content", "news.json");
 const COUNTER_FILE = path.join(__dirname, "..", "data", "news-counter.json");
 
 // Helper to read news data
