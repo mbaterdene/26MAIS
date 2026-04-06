@@ -6,7 +6,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { getHomeData, getAlumniStats } from '../../lib/api';
 import type { HomeData, AlumniStatsData } from '../../lib/api';
 import { bil, formatDate, formatNumber, truncateWords } from '../../lib/utils';
-import { jsonCourses, jsonAlumni } from '../../data/contentJson';
+import { jsonCourses } from '../../data/contentJson';
 import { pageText } from '../../data/pageText';
 import type { Course } from '../../lib/types';
 import WorldMap from '../../components/WorldMap';

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, FileText, Image as ImageIcon, AlertCircle } from 'lucide-react';
 import { Article } from '../../hooks/useArticles';
+import { TiptapEditor } from '../../components/admin/TiptapEditor';
 
 interface ContentEditorModalProps {
   isOpen: boolean;
@@ -114,23 +115,11 @@ export function ContentEditorModal({ isOpen, onClose, initialData, onSave }: Con
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Main Body (Rich Text)</label>
-                {/* Rich Text Editor Placeholder */}
-                <div className="w-full bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-cardinal-red/20 focus-within:border-cardinal-red transition-all">
-                  <div className="flex items-center gap-2 p-2 border-b border-gray-200 bg-white">
-                    {['B', 'I', 'U', 'H1', 'H2', 'Quote', 'Code'].map((t) => (
-                      <button key={t} type="button" className="px-2 py-1 text-xs font-bold text-gray-500 hover:text-black hover:bg-gray-100 rounded">
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-                  <textarea
-                    placeholder="Start typing the article content here..."
-                    rows={8}
-                    className="w-full p-4 bg-transparent outline-none resize-none text-gray-900 text-sm leading-relaxed"
-                    value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  />
-                </div>
+                <TiptapEditor
+                  initialContent={formData.content}
+                  onChange={(content) => setFormData({ ...formData, content })}
+                  placeholder="Start typing the article content here..."
+                />
               </div>
             </div>
 

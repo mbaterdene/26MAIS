@@ -1,5 +1,5 @@
 import { useNews, useDeleteNews, useApproveNews, useRejectNews, useSubmitNews } from '../../hooks/useNews';
-import { Trash2, Check, X, Send, Loader2 } from 'lucide-react';
+import { Trash2, Check, X, Send, Loader2, Edit2 } from 'lucide-react';
 import type { News } from '../../lib/admin-types';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -116,6 +116,13 @@ export function AdminNewsList() {
                           </button>
                         </>
                       )}
+                      <Link
+                        to={`/admin/news/${article.id}/edit`}
+                        title="Edit"
+                        className="p-1.5 rounded-lg text-purple-600 hover:bg-purple-50 transition-colors inline-flex"
+                      >
+                        <Edit2 size={16} />
+                      </Link>
                       <button
                         onClick={() => {
                           if (confirm('Delete this article?')) {

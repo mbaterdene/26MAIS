@@ -33,7 +33,7 @@ const AlumniPoster: React.FC<AlumniPosterProps> = ({
   return (
     <>
       <motion.div
-        ref={ref}
+        ref={ref as any}
         className={`relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer ${className}`}
         whileHover={{ scale: 1.05, y: -5 }}
         whileTap={{ scale: 0.98 }}

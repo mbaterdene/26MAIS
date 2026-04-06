@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import type { University } from '../../data/alumniData';
 import { getTotalAlumniCount } from '../../data/alumniData';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
 import { createPortal } from 'react-dom';
 
@@ -12,7 +12,7 @@ interface AlumniPopupProps {
 }
 
 const AlumniPopup: React.FC<AlumniPopupProps> = ({ universities, countryName, onClose }) => {
-  const { isEnglish, t } = useLanguage();
+  const { t } = useLanguage();
 
   const sortedUniversities = useMemo(() => {
     return [...universities].sort((a, b) => {
