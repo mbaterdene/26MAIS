@@ -1,88 +1,78 @@
 import { motion } from 'framer-motion';
-import { studentLifeContent } from '../../data/studentLife';
-import { Calendar as CalendarIcon, MapPin, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-};
-const staggerChildren = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
+import { Calendar } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { getEvents } from '../../lib/api';
+import type { Event } from '../../lib/types';
+import { bil, formatDate, truncateWords } from '../../lib/utils';
 
 export function EventsPage() {
-  const { events } = studentLifeContent;
+  const { isEnglish, t } = useLanguage();
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getEvents().then((data) => { setEvents(data); setLoading(false); }).catch(() => setLoading(false));
+  }, []);
 
   return (
-    <div className="min-h-screen bg-sand pt-40 pb-32">
+    <div className="min-h-screen bg-gray-50 pt-32 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <motion.div variants={fadeUp} initial="hidden" animate="visible" className="text-center mb-20">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center mb-16">
           <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-black/60 bg-black/10 px-3 py-1 rounded-full mb-6">
-            Student Life
+            {t('Events', 'Үйл ажиллагаа')}
           </span>
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-black mb-6">
-            Annual Traditions
+            {t('Events Calendar', 'Үйл ажиллагааны хуанли')}
           </h1>
           <p className="text-xl max-w-2xl mx-auto font-sans text-gray-700">
-            Explore our signature events that bring the Stanford OHS community together.
+            {t('Stay updated with all school events and activities.', 'Сургуулийн бүх үйл ажиллагаанаас мэдлэгтэй байгаарай.')}
           </p>
         </motion.div>
 
-        <motion.div
-           variants={staggerChildren}
-           initial="hidden"
-           animate="visible"
-           className="relative max-w-4xl mx-auto"
-        >
-          {/* Timeline Line */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200 transform -translate-x-1/2" />
-
-          <div className="space-y-12">
-            {events.timeline.map((event, index) => {
-              const isEven = index % 2 === 0;
-              return (
-                <motion.div key={event.id} variants={fadeUp} className={`relative flex flex-col md:flex-row items-center gap-8 md:gap-16 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                  
-                  {/* Content Box */}
-                  <div className={`w-full md:w-1/2 ${isEven ? 'md:text-right' : 'md:text-left'} flex flex-col ${isEven ? 'md:items-end' : 'md:items-start'}`}>
-                    <span className="inline-block px-3 py-1 rounded text-xs font-bold tracking-widest uppercase text-cardinal-red bg-cardinal-red/10 mb-4 border border-cardinal-red/20 shadow-sm">
-                      {event.season}
-                    </span>
-                    <h3 className="text-3xl font-serif font-bold text-black mb-4">{event.title}</h3>
-                    <p className="text-gray-600 font-sans leading-relaxed text-lg mb-6">
-                      {event.description}
-                    </p>
-                    <div className="flex items-center gap-4 text-sm font-semibold text-gray-400">
-                      <span className="flex items-center gap-1.5"><CalendarIcon size={16} className="text-cardinal-red"/> Annual</span>
-                      <span className="flex items-center gap-1.5"><MapPin size={16} className="text-cardinal-red"/> Global</span>
+        {loading ? (
+          <div className="text-center py-20 text-gray-500">{t('Loading...', 'Ачааллаж байна...')}</div>
+        ) : events.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {events.map((event, i) => (
+              <motion.div
+                key={event.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08, duration: 0.5 }}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-cardinal-red/20 group"
+              >
+                <div className="h-48 overflow-hidden">
+                  {event.image ? (
+                    <img src={event.image} alt={bil(isEnglish, event.title_en, event.title_mn)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-digital-blue/10 to-cardinal-red/10 flex items-center justify-center">
+                      <Calendar size={48} className="text-gray-300" />
                     </div>
+                  )}
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    {event.event_type_display && (
+                      <span className="text-xs font-bold uppercase tracking-wider text-digital-blue bg-digital-blue/10 px-2 py-1 rounded">{event.event_type_display}</span>
+                    )}
+                    <span className="text-sm text-gray-400">{formatDate(event.event_date)}</span>
                   </div>
-
-                  {/* Marker (Desktop) */}
-                  <div className="hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border-4 border-cardinal-red z-10 shadow-md">
-                    <div className="w-full h-full bg-cardinal-red rounded-full opacity-20 animate-ping" />
-                  </div>
-
-                  {/* Image Box */}
-                  <div className="w-full md:w-1/2">
-                    <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-sm group">
-                      <img 
-                        src={event.imageUrl} 
-                        alt={event.title} 
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
-                    </div>
-                  </div>
-
-                </motion.div>
-              );
-            })}
+                  <h3 className="text-xl font-serif font-bold text-black mb-3 group-hover:text-cardinal-red transition-colors">
+                    {bil(isEnglish, event.title_en, event.title_mn)}
+                  </h3>
+                  <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+                    {truncateWords(bil(isEnglish, event.description_en, event.description_mn), 25)}
+                  </p>
+                  {event.location && <p className="text-xs text-gray-400">📍 {event.location}</p>}
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
+        ) : (
+          <div className="text-center py-20 text-gray-500">{t('No events available.', 'Одоогоор үйл ажиллагаа байхгүй байна.')}</div>
+        )}
       </div>
     </div>
   );

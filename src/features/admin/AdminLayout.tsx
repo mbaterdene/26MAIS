@@ -1,93 +1,75 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Newspaper, Calendar, BookOpen, Users, Settings, LogOut, Globe, User } from 'lucide-react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Newspaper, Users, LogOut, BarChart2 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+
+const sidebarLinks = [
+  { label: 'Dashboard', href: '/admin', icon: <LayoutDashboard size={18} /> },
+  { label: 'News', href: '/admin/news', icon: <Newspaper size={18} /> },
+  { label: 'Users', href: '/admin/users', icon: <Users size={18} /> },
+  { label: 'Analytics', href: '/admin/analytics', icon: <BarChart2 size={18} /> },
+];
 
 export function AdminLayout() {
+  const { admin, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const navItems = [
-    { label: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} /> },
-    { label: 'News & Articles', path: '/admin/news', icon: <Newspaper size={20} /> },
-    { label: 'Events', path: '/admin/events', icon: <Calendar size={20} /> },
-    { label: 'Course Catalog', path: '/admin/courses', icon: <BookOpen size={20} /> },
-    { label: 'Admissions Data', path: '/admin/admissions', icon: <Users size={20} /> },
-    { label: 'Settings', path: '/admin/settings', icon: <Settings size={20} /> },
-  ];
+  function handleLogout() {
+    logout();
+    navigate('/admin/login');
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans">
-      {/* ── Sidebar ────────────────────────────────────────────────────── */}
-      <aside className="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 z-10 flex flex-col">
-        {/* Logo Area */}
-        <div className="h-16 flex items-center px-6 border-b border-gray-200 bg-white">
-          <Link to="/admin" className="font-serif font-bold text-xl text-cardinal-red flex items-center gap-2 tracking-tight">
-            Stanford OHS <span className="font-sans text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded uppercase tracking-wider">Admin</span>
-          </Link>
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white border-r border-gray-100 flex flex-col flex-shrink-0">
+        <div className="p-6 border-b border-gray-100">
+          <Link to="/" className="text-cardinal-red font-serif font-bold text-xl">MAIS</Link>
+          <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
         </div>
-
-        {/* Navigation Links */}
-        <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path || (item.path !== '/admin' && location.pathname.startsWith(item.path));
+        <nav className="flex-1 p-4 space-y-1">
+          {sidebarLinks.map((link) => {
+            const isActive = location.pathname === link.href;
             return (
               <Link
-                key={item.label}
-                to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                key={link.href}
+                to={link.href}
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-cardinal-red/10 text-cardinal-red'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                 }`}
               >
-                <div className={isActive ? 'text-cardinal-red' : 'text-gray-400'}>
-                  {item.icon}
-                </div>
-                {item.label}
+                {link.icon}
+                {link.label}
               </Link>
-            )
+            );
           })}
         </nav>
+        <div className="p-4 border-t border-gray-100">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-8 h-8 rounded-full bg-cardinal-red/10 flex items-center justify-center text-cardinal-red text-xs font-bold">
+              {admin?.displayName?.charAt(0) ?? 'A'}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-900 truncate">{admin?.displayName ?? 'Admin'}</p>
+              <p className="text-xs text-gray-400 capitalize">{admin?.role?.replace('_', ' ') ?? ''}</p>
+            </div>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-500 hover:text-cardinal-red hover:bg-gray-50 rounded-lg transition-colors"
+          >
+            <LogOut size={16} />
+            Sign Out
+          </button>
+        </div>
       </aside>
 
-      {/* ── Main Content Area ────────────────────────────────────────── */}
-      <div className="flex-1 ml-64 flex flex-col min-h-screen">
-        {/* Top Bar */}
-        <header className="h-16 bg-white border-b border-gray-200 sticky top-0 z-10 flex items-center justify-between px-8">
-          <div className="text-gray-500 font-medium text-sm">
-            Content Management System
-          </div>
-
-          <div className="flex items-center gap-6">
-            <Link 
-              to="/" 
-              target="_blank"
-              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-black transition-colors"
-            >
-              <Globe size={18} />
-              View Live Site
-            </Link>
-            
-            <div className="w-px h-6 bg-gray-200" />
-            
-            <div className="flex items-center gap-3 text-sm font-medium text-gray-800 cursor-default">
-              <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center">
-                <User size={16} className="text-gray-500" />
-              </div>
-              Admin User
-            </div>
-
-            <button className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-cardinal-red transition-colors">
-              <LogOut size={18} />
-              Logout
-            </button>
-          </div>
-        </header>
-
-        {/* Page Views Wrapper */}
-        <main className="flex-1 p-8">
-          <Outlet />
-        </main>
-      </div>
-
+      {/* Main Content */}
+      <main className="flex-1 p-8 overflow-y-auto">
+        <Outlet />
+      </main>
     </div>
   );
 }

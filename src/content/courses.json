@@ -1,0 +1,57 @@
+[
+  {
+    "id": 201,
+    "slug": "advanced-mathematics",
+    "name": "Advanced Mathematics",
+    "description": "A rigorous upper-secondary course focused on algebra, calculus foundations, problem solving, and exam strategy.",
+    "teacher": "Ts. Munkh-Erdene",
+    "grade": "12",
+    "grade_display": "12th Grade",
+    "program_type": "international",
+    "program_type_display": "International Program"
+  },
+  {
+    "id": 202,
+    "slug": "academic-english-writing",
+    "name": "Academic English & Writing",
+    "description": "Develops academic writing, presentation, and critical reading skills for university applications and coursework.",
+    "teacher": "B. Ariunjargal",
+    "grade": "11",
+    "grade_display": "11th Grade",
+    "program_type": "international",
+    "program_type_display": "International Program"
+  },
+  {
+    "id": 203,
+    "slug": "mongolian-language-literature",
+    "name": "Mongolian Language & Literature",
+    "description": "Strengthens language mastery, interpretation, and formal writing aligned with national standards.",
+    "teacher": "L. Sarnai",
+    "grade": "10",
+    "grade_display": "10th Grade",
+    "program_type": "national",
+    "program_type_display": "National Program"
+  },
+  {
+    "id": 204,
+    "slug": "integrated-science",
+    "name": "Integrated Science",
+    "description": "Inquiry-based science course combining biology, chemistry, and physics through thematic projects.",
+    "teacher": "G. Nyamgerel",
+    "grade": "9",
+    "grade_display": "9th Grade",
+    "program_type": "national",
+    "program_type_display": "National Program"
+  },
+  {
+    "id": 205,
+    "slug": "global-perspectives",
+    "name": "Global Perspectives",
+    "description": "A research and discussion course developing argumentation, collaboration, and evidence-based communication.",
+    "teacher": "A. Temuulen",
+    "grade": "11",
+    "grade_display": "11th Grade",
+    "program_type": "international",
+    "program_type_display": "International Program"
+  }
+]

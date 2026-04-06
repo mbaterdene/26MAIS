@@ -1,0 +1,70 @@
+[
+  {
+    "id": 501,
+    "student_id": "MA-2026-001",
+    "full_name": "A. Tergel",
+    "grade": "12",
+    "grade_display": "12th Grade",
+    "is_featured": true,
+    "achievement_type": "olympiad",
+    "achievement_type_display": "Olympiad",
+    "achievement_title_mn": "Улсын математикийн олимпиад - Алт",
+    "achievement_title_en": "National Mathematics Olympiad - Gold",
+    "achievement_description_mn": "Ахлах ангилалд тэргүүн байр эзэлсэн.",
+    "achievement_description_en": "Ranked first place in senior category.",
+    "achievement_year": 2025
+  },
+  {
+    "id": 502,
+    "student_id": "MA-2026-018",
+    "full_name": "N. Khulan",
+    "grade": "11",
+    "grade_display": "11th Grade",
+    "is_featured": true,
+    "achievement_type": "research",
+    "achievement_type_display": "Research",
+    "achievement_title_mn": "Шинжлэх ухааны төслийн уралдаан - Мөнгө",
+    "achievement_title_en": "Science Project Competition - Silver",
+    "achievement_description_mn": "Экологийн инновац сэдвээр төсөл хамгаалсан.",
+    "achievement_description_en": "Presented an environmental innovation project.",
+    "achievement_year": 2025
+  },
+  {
+    "id": 503,
+    "student_id": "MA-2026-032",
+    "full_name": "B. Anar",
+    "grade": "10",
+    "grade_display": "10th Grade",
+    "is_featured": false,
+    "achievement_type": "language",
+    "achievement_type_display": "Language",
+    "achievement_title_mn": "IELTS 7.5",
+    "achievement_title_en": "IELTS 7.5",
+    "achievement_description_mn": "Англи хэлний ахисан түвшин тогтоосон.",
+    "achievement_description_en": "Demonstrated advanced English proficiency.",
+    "achievement_year": 2025
+  },
+  {
+    "id": 504,
+    "student_id": "MA-2026-044",
+    "full_name": "S. Bilguun",
+    "grade": "9",
+    "grade_display": "9th Grade",
+    "is_featured": false,
+    "achievement_type": "sport",
+    "achievement_type_display": "Sport",
+    "achievement_title_mn": "Хотын аварга шалгаруулах тэмцээн - Хүрэл",
+    "achievement_title_en": "City Championship - Bronze",
+    "achievement_description_mn": "Багийн бүрэлдэхүүнд амжилттай оролцсон.",
+    "achievement_description_en": "Contributed to team success at city level.",
+    "achievement_year": 2025
+  },
+  {
+    "id": 505,
+    "student_id": "MA-2026-057",
+    "full_name": "M. Nomuun",
+    "grade": "12",
+    "grade_display": "12th Grade",
+    "is_featured": false
+  }
+]

@@ -1,235 +1,182 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Globe, BookOpen, Heart, ArrowRight, Play, ChevronLeft, ChevronRight } from 'lucide-react';
-import { aboutContent } from '../../data/about';
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: (i = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.65, ease: 'easeOut', delay: i * 0.1 },
-  }),
-};
-const stagger = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
-};
-const vp = { once: true, margin: '-80px' };
-
-const pillarIconMap: Record<string, React.ReactNode> = {
-  intellect: <BookOpen size={22} />,
-  access: <Globe size={22} />,
-  whole: <Heart size={22} />,
-};
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-block text-xs font-sans font-bold tracking-[0.2em] uppercase text-digital-blue bg-digital-blue/10 px-3 py-1 rounded-full mb-5">
-      {children}
-    </span>
-  );
-}
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
+import { getAboutData } from '../../lib/api';
+import type { AboutData } from '../../lib/api';
+import { bil, formatNumber } from '../../lib/utils';
+import { pageText } from '../../data/pageText';
 
 export function AboutPage() {
-  const missionRef = useRef(null);
-  const newsRef = useRef(null);
-  const tourRef = useRef(null);
+  const { isEnglish, t } = useLanguage();
+  const ui = pageText.about;
+  const tr = (label: { en: string; mn: string }) => t(label.en, label.mn);
+  const [data, setData] = useState<AboutData | null>(null);
 
-  const missionInView = useInView(missionRef, vp);
-  const newsInView = useInView(newsRef, vp);
-  const tourInView = useInView(tourRef, vp);
+  useEffect(() => {
+    getAboutData().then(setData).catch(() => {});
+  }, []);
 
-  const { hero, mission, news, tour } = aboutContent;
-
-  const [activeSlide, setActiveSlide] = useState(0);
-
-  const nextSlide = () => setActiveSlide((p) => (p + 1) % tour.galleryImages.length);
-  const prevSlide = () => setActiveSlide((p) => (p - 1 + tour.galleryImages.length) % tour.galleryImages.length);
+  const info = data?.school_info;
 
   return (
-    <div className="w-full bg-white">
-      {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <motion.section
-        className="relative bg-black text-white py-32 md:py-44 overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
-        <div className="absolute inset-0 w-full h-full">
-          <img src={hero.bgImage} alt="Stanford OHS background" className="w-full h-full object-cover opacity-40 mix-blend-overlay" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.22em] uppercase text-white/80 bg-white/20 px-4 py-1.5 rounded-full mb-8 backdrop-blur-md"
+    <div className="w-full">
+      {/* ── Hero ───────────────────────────────── */}
+      <section className="relative bg-black text-white py-32 md:py-44 overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-30 bg-gradient-to-br from-cardinal-red to-digital-blue" />
+        <motion.div
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-cardinal-red/10 blur-3xl"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.6 }}
+            className="inline-flex text-xs font-bold tracking-[0.2em] uppercase text-white/50 bg-white/10 px-4 py-1.5 rounded-full mb-8"
           >
-            {hero.eyebrow}
+            {tr(ui.heroTitle)}
           </motion.div>
           <motion.h1
-            className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold mb-6 leading-[1.1]"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.8 }}
+            className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight"
           >
-            {hero.title}
-            <br />
-            <span className="text-cardinal-red">{hero.titleAccent}</span>
+            {t('Mongol', 'Монгол')} <br />
+            <span className="text-cardinal-red">{t('Aspiration', 'Тэмүүлэл')}</span>
           </motion.h1>
           <motion.p
-            className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto font-sans leading-relaxed"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.38, duration: 0.8 }}
+            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.8 }}
+            className="text-xl md:text-2xl text-gray-200 max-w-2xl font-sans leading-relaxed"
           >
-            {hero.subtitle}
+            {tr(ui.heroSubtitle)}
           </motion.p>
         </div>
-      </motion.section>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col gap-32">
-        {/* ── Mission ───────────────────────────────────────────────────── */}
-        <section ref={missionRef}>
-          <motion.div initial="hidden" animate={missionInView ? 'visible' : 'hidden'} variants={stagger}>
-            <motion.div variants={fadeUp} className="text-center mb-16 max-w-2xl mx-auto">
-              <SectionLabel>{mission.sectionLabel}</SectionLabel>
-              <h2 className="text-4xl lg:text-5xl font-serif font-bold text-black mb-5">{mission.heading}</h2>
-              <div className="w-20 h-1.5 bg-cardinal-red rounded-full mx-auto mb-6" />
-              <p className="text-gray-600 font-sans text-lg leading-relaxed">{mission.body}</p>
-            </motion.div>
-            <motion.div variants={stagger} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {mission.pillars.map((p, i) => (
-                <motion.div
-                  key={p.id}
-                  custom={i}
-                  variants={fadeUp}
-                  whileHover={{ y: -6 }}
-                  transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-                  className="bg-gray-50 border border-gray-100 rounded-3xl p-8 flex flex-col gap-4 hover:shadow-xl transition-shadow"
-                >
-                  <div className="flex items-center gap-4">
-                    <span className={`text-3xl font-serif font-bold ${p.accentColor}`}>{p.num}</span>
-                    <div className={`w-0.5 h-8 ${p.barColor} rounded-full`} />
-                    <span className={`${p.accentColor}`}>{pillarIconMap[p.id]}</span>
+      {/* ── Vision & Mission ───────────────────── */}
+      {info && (
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+                <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-cardinal-red bg-cardinal-red/10 px-3 py-1 rounded-full mb-4">{tr(ui.vision)}</span>
+                <p className="text-lg text-gray-700 font-sans leading-relaxed">{bil(isEnglish, info.vision_en, info.vision_mn)}</p>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}>
+                <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-digital-blue bg-digital-blue/10 px-3 py-1 rounded-full mb-4">{tr(ui.mission)}</span>
+                <p className="text-lg text-gray-700 font-sans leading-relaxed">{bil(isEnglish, info.mission_en, info.mission_mn)}</p>
+              </motion.div>
+            </div>
+            {(info.total_students || info.total_teachers) && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
+                {info.total_students && (
+                  <div className="text-center">
+                    <p className="text-4xl font-bold text-cardinal-red">{formatNumber(info.total_students)}</p>
+                    <p className="text-gray-500 mt-1">{tr(ui.totalStudents)}</p>
                   </div>
-                  <h3 className="text-xl font-serif font-bold text-black">{p.heading}</h3>
-                  <p className="text-gray-600 font-sans text-sm leading-relaxed">{p.body}</p>
+                )}
+                {info.total_teachers && (
+                  <div className="text-center">
+                    <p className="text-4xl font-bold text-digital-blue">{formatNumber(info.total_teachers)}</p>
+                    <p className="text-gray-500 mt-1">{tr(ui.totalTeachers)}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* ── School Characteristics ──────────────── */}
+      {data && data.characteristics.length > 0 && (
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-serif font-bold text-center mb-12 text-black">{tr(ui.schoolCharacteristics)}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {data.characteristics.map((c, i) => (
+                <motion.div
+                  key={c.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow"
+                >
+                  <h3 className="text-xl font-serif font-bold text-black mb-3">{bil(isEnglish, c.title_en, c.title_mn)}</h3>
+                  <p className="text-gray-600 font-sans leading-relaxed">{bil(isEnglish, c.description_en, c.description_mn)}</p>
                 </motion.div>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </section>
+      )}
 
-        {/* ── Community News ────────────────────────────────────────────── */}
-        <section ref={newsRef}>
-          <motion.div initial="hidden" animate={newsInView ? 'visible' : 'hidden'} variants={stagger}>
-            <motion.div variants={fadeUp} className="mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      {/* ── National Program Results ────────────── */}
+      {data?.national_program && (
+        <section className="py-20 bg-black text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl font-serif font-bold mb-12">{tr(ui.nationalProgramResults)}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
-                <SectionLabel>{news.sectionLabel}</SectionLabel>
-                <h2 className="text-4xl lg:text-5xl font-serif font-bold text-black mb-4">{news.heading}</h2>
-                <div className="w-20 h-1.5 bg-black rounded-full" />
+                <p className="text-5xl font-bold text-cardinal-red">{data.national_program.performance_rate}%</p>
+                <p className="text-gray-400 mt-2">{tr(ui.performanceRate)}</p>
               </div>
-              <Link to="/news" className="inline-flex items-center gap-2 text-digital-blue font-bold hover:underline">
-                View All News <ArrowRight size={18} />
-              </Link>
-            </motion.div>
-            
-            <motion.div variants={stagger} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {news.items.map((item, i) => (
-                <motion.div
-                  key={item.id}
-                  custom={i}
-                  variants={fadeUp}
-                  className={`group relative rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 bg-white ${i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`}
-                >
-                  <div className={`overflow-hidden ${i === 0 ? 'h-80 lg:h-[400px]' : 'h-60'}`}>
-                    <img 
-                      src={item.imageUrl} 
-                      alt={item.title} 
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" 
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-                  <div className="absolute bottom-0 left-0 p-8 w-full z-10 flex flex-col justify-end">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="bg-cardinal-red text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">{item.category}</span>
-                      <span className="text-gray-300 text-sm">{item.date}</span>
-                    </div>
-                    <h3 className={`font-serif font-bold text-white leading-tight ${i === 0 ? 'text-2xl lg:text-3xl' : 'text-xl'} group-hover:text-sand transition-colors duration-300`}>
-                      {item.title}
-                    </h3>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
+              <div>
+                <p className="text-5xl font-bold text-digital-blue">{data.national_program.success_rate}%</p>
+                <p className="text-gray-400 mt-2">{tr(ui.successRate)}</p>
+              </div>
+              <div>
+                <p className="text-5xl font-bold text-sand">{data.national_program.quality_rate}%</p>
+                <p className="text-gray-400 mt-2">{tr(ui.qualityRate)}</p>
+              </div>
+            </div>
+          </div>
         </section>
+      )}
 
-        {/* ── Take the Tour ─────────────────────────────────────────────── */}
-        <section ref={tourRef} className="bg-sand rounded-[3rem] p-10 lg:p-20 overflow-hidden relative">
-          <motion.div 
-            initial="hidden" 
-            animate={tourInView ? 'visible' : 'hidden'} 
-            variants={stagger}
-            className="flex flex-col lg:flex-row gap-16 items-center"
-          >
-            <motion.div variants={fadeUp} className="w-full lg:w-1/3">
-              <SectionLabel>{tour.sectionLabel}</SectionLabel>
-              <h2 className="text-4xl lg:text-5xl font-serif font-bold text-black mb-6">{tour.heading}</h2>
-              <p className="text-lg font-sans text-gray-800 leading-relaxed mb-8">{tour.body}</p>
-              
-              <div className="flex flex-col gap-4">
-                <Link to="/tour" className="inline-flex items-center justify-center gap-2 bg-cardinal-red text-white px-8 py-3.5 rounded-full font-bold hover:bg-black transition-colors shadow-lg">
-                  Start Virtual Tour
-                </Link>
-                <Link to="/admissions" className="inline-flex items-center justify-center gap-2 border-2 border-black text-black px-8 py-3.5 rounded-full font-bold hover:bg-black hover:text-white transition-colors">
-                  Contact Admissions
-                </Link>
+      {/* ── Graduate Information ────────────────── */}
+      {data && data.graduate_stats.length > 0 && (
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-serif font-bold text-center mb-4 text-black">{tr(ui.graduateInformation)}</h2>
+            <div className="grid grid-cols-3 gap-8 text-center mb-12">
+              <div>
+                <p className="text-3xl font-bold text-cardinal-red">{formatNumber(data.total_graduates)}</p>
+                <p className="text-gray-500">{tr(ui.totalGraduates)}</p>
               </div>
-            </motion.div>
-
-            <motion.div variants={fadeUp} className="w-full lg:w-2/3 flex flex-col gap-6">
-              {/* Video Placeholder */}
-              <div className="relative w-full aspect-video bg-black rounded-3xl overflow-hidden group shadow-2xl">
-                <img src={tour.videoPlaceholderUrl} alt="Tour Video" className="w-full h-full object-cover opacity-60 group-hover:opacity-50 transition-opacity duration-300" />
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-20 h-20 bg-cardinal-red/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-xl backdrop-blur-sm">
-                    <Play className="text-white ml-2 w-8 h-8" />
-                  </div>
-                </div>
+              <div>
+                <p className="text-3xl font-bold text-digital-blue">{formatNumber(data.total_abroad)}</p>
+                <p className="text-gray-500">{tr(ui.abroad)}</p>
               </div>
-
-              {/* Photo Gallery Slider */}
-              <div className="flex gap-4 items-center">
-                <button onClick={prevSlide} className="p-3 rounded-full bg-white shadow-md hover:bg-cardinal-red hover:text-white transition-colors">
-                  <ChevronLeft size={24} />
-                </button>
-                <div className="flex-1 overflow-hidden rounded-2xl h-48 relative">
-                  <motion.div 
-                    className="flex h-full w-full"
-                    animate={{ x: `-${activeSlide * 100}%` }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  >
-                    {tour.galleryImages.map((img, i) => (
-                      <div key={i} className="min-w-full h-full p-1">
-                        <img src={img} alt={`Gallery ${i}`} className="w-full h-full object-cover rounded-xl" />
-                      </div>
-                    ))}
-                  </motion.div>
-                </div>
-                <button onClick={nextSlide} className="p-3 rounded-full bg-white shadow-md hover:bg-cardinal-red hover:text-white transition-colors">
-                  <ChevronRight size={24} />
-                </button>
+              <div>
+                <p className="text-3xl font-bold text-sand">${formatNumber(data.total_scholarship)}</p>
+                <p className="text-gray-500">{tr(ui.scholarshipAmount)}</p>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b-2 border-gray-200">
+                    <th className="py-3 px-4 text-sm font-bold text-gray-500">{tr(ui.year)}</th>
+                    <th className="py-3 px-4 text-sm font-bold text-gray-500">{tr(ui.totalGraduates)}</th>
+                    <th className="py-3 px-4 text-sm font-bold text-gray-500">{tr(ui.abroad)}</th>
+                    <th className="py-3 px-4 text-sm font-bold text-gray-500">{tr(ui.scholarshipAmount)}</th>
+                    <th className="py-3 px-4 text-sm font-bold text-gray-500">{tr(ui.percentage)}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.graduate_stats.map((g) => (
+                    <tr key={g.year} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4 font-semibold">{g.year}</td>
+                      <td className="py-3 px-4">{formatNumber(g.total_graduates)}</td>
+                      <td className="py-3 px-4">{formatNumber(g.abroad_count)}</td>
+                      <td className="py-3 px-4">${formatNumber(g.scholarship_amount)}</td>
+                      <td className="py-3 px-4">{g.percentage}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </section>
-
-      </div>
+      )}
     </div>
   );
 }

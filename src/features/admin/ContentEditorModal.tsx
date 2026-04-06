@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, UploadCloud, FileText, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import { X, FileText, Image as ImageIcon, AlertCircle } from 'lucide-react';
 import { Article } from '../../hooks/useArticles';
 
 interface ContentEditorModalProps {

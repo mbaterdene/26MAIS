@@ -1,0 +1,20 @@
+[
+  {
+    "id": "7d943249-edbd-4097-aff0-c28e5436f0c4",
+    "displayName": "Main Super Admin",
+    "role": "super_admin",
+    "usernameHash": "$2a$10$Tzb7piXvskq1dsStN./vO.QZSBaD8w/ZD4YDqFAotcp7N0UbKvr/u",
+    "passwordHash": "$2a$10$7FCWUEgwEHDrIq09TLgwkeoMLZZx3Djcw6DTt47FnNX3HPguFiwvG",
+    "createdBy": "system-seed",
+    "createdAt": "2026-03-31T10:45:17.118Z"
+  },
+  {
+    "id": "df420438-33fb-41f8-8797-04e0bb7bc842",
+    "displayName": "Test Editor",
+    "role": "news_editor",
+    "usernameHash": "$2a$10$IpqqzdQ6wxiISpBp.NUYMufDyZku4t2v.jY3Wj.9VjoHxrTPcg0UO",
+    "passwordHash": "$2a$10$E8BGbsMvJhHdUrTbBybTieF9Zu1QVI6L9hP/v2HPjHv8/31e.rF0S",
+    "createdBy": "7d943249-edbd-4097-aff0-c28e5436f0c4",
+    "createdAt": "2026-03-31T10:47:17.261Z"
+  }
+]

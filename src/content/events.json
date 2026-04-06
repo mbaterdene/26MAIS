@@ -1,0 +1,48 @@
+[
+  {
+    "id": 301,
+    "title_mn": "Эцэг эх, багшийн зөвлөгөөн",
+    "title_en": "Parent-Teacher Conference",
+    "description_mn": "Сурагч бүрийн ахиц дэвшлийг танилцуулах уулзалт.",
+    "description_en": "Individual progress meetings between parents and teachers.",
+    "event_type": "academic",
+    "event_type_display": "Academic",
+    "event_date": "2026-04-05T09:00:00",
+    "event_end": "2026-04-05T16:30:00",
+    "location": "Main Building, Hall A"
+  },
+  {
+    "id": 302,
+    "title_mn": "Их сургуулийн зөвлөх өдөр",
+    "title_en": "University Counseling Day",
+    "description_mn": "12-р ангийн сурагч, эцэг эхэд зориулсан зөвлөх өдөрлөг.",
+    "description_en": "Guidance day for Grade 12 students and parents.",
+    "event_type": "other",
+    "event_type_display": "Counseling",
+    "event_date": "2026-04-12T13:00:00",
+    "location": "Counseling Center"
+  },
+  {
+    "id": 303,
+    "title_mn": "Хаврын спортын өдөр",
+    "title_en": "Spring Sports Day",
+    "description_mn": "Сурагчдын багийн спортын тэмцээн.",
+    "description_en": "Inter-class sports events and team competitions.",
+    "event_type": "sport",
+    "event_type_display": "Sport",
+    "event_date": "2026-04-20T10:00:00",
+    "location": "School Field"
+  },
+  {
+    "id": 304,
+    "title_mn": "Шалгалтын бэлтгэлийн долоо хоног",
+    "title_en": "Exam Preparation Week",
+    "description_mn": "Давтлага, зөвлөгөө, загвар шалгалтууд.",
+    "description_en": "Revision sessions, consultations, and mock exams.",
+    "event_type": "exam",
+    "event_type_display": "Exam",
+    "event_date": "2026-05-01T08:00:00",
+    "event_end": "2026-05-07T17:00:00",
+    "location": "All Classrooms"
+  }
+]

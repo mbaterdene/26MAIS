@@ -1,0 +1,42 @@
+[
+  {
+    "id": 401,
+    "full_name": "Ts. Munkh-Erdene",
+    "subject": "Mathematics",
+    "bio": "Leads advanced math classes and supports university entrance preparation.",
+    "email": "munkherdene@school.mn",
+    "category": "aice"
+  },
+  {
+    "id": 402,
+    "full_name": "B. Ariunjargal",
+    "subject": "English",
+    "bio": "Focuses on academic writing, presentations, and language certification readiness.",
+    "email": "ariunjargal@school.mn",
+    "category": "igcse"
+  },
+  {
+    "id": 403,
+    "full_name": "L. Sarnai",
+    "subject": "Mongolian Language",
+    "bio": "Guides senior students in structured writing and national exam competencies.",
+    "email": "sarnai@school.mn",
+    "category": "national"
+  },
+  {
+    "id": 404,
+    "full_name": "G. Nyamgerel",
+    "subject": "Integrated Science",
+    "bio": "Designs inquiry-based lessons connecting science theory with practical labs.",
+    "email": "nyamgerel@school.mn",
+    "category": "pdq"
+  },
+  {
+    "id": 405,
+    "full_name": "D. Enkhjargal",
+    "subject": "School Leadership",
+    "bio": "Coordinates curriculum quality and parent communication initiatives.",
+    "email": "enkhjargal@school.mn",
+    "category": "leadership"
+  }
+]

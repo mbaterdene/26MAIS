@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title_mn": "Эцэг эхтэй нээлттэй хамтын ажиллагаа",
+    "title_en": "Open Partnership with Parents",
+    "subtitle_mn": "Ил тод мэдээлэл, бодит ахицыг хамтдаа",
+    "subtitle_en": "Transparent communication and measurable progress",
+    "background": "#991b1b"
+  },
+  {
+    "id": 2,
+    "title_mn": "Хос хөтөлбөр, бодит үр дүн",
+    "title_en": "Dual Program, Real Outcomes",
+    "subtitle_mn": "Үндэсний ба олон улсын хөтөлбөрийн уялдаа",
+    "subtitle_en": "Aligned national and international curriculum",
+    "background": "#1e3a8a"
+  },
+  {
+    "id": 3,
+    "title_mn": "Их сургуульд бэлтгэх орчин",
+    "title_en": "University-Readiness Environment",
+    "subtitle_mn": "Судалгаа, сэтгэлгээ, хариуцлага",
+    "subtitle_en": "Research mindset, discipline, and responsibility",
+    "background": "#065f46"
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "statistics": {
+    "total_alumni": 269,
+    "total_countries": 12,
+    "total_universities": 94,
+    "total_scholarship": 1799000000
+  },
+  "countries_data": [
+    {
+      "code": "KR",
+      "name": "БНСУ",
+      "name_en": "South Korea",
+      "alumni_count": 62,
+      "latitude": 36.5,
+      "longitude": 127.8,
+      "color": "#2563eb"
+    },
+    {
+      "code": "JP",
+      "name": "Япон",
+      "name_en": "Japan",
+      "alumni_count": 41,
+      "latitude": 36.2,
+      "longitude": 138.3,
+      "color": "#ef4444"
+    },
+    {
+      "code": "US",
+      "name": "АНУ",
+      "name_en": "United States",
+      "alumni_count": 38,
+      "latitude": 39.8,
+      "longitude": -98.5,
+      "color": "#10b981"
+    },
+    {
+      "code": "CN",
+      "name": "БНХАУ",
+      "name_en": "China",
+      "alumni_count": 34,
+      "latitude": 35.9,
+      "longitude": 104.2,
+      "color": "#f59e0b"
+    },
+    {
+      "code": "SG",
+      "name": "Сингапур",
+      "name_en": "Singapore",
+      "alumni_count": 21,
+      "latitude": 1.35,
+      "longitude": 103.82,
+      "color": "#8b5cf6"
+    }
+  ]
+}

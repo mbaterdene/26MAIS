@@ -1,16 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, ExternalLink } from 'lucide-react';
+import { Menu, X, ChevronDown, ExternalLink, Globe } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const utilityLinks = [
-  { label: 'Gateway', href: '/placeholder', external: true },
-  { label: 'Alumni', href: '/placeholder', external: true },
-  { label: 'Support Us', href: '/placeholder', external: true },
-  { label: 'Questions?', href: '/placeholder', external: false },
-  { label: 'Contact Us', href: '/placeholder', external: false },
+  { label: 'Teachers', href: '/teachers', external: false },
+  { label: 'Events', href: '/events', external: false },
+  { label: 'Contact Us', href: '/about', external: false },
 ];
 
 interface NavItem {
@@ -280,6 +279,20 @@ function MobileAccordionItem({
 
 // ─── Main Navbar ──────────────────────────────────────────────────────────────
 
+function LanguageToggle() {
+  const { lang, setLang } = useLanguage();
+  return (
+    <button
+      onClick={() => setLang(lang === 'mn' ? 'en' : 'mn')}
+      className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-cardinal-red hover:text-cardinal-red transition-colors"
+      title="Toggle language"
+    >
+      <Globe size={14} />
+      {lang === 'mn' ? 'EN' : 'MN'}
+    </button>
+  );
+}
+
 export function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -336,10 +349,10 @@ export function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 flex-shrink-0 group">
             <span className="text-cardinal-red font-serif font-bold text-2xl tracking-tight transition-opacity group-hover:opacity-80">
-              Stanford
+              MAIS
             </span>
             <span className="text-black font-sans font-semibold text-sm border-l-2 border-gray-300 pl-3 leading-tight hidden sm:block">
-              Online High<br />School
+              Монгол<br />Тэмүүлэл
             </span>
           </Link>
 
@@ -350,14 +363,15 @@ export function Navbar() {
             ))}
           </nav>
 
-          {/* Desktop CTA */}
+          {/* Desktop CTA + Lang Toggle */}
           <div className="hidden lg:flex items-center gap-3">
-            <a
-              href="/admissions"
+            <LanguageToggle />
+            <Link
+              to="/admissions"
               className="bg-cardinal-red hover:bg-digital-red text-white text-sm px-5 py-2 rounded-full font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cardinal-red"
             >
               Apply Now
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Hamburger */}
@@ -403,9 +417,9 @@ export function Navbar() {
               {/* Drawer header */}
               <div className="flex items-center justify-between px-4 h-16 border-b border-gray-100 flex-shrink-0">
                 <Link to="/" onClick={closeDrawer} className="flex items-center gap-2">
-                  <span className="text-cardinal-red font-serif font-bold text-xl">Stanford</span>
+                  <span className="text-cardinal-red font-serif font-bold text-xl">MAIS</span>
                   <span className="text-black font-sans text-xs font-semibold leading-tight">
-                    Online High<br />School
+                    Монгол<br />Тэмүүлэл
                   </span>
                 </Link>
                 <button
@@ -447,6 +461,10 @@ export function Navbar() {
               </div>
 
               {/* Drawer footer CTA */}
+              {/* Language toggle in drawer */}
+              <div className="px-4 pb-4">
+                <LanguageToggle />
+              </div>
               <div className="p-4 border-t border-gray-100 flex-shrink-0">
                 <Link
                   to="/admissions"

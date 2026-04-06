@@ -1,0 +1,92 @@
+[
+  {
+    "id": 601,
+    "name_en": "Debate Club",
+    "name_mn": "Сорилцоо ярилцлагын клуб",
+    "category": "student",
+    "description_en": "A platform for students to develop critical thinking and public speaking skills through competitive debates on various topics.",
+    "description_mn": "Сурагчдад сорилцоо ярилцлагын дамжуулан авхаалж самуунсан сэтгэлгээ, олон нийтэд илэрхийлэх чадварыг хөгжүүлэх платформ.",
+    "icon": "🎤"
+  },
+  {
+    "id": 602,
+    "name_en": "Science & Innovation Club",
+    "name_mn": "Шинжлэх ухаан & Инноваци Клуб",
+    "category": "student",
+    "description_en": "Dedicated to scientific exploration, hands-on experiments, and innovative project development for curious minds.",
+    "description_mn": "Шинжлэх ухааны судалгаа, практик туршилтууд, инновацийн төсөл боловсруулахад зориулсан.",
+    "icon": "🔬"
+  },
+  {
+    "id": 603,
+    "name_en": "Environmental Club",
+    "name_mn": "Экологийн клуб",
+    "category": "student",
+    "description_en": "Engaging students in environmental conservation, sustainability projects, and ecological awareness initiatives.",
+    "description_mn": "Сурагчдыг байгаль хайраулах, тогтвортой хөгжил, эко-ухамсарын төсөлд оролцуулж байна.",
+    "icon": "♻️"
+  },
+  {
+    "id": 604,
+    "name_en": "Arts & Culture Club",
+    "name_mn": "Урлаг & Соёл Клуб",
+    "category": "student",
+    "description_en": "Celebrating creative expression through visual arts, performing arts, and cultural heritage preservation.",
+    "description_mn": "Урлагийн үзүүлбэр, соёлын үүргийн дамжуулан сурагчдын сэтгэж бүтээх чадварыг хөгжүүлнэ.",
+    "icon": "🎨"
+  },
+  {
+    "id": 605,
+    "name_en": "Sports & Fitness Club",
+    "name_mn": "Спорт & Идэвхтэй амьдрал Клуб",
+    "category": "student",
+    "description_en": "Promoting physical wellness, team sports, and an active lifestyle among students.",
+    "description_mn": "Сурагчдын биеийн эргүүлэлт, спортын уралдаани, идэвхтэй амьдралыг сурталчилнэ.",
+    "icon": "⚽"
+  },
+  {
+    "id": 606,
+    "name_en": "Technology & Coding Club",
+    "name_mn": "Технологи & Программчлал Клуб",
+    "category": "student",
+    "description_en": "Learning programming, robotics, and emerging technologies through collaborative projects.",
+    "description_mn": "Программчлал, робототехник, шинэ технологийг хамтарч сурч байна.",
+    "icon": "💻"
+  },
+  {
+    "id": 607,
+    "name_en": "Language Exchange Club",
+    "name_mn": "Хэлний солилцоо Клуб",
+    "category": "school",
+    "description_en": "School-organized program to enhance language skills and cultural understanding through international exchanges.",
+    "description_mn": "Сугалалтын хүнд хэлнийг сайжруулах, соёлын ойлголтыг гүнзгийрүүлэх сургуулийн төсөл.",
+    "icon": "🌍"
+  },
+  {
+    "id": 608,
+    "name_en": "Leadership Development Program",
+    "name_mn": "Удирдамжийн хөгжлийн хөтөлбөр",
+    "category": "school",
+    "description_en": "School-organized leadership training and mentoring program for student representatives and future leaders.",
+    "description_mn": "Төлөөлөл, ирээдүйн удирдагчдын удирдамжийн сургалт, дамжүүлэх сургуулийн хөтөлбөр.",
+    "icon": "👥"
+  },
+  {
+    "id": 609,
+    "name_en": "Community Service Club",
+    "name_mn": "Нийгмийн үйлсийн клуб",
+    "category": "school",
+    "description_en": "School-organized volunteer and community service initiatives focused on social responsibility.",
+    "description_mn": "Сурагчдын сайн сэтгэлийн ажил, нийгмийн ёс зүйг сурталчилдаг сургуулийн төсөл.",
+    "icon": "🤝"
+  },
+  {
+    "id": 610,
+    "name_en": "Entrepreneurship Club",
+    "name_mn": "Бизнесийн сүүлийн клуб",
+    "category": "school",
+    "description_en": "School-organized program to develop entrepreneurial mindset and business acumen among students.",
+    "description_mn": "Сурагчдын бизнесийн ухаан, хөгжил, удирдлагын чадварыг сурталчилдаг сургуулийн төсөл.",
+    "icon": "💼"
+  }
+]
