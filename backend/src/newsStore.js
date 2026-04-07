@@ -35,12 +35,26 @@ function generateSlug(text) {
     .replace(/-+/g, "-");
 }
 
+// Transform MongoDB document to include 'id' field
+function transformNews(doc) {
+  if (!doc) return null;
+  const obj = doc.toObject ? doc.toObject() : doc;
+  return {
+    ...obj,
+    id: obj._id.toString(),
+  };
+}
+
+
 export async function getNewsByStatus(status) {
   try {
+    let results;
     if (status === "all") {
-      return await News.find().sort({ created_at: -1 }).exec();
+      results = await News.find().sort({ created_at: -1 }).exec();
+    } else {
+      results = await News.find({ status }).sort({ created_at: -1 }).exec();
     }
-    return await News.find({ status }).sort({ created_at: -1 }).exec();
+    return results.map(transformNews);
   } catch (error) {
     console.error("Error fetching news by status:", error);
     throw error;
@@ -49,7 +63,8 @@ export async function getNewsByStatus(status) {
 
 export async function getAllNews() {
   try {
-    return await News.find().sort({ created_at: -1 }).exec();
+    const results = await News.find().sort({ created_at: -1 }).exec();
+    return results.map(transformNews);
   } catch (error) {
     console.error("Error fetching all news:", error);
     throw error;
@@ -59,10 +74,13 @@ export async function getAllNews() {
 export async function getNewsById(id) {
   try {
     // Try to find by MongoDB ObjectId if it looks like one, otherwise by slug
+    let doc;
     if (mongoose.Types.ObjectId.isValid(id)) {
-      return await News.findById(id).exec();
+      doc = await News.findById(id).exec();
+    } else {
+      doc = await News.findOne({ slug: id }).exec();
     }
-    return await News.findOne({ slug: id }).exec();
+    return transformNews(doc);
   } catch (error) {
     console.error("Error fetching news by id:", error);
     throw error;
@@ -104,7 +122,7 @@ export async function createNews(data) {
     });
 
     const savedArticle = await newArticle.save();
-    return savedArticle.toObject();
+    return transformNews(savedArticle);
   } catch (error) {
     console.error("Error creating news:", error);
     throw error;
@@ -123,7 +141,7 @@ export async function updateNews(id, data) {
       throw new Error(`News with id ${id} not found`);
     }
 
-    return article.toObject();
+    return transformNews(article);
   } catch (error) {
     console.error("Error updating news:", error);
     throw error;
@@ -138,7 +156,7 @@ export async function deleteNews(id) {
       throw new Error(`News with id ${id} not found`);
     }
 
-    return article.toObject();
+    return transformNews(article);
   } catch (error) {
     console.error("Error deleting news:", error);
     throw error;
@@ -209,7 +227,7 @@ export async function rejectNews(id) {
 export async function searchNews(query) {
   try {
     const lowerQuery = query.toLowerCase();
-    return await News.find({
+    const results = await News.find({
       $or: [
         { title_en: { $regex: lowerQuery, $options: "i" } },
         { title_mn: { $regex: lowerQuery, $options: "i" } },
@@ -218,6 +236,7 @@ export async function searchNews(query) {
         { content_mn: { $regex: lowerQuery, $options: "i" } },
       ],
     }).sort({ created_at: -1 }).exec();
+    return results.map(transformNews);
   } catch (error) {
     console.error("Error searching news:", error);
     throw error;
