@@ -58,6 +58,10 @@ export function NewsDetailPage() {
                 src={article.image}
                 alt={bil(isEnglish, article.title_en, article.title_mn)}
                 className="w-full h-64 md:h-96 object-cover"
+                onError={(e) => {
+                  console.error('Image failed to load:', article.image);
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
               />
             </div>
           )}

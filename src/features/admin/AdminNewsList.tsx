@@ -159,6 +159,7 @@ export function AdminNewsList() {
           title_mn={previewArticle.title_mn}
           content_en={previewArticle.content_en}
           content_mn={previewArticle.content_mn}
+          image={previewArticle.image}
           onClose={() => setPreviewArticle(null)}
         />
       )}

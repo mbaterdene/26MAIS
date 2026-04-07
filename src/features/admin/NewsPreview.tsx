@@ -7,10 +7,11 @@ interface NewsPreviewProps {
   title_mn: string;
   content_en: string;
   content_mn: string;
+  image: string;
   onClose: () => void;
 }
 
-export function NewsPreview({ title_en, title_mn, content_en, content_mn, onClose }: NewsPreviewProps) {
+export function NewsPreview({ title_en, title_mn, content_en, content_mn, image, onClose }: NewsPreviewProps) {
   const { isEnglish } = useLanguage();
   const title = bil(isEnglish, title_en, title_mn);
   const content = bil(isEnglish, content_en, content_mn);
@@ -32,6 +33,15 @@ export function NewsPreview({ title_en, title_mn, content_en, content_mn, onClos
         {/* Content */}
         <div className="overflow-y-auto flex-1 p-8">
           <div className="prose prose-sm max-w-none">
+            {image && (
+              <div className="mb-6 rounded-lg overflow-hidden">
+                <img
+                  src={image}
+                  alt={title}
+                  className="w-full h-80 object-cover"
+                />
+              </div>
+            )}
             <h1 className="text-3xl font-serif font-bold text-gray-900 mb-6">{title}</h1>
             <div
               className="text-gray-700 leading-relaxed space-y-4"

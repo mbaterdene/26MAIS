@@ -3,6 +3,7 @@ import { X, FileText, AlertCircle, Loader2, Eye } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TiptapEditor } from '../../components/admin/TiptapEditor';
 import { NewsPreview } from './NewsPreview';
+import { ImageUpload } from './ImageUpload';
 import { useCreateNews, useUpdateNews, useNewsById } from '../../hooks/useNews';
 
 interface NewsEditorPageProps {
@@ -18,6 +19,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
     title_mn: '',
     content_en: '',
     content_mn: '',
+    image: '' as string,
     status: 'draft' as 'draft' | 'pending' | 'published',
   });
   const [error, setError] = useState('');
@@ -36,6 +38,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
         title_mn: existingNews.title_mn || '',
         content_en: existingNews.content_en || '',
         content_mn: existingNews.content_mn || '',
+        image: existingNews.image || '',
         status: existingNews.status || 'draft',
       });
     }
@@ -70,6 +73,10 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
     }
     if (!formData.content_en.trim() || !formData.content_mn.trim()) {
       setError('Both English and Mongolian content are required.');
+      return;
+    }
+    if (!formData.image) {
+      setError('Cover image is required.');
       return;
     }
 
@@ -195,6 +202,12 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-6">
         <h2 className="text-lg font-bold text-gray-900">Article Settings</h2>
 
+        {/* Cover Image Upload */}
+        <ImageUpload
+          value={formData.image}
+          onChange={(url: string) => setFormData({ ...formData, image: url })}
+        />
+
         {/* Status */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Publication Status</label>
@@ -247,6 +260,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
           title_mn={formData.title_mn}
           content_en={formData.content_en}
           content_mn={formData.content_mn}
+          image={formData.image}
           onClose={() => setShowPreview(false)}
         />
       )}

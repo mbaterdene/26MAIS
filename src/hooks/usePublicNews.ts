@@ -41,7 +41,9 @@ export function usePublicNewsBySlug(slug: string | undefined) {
         throw new Error("Failed to fetch news");
       }
 
-      return response.json();
+      const result = await response.json();
+      console.log("Fetched article:", result); // Debug logging
+      return result;
     },
     enabled: !!slug,
     staleTime: 5 * 60 * 1000, // 5 minutes

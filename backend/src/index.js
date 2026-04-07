@@ -563,7 +563,7 @@ app.get("/api/news/:slug", async (req, res) => {
       return res.status(404).json({ error: "Article not found" });
     }
 
-    return res.json(article);
+    return res.json({ ...article, image: article.image || null });
   } catch (error) {
     return res.status(500).json({ error: error instanceof Error ? error.message : "Failed to fetch news" });
   }

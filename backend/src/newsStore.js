@@ -8,7 +8,7 @@ const newsSchema = new mongoose.Schema(
     title_en: { type: String, required: true },
     content_mn: { type: String, required: true },
     content_en: { type: String, required: true },
-    image: { type: String, default: null },
+    image: { type: String, required: true },
     category: { type: String, default: "news" },
     author: { type: String, default: "Anonymous" },
     status: { type: String, enum: ["draft", "pending", "published"], default: "draft" },

@@ -49,7 +49,7 @@ export interface News {
   title_en: string;
   content_mn: string; // HTML from Tiptap
   content_en: string; // HTML from Tiptap
-  image?: string; // Cloudinary URL
+  image: string; // Cloudinary URL
   category?: string;
   author: string; // admin username or display name
   status: NewsStatus;
@@ -65,7 +65,7 @@ export interface CreateNewsRequest {
   title_en: string;
   content_mn: string;
   content_en: string;
-  image?: string;
+  image: string;
   category?: string;
   author?: string;
   status?: NewsStatus;
@@ -76,7 +76,7 @@ export interface UpdateNewsRequest {
   title_en?: string;
   content_mn?: string;
   content_en?: string;
-  image?: string;
+  image: string;
   category?: string;
   author?: string;
   status?: NewsStatus;
