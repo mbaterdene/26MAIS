@@ -5,7 +5,6 @@ import type {
   Club,
   Course,
   Event,
-  NewsItem,
   SchoolInfo,
   Student,
   Teacher,
@@ -13,7 +12,6 @@ import type {
 
 import schoolRaw from "../content/school.json";
 import slidesRaw from "../content/slides.json";
-import newsRaw from "../content/news.json";
 import coursesRaw from "../content/courses.json";
 import eventsRaw from "../content/events.json";
 import teachersRaw from "../content/teachers.json";
@@ -71,7 +69,6 @@ export const jsonSlides = (slidesRaw as RawSlide[]).map((s) => ({
     s.background
   ),
 })) satisfies CarouselSlide[];
-export const jsonNews = newsRaw as NewsItem[];
 export const jsonCourses = coursesRaw as Course[];
 export const jsonEvents = eventsRaw as Event[];
 export const jsonTeachers = teachersRaw as Teacher[];

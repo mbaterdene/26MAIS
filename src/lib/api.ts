@@ -21,13 +21,14 @@ import {
   jsonClubs,
   jsonCourses,
   jsonEvents,
-  jsonNews,
   jsonSchoolInfo,
   jsonSlides,
   jsonStudents,
   jsonTeachers,
 } from "../data/contentJson";
 import { coursePDQData } from "../data/courseQuality";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8787";
 
 function filterCourses(items: Course[], params?: { grade?: string; program_type?: string }): Course[] {
   return items.filter((c) => {
@@ -62,13 +63,29 @@ export interface HomeData {
   upcoming_events: Event[];
   school_info: SchoolInfo | null;
 }
-export const getHomeData = (): Promise<HomeData> =>
-  Promise.resolve({
-    slides: jsonSlides,
-    latest_news: jsonNews.slice(0, 4),
-    upcoming_events: jsonEvents.slice(0, 4),
-    school_info: jsonSchoolInfo,
-  });
+export const getHomeData = async (): Promise<HomeData> => {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/news`);
+    const data = await response.json();
+    const latest_news = (data.data || []).slice(0, 4);
+    
+    return {
+      slides: jsonSlides,
+      latest_news: latest_news,
+      upcoming_events: jsonEvents.slice(0, 4),
+      school_info: jsonSchoolInfo,
+    };
+  } catch (error) {
+    console.error("Failed to fetch home data:", error);
+    // Fallback to empty news array
+    return {
+      slides: jsonSlides,
+      latest_news: [],
+      upcoming_events: jsonEvents.slice(0, 4),
+      school_info: jsonSchoolInfo,
+    };
+  }
+};
 
 // ─── About ────────────────────────────────────────────────────────────────────
 export interface Achievement {
@@ -111,13 +128,28 @@ export const getAboutData = (): Promise<AboutData> =>
   Promise.resolve(aboutData);
 
 // ─── News ─────────────────────────────────────────────────────────────────────
-export const getNewsList = async (limit = 20, offset = 0): Promise<NewsItem[]> =>
-  jsonNews.slice(offset, offset + limit);
+export const getNewsList = async (limit = 20, offset = 0): Promise<NewsItem[]> => {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/news`);
+    const data = await response.json();
+    return (data.data || []).slice(offset, offset + limit);
+  } catch (error) {
+    console.error("Failed to fetch news list:", error);
+    return [];
+  }
+};
 
 export const getNewsDetail = async (slug: string): Promise<NewsItem> => {
-  const item = jsonNews.find((n) => n.slug === slug);
-  if (!item) throw new Error(`News not found: ${slug}`);
-  return item;
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/news/${slug}`);
+    if (!response.ok) {
+      throw new Error(`News not found: ${slug}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Failed to fetch news detail:", error);
+    throw new Error(`News not found: ${slug}`);
+  }
 };
 
 // ─── Courses ──────────────────────────────────────────────────────────────────

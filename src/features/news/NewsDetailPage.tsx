@@ -1,14 +1,25 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { bil, formatDate } from '../../lib/utils';
-import { jsonNews } from '../../data/contentJson';
+import { usePublicNewsBySlug } from '../../hooks/usePublicNews';
 
 export function NewsDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { isEnglish, t } = useLanguage();
-  const article = jsonNews.find((n) => n.slug === slug);
+  const { data: article, isLoading } = usePublicNewsBySlug(slug);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-32 flex items-center justify-center">
+        <div className="text-center text-gray-500 flex items-center gap-2">
+          <Loader className="animate-spin" />
+          {t('Loading article...', 'Өгүүлэл ачаалж байна...')}
+        </div>
+      </div>
+    );
+  }
 
   if (!article) {
     return (
