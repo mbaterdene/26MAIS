@@ -2,6 +2,7 @@ import crypto from "crypto";
 import express from "express";
 import cors from "cors";
 import { z } from "zod";
+import mongoose from "mongoose";
 import { config } from "./config.js";
 import {
   ADMIN_ROLES,
@@ -351,7 +352,7 @@ app.get("/api/news/fetch", requireRole(CONTENT_WRITE_ROLES), async (req, res) =>
 // GET /api/news/fetch/:id - Get single news by ID (admin only)
 app.get("/api/news/fetch/:id", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
     const news = await getNewsById(id);
 
     if (!news) {
@@ -387,7 +388,7 @@ app.post("/api/news/create", requireRole(CONTENT_WRITE_ROLES), async (req, res) 
 // PUT /api/news/:id/update - Update existing news
 app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
     const parsed = newsCreateSchema.partial().safeParse(req.body);
 
     if (!parsed.success) {
@@ -400,7 +401,7 @@ app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, re
     }
 
     // Check permissions: only creator or admin can edit
-    if (req.auth.role === "news_editor" && existing.createdBy !== req.auth.adminId) {
+    if (req.auth.role === "news_editor" && existing.createdBy.toString() !== req.auth.adminId) {
       return res.status(403).json({ error: "You can only edit your own articles" });
     }
 
@@ -414,7 +415,7 @@ app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, re
 // DELETE /api/news/:id - Delete news (admin only)
 app.delete("/api/news/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
     const deleted = await deleteNews(id);
 
     return res.json({ ok: true, data: deleted });
@@ -426,7 +427,7 @@ app.delete("/api/news/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.AD
 // PUT /api/news/:id/submit - Submit for approval (draft → pending)
 app.put("/api/news/:id/submit", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
     const updated = await submitForApproval(id);
 
     return res.json({ ok: true, data: updated });
@@ -438,7 +439,7 @@ app.put("/api/news/:id/submit", requireRole(CONTENT_WRITE_ROLES), async (req, re
 // PUT /api/news/:id/approve - Approve news (pending → published)
 app.put("/api/news/:id/approve", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
     const updated = await approveNews(id, req.auth.adminId);
 
     return res.json({ ok: true, data: updated });
@@ -450,7 +451,7 @@ app.put("/api/news/:id/approve", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROL
 // PUT /api/news/:id/reject - Reject news (pending → draft)
 app.put("/api/news/:id/reject", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
     const updated = await rejectNews(id);
 
     return res.json({ ok: true, data: updated });
@@ -546,6 +547,23 @@ app.get("/api/news", async (req, res) => {
   try {
     const published = await getNewsByStatus("published");
     return res.json({ data: published });
+  } catch (error) {
+    return res.status(500).json({ error: error instanceof Error ? error.message : "Failed to fetch news" });
+  }
+});
+
+// GET /api/news/:slug - Get single published article by slug (public)
+app.get("/api/news/:slug", async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const published = await getNewsByStatus("published");
+    const article = published.find((n) => n.slug === slug);
+
+    if (!article) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    return res.json(article);
   } catch (error) {
     return res.status(500).json({ error: error instanceof Error ? error.message : "Failed to fetch news" });
   }
@@ -655,6 +673,15 @@ app.post("/api/content/delete", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLE
 
 async function start() {
   try {
+    // Connect to MongoDB
+    if (!config.mongoUri) {
+      throw new Error("MONGO_URI environment variable is required");
+    }
+
+    await mongoose.connect(config.mongoUri);
+    // eslint-disable-next-line no-console
+    console.log("Connected to MongoDB");
+
     const seeded = await ensureInitialSuperAdmin();
     if (seeded) {
       // eslint-disable-next-line no-console

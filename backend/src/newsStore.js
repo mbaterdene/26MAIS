@@ -1,39 +1,30 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import mongoose from "mongoose";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const NEWS_FILE = path.join(__dirname, "..", "..", "src", "content", "news.json");
-const COUNTER_FILE = path.join(__dirname, "..", "data", "news-counter.json");
-
-// Helper to read news data
-function readNewsData() {
-  try {
-    const data = fs.readFileSync(NEWS_FILE, "utf8");
-    return JSON.parse(data || "[]");
-  } catch {
-    return [];
+// News Schema
+const newsSchema = new mongoose.Schema(
+  {
+    slug: { type: String, required: true, unique: true, index: true },
+    title_mn: { type: String, required: true },
+    title_en: { type: String, required: true },
+    content_mn: { type: String, required: true },
+    content_en: { type: String, required: true },
+    image: { type: String, default: null },
+    category: { type: String, default: "news" },
+    author: { type: String, default: "Anonymous" },
+    status: { type: String, enum: ["draft", "pending", "published"], default: "draft" },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, default: null },
+    approvedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
+    approvedAt: { type: Date, default: null },
+  },
+  {
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
   }
-}
+);
 
-// Helper to write news data
-function writeNewsData(data) {
-  fs.writeFileSync(NEWS_FILE, JSON.stringify(data, null, 2));
-}
-
-// Helper to get next ID
-function getNextNewsId() {
-  try {
-    const counter = JSON.parse(fs.readFileSync(COUNTER_FILE, "utf8"));
-    counter.nextId += 1;
-    fs.writeFileSync(COUNTER_FILE, JSON.stringify(counter, null, 2));
-    return counter.nextId - 1;
-  } catch {
-    const counter = { nextId: 2 };
-    fs.writeFileSync(COUNTER_FILE, JSON.stringify(counter, null, 2));
-    return 1;
-  }
-}
+const News = mongoose.model("News", newsSchema);
 
 function generateSlug(text) {
   return text
@@ -46,13 +37,10 @@ function generateSlug(text) {
 
 export async function getNewsByStatus(status) {
   try {
-    const news = readNewsData();
     if (status === "all") {
-      return news.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      return await News.find().sort({ created_at: -1 }).exec();
     }
-    return news
-      .filter((n) => n.status === status)
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return await News.find({ status }).sort({ created_at: -1 }).exec();
   } catch (error) {
     console.error("Error fetching news by status:", error);
     throw error;
@@ -61,8 +49,7 @@ export async function getNewsByStatus(status) {
 
 export async function getAllNews() {
   try {
-    const news = readNewsData();
-    return news.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return await News.find().sort({ created_at: -1 }).exec();
   } catch (error) {
     console.error("Error fetching all news:", error);
     throw error;
@@ -71,8 +58,11 @@ export async function getAllNews() {
 
 export async function getNewsById(id) {
   try {
-    const news = readNewsData();
-    return news.find((n) => n.id === id);
+    // Try to find by MongoDB ObjectId if it looks like one, otherwise by slug
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      return await News.findById(id).exec();
+    }
+    return await News.findOne({ slug: id }).exec();
   } catch (error) {
     console.error("Error fetching news by id:", error);
     throw error;
@@ -98,13 +88,9 @@ export async function createNews(data) {
   }
 
   try {
-    const news = readNewsData();
-    const id = getNextNewsId();
     const slug = generateSlug(title_en);
-    const now = new Date().toISOString();
 
-    const newArticle = {
-      id,
+    const newArticle = new News({
       slug,
       title_mn,
       title_en,
@@ -115,15 +101,10 @@ export async function createNews(data) {
       author: author || "Anonymous",
       status: status || "draft",
       createdBy: createdBy || null,
-      approvedBy: null,
-      approvedAt: null,
-      created_at: now,
-      updated_at: now,
-    };
+    });
 
-    news.push(newArticle);
-    writeNewsData(news);
-    return newArticle;
+    const savedArticle = await newArticle.save();
+    return savedArticle.toObject();
   } catch (error) {
     console.error("Error creating news:", error);
     throw error;
@@ -132,21 +113,17 @@ export async function createNews(data) {
 
 export async function updateNews(id, data) {
   try {
-    const news = readNewsData();
-    const index = news.findIndex((n) => n.id === id);
+    const article = await News.findByIdAndUpdate(
+      id,
+      { ...data, updated_at: new Date() },
+      { new: true, runValidators: true }
+    ).exec();
 
-    if (index === -1) {
+    if (!article) {
       throw new Error(`News with id ${id} not found`);
     }
 
-    news[index] = {
-      ...news[index],
-      ...data,
-      updated_at: new Date().toISOString(),
-    };
-
-    writeNewsData(news);
-    return news[index];
+    return article.toObject();
   } catch (error) {
     console.error("Error updating news:", error);
     throw error;
@@ -155,16 +132,13 @@ export async function updateNews(id, data) {
 
 export async function deleteNews(id) {
   try {
-    const news = readNewsData();
-    const index = news.findIndex((n) => n.id === id);
+    const article = await News.findByIdAndDelete(id).exec();
 
-    if (index === -1) {
+    if (!article) {
       throw new Error(`News with id ${id} not found`);
     }
 
-    const deleted = news.splice(index, 1)[0];
-    writeNewsData(news);
-    return deleted;
+    return article.toObject();
   } catch (error) {
     console.error("Error deleting news:", error);
     throw error;
@@ -176,7 +150,7 @@ export async function updateNewsStatus(id, newStatus, approverId) {
     return await updateNews(id, {
       status: newStatus,
       approvedBy: newStatus === "published" ? approverId : null,
-      approvedAt: newStatus === "published" ? new Date().toISOString() : null,
+      approvedAt: newStatus === "published" ? new Date() : null,
     });
   } catch (error) {
     console.error("Error updating news status:", error);
@@ -234,16 +208,16 @@ export async function rejectNews(id) {
 
 export async function searchNews(query) {
   try {
-    const news = readNewsData();
     const lowerQuery = query.toLowerCase();
-    return news.filter(
-      (n) =>
-        n.title_en.toLowerCase().includes(lowerQuery) ||
-        n.title_mn.toLowerCase().includes(lowerQuery) ||
-        n.author.toLowerCase().includes(lowerQuery) ||
-        n.content_en.toLowerCase().includes(lowerQuery) ||
-        n.content_mn.toLowerCase().includes(lowerQuery)
-    );
+    return await News.find({
+      $or: [
+        { title_en: { $regex: lowerQuery, $options: "i" } },
+        { title_mn: { $regex: lowerQuery, $options: "i" } },
+        { author: { $regex: lowerQuery, $options: "i" } },
+        { content_en: { $regex: lowerQuery, $options: "i" } },
+        { content_mn: { $regex: lowerQuery, $options: "i" } },
+      ],
+    }).sort({ created_at: -1 }).exec();
   } catch (error) {
     console.error("Error searching news:", error);
     throw error;

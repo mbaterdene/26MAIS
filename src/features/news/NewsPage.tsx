@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
-import { FileText, ArrowRight } from 'lucide-react';
+import { FileText, ArrowRight, Loader } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { bil, formatDate, truncateWords } from '../../lib/utils';
-import { jsonNews } from '../../data/contentJson';
+import { usePublicNews } from '../../hooks/usePublicNews';
 
 export function NewsPage() {
   const { isEnglish, t } = useLanguage();
-  const publishedNews = jsonNews;
+  const { data: publishedNews, isLoading } = usePublicNews();
 
   return (
     <div className="min-h-screen bg-gray-50 pt-32 pb-24">
@@ -34,7 +34,12 @@ export function NewsPage() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {publishedNews.length > 0 ? (
+          {isLoading ? (
+            <div className="col-span-full py-20 text-center text-gray-500 flex items-center justify-center">
+              <Loader className="animate-spin mr-2" />
+              {t('Loading news...', 'Мэдээ ачаалж байна...')}
+            </div>
+          ) : publishedNews.length > 0 ? (
             publishedNews.map((article, i) => (
               <motion.article
                 key={article.id}

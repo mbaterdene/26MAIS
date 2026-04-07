@@ -18,6 +18,7 @@ export const config = {
     .map((s) => s.trim())
     .filter(Boolean),
   authSecret: process.env.ADMIN_AUTH_SECRET || "",
+  mongoUri: process.env.MONGO_URI,
   github: {
     owner: requireEnv("GITHUB_OWNER"),
     repo: requireEnv("GITHUB_REPO"),
