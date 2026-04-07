@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { X, FileText, AlertCircle, Loader2 } from 'lucide-react';
+import { X, FileText, AlertCircle, Loader2, Eye } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TiptapEditor } from '../../components/admin/TiptapEditor';
+import { NewsPreview } from './NewsPreview';
 import { useCreateNews, useUpdateNews, useNewsById } from '../../hooks/useNews';
 
 interface NewsEditorPageProps {
@@ -21,6 +22,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   // Fetch existing news if editing
   const { data: existingNews, isLoading: isFetching } = useNewsById(id || null);
@@ -222,6 +224,13 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
           Cancel
         </button>
         <button
+          onClick={() => setShowPreview(true)}
+          className="px-6 py-3 text-sm font-bold text-gray-600 hover:text-gray-900 bg-white border border-gray-200 rounded-lg transition-colors flex items-center gap-2"
+        >
+          <Eye size={16} />
+          Preview
+        </button>
+        <button
           onClick={handleSave}
           disabled={isLoading}
           className="px-6 py-3 text-sm font-bold text-white bg-cardinal-red hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center gap-2"
@@ -230,6 +239,17 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
           {mode === 'create' ? 'Create Article' : 'Save Changes'}
         </button>
       </div>
+
+      {/* Preview Modal */}
+      {showPreview && (
+        <NewsPreview
+          title_en={formData.title_en}
+          title_mn={formData.title_mn}
+          content_en={formData.content_en}
+          content_mn={formData.content_mn}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </div>
   );
 }

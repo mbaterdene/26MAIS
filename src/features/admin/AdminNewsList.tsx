@@ -1,8 +1,9 @@
 import { useNews, useDeleteNews, useApproveNews, useRejectNews, useSubmitNews } from '../../hooks/useNews';
-import { Trash2, Check, X, Send, Loader2, Edit2 } from 'lucide-react';
+import { Trash2, Check, X, Send, Loader2, Edit2, Eye } from 'lucide-react';
 import type { News } from '../../lib/admin-types';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { NewsPreview } from './NewsPreview';
 
 const statusColors: Record<string, string> = {
   draft: 'bg-gray-100 text-gray-600',
@@ -17,6 +18,7 @@ export function AdminNewsList() {
   const rejectMutation = useRejectNews();
   const submitMutation = useSubmitNews();
   const [filter, setFilter] = useState<string>('all');
+  const [previewArticle, setPreviewArticle] = useState<News | null>(null);
 
   const filtered = filter === 'all' ? news : news.filter((n: News) => n.status === filter);
 
@@ -89,6 +91,13 @@ export function AdminNewsList() {
                   <td className="px-6 py-4 text-sm text-gray-400">{new Date(article.created_at).toLocaleDateString()}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => setPreviewArticle(article)}
+                        title="Preview"
+                        className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 transition-colors"
+                      >
+                        <Eye size={16} />
+                      </button>
                       {article.status === 'draft' && (
                         <button
                           onClick={() => submitMutation.mutateAsync(article.id).then(() => refetch())}
@@ -142,6 +151,17 @@ export function AdminNewsList() {
           </table>
         )}
       </div>
+
+      {/* Preview Modal */}
+      {previewArticle && (
+        <NewsPreview
+          title_en={previewArticle.title_en}
+          title_mn={previewArticle.title_mn}
+          content_en={previewArticle.content_en}
+          content_mn={previewArticle.content_mn}
+          onClose={() => setPreviewArticle(null)}
+        />
+      )}
     </div>
   );
 }
