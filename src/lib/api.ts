@@ -15,7 +15,7 @@ import type {
   StudentProgram,
 } from "./types";
 
-import { aboutData } from "../data/aboutMais";
+import aboutData from "../content/about.json";
 import {
   jsonAlumni,
   jsonClubs,

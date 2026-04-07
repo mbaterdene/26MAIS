@@ -3,7 +3,7 @@
  * Defines all editable content files
  */
 
-import schoolData from '../content/school.json';
+import aboutData from '../content/about.json';
 import alumniData from '../content/alumni.json';
 import clubsData from '../content/clubs.json';
 import coursesData from '../content/courses.json';
@@ -23,12 +23,12 @@ export interface ContentPageConfig {
 
 export const CONTENT_PAGES: ContentPageConfig[] = [
   {
-    key: 'school',
-    label: 'School Info',
-    label_mn: 'Сургуулийн мэдээлэл',
-    description: 'School vision, mission, and general information',
-    data: schoolData,
-    path: 'src/content/school.json',
+    key: 'about',
+    label: 'About Page',
+    label_mn: 'Сургуулийн тухай',
+    description: 'Complete about page with all sections',
+    data: aboutData,
+    path: 'src/content/about.json',
   },
   {
     key: 'alumni',

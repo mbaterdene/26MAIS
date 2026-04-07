@@ -1,0 +1,182 @@
+{
+  "school_info": {
+    "vision_mn": "Олон улсын хөтөлбөрийн сургалттай, байгалийн шинжлэх ухааны тэргүүлэх ахлах сургууль болно.",
+    "vision_en": "To become a leading high school with international programs and natural sciences.",
+    "mission_mn": "Хос хөтөлбөрийн чанартай боловсрол олгож, тасралтгүй хөгжилд тэмүүлэх хариуцлагатай монгол иргэнийг бэлтгэх",
+    "mission_en": "To provide quality dual-program education and prepare responsible Mongolian citizens committed to continuous development.",
+    "general_info_mn": "Олон улсын хөтөлбөрийн сургалттай Монгол тэмүүлэл сургууль нь БСШУСайдын 2011 оны 09 дүгээр сарын 28-ны өдрийн 370 дугаар тушаалаар 21 багш, Амжилтантайгаар үүсгэн байгуулагдаж, 9-р ангийн 2 бүлгийн нийт 40 сурагчтай Сургалт, сургалтын үйл ажиллагаа явуулж эхэлжээ.\n\n\"Монгол-Кембрижийн боловсролын санаачилга\" төслийн хүрээнд 2012 оны 03 дугаар сард MN014 дугаар бүхий Кембрижийн олон улсын шалгалтын төвөөр бүртгэгдэж, хөтөлбөр хэрэгжүүлэх тусгай зөвшөөрлөө гардан авснаас хойш 13 жил олон улсын шалгалтыг Кембрижийн олон улсын шалгалтын стандартын дагуу зохион байгуулж буй туршлагатай.\n\n2025-2026 оны Сургалтийн жилд 382 сурагч /4 анги,16 бүлэг, үндсэн багш 40, цагийн 2, бусад Амжилтан 21, гэрээт 10 Амжилтантайгаар үйл ажиллагаагаа явуулж байна. Нийт багш нарын 43% /18/ нь бакалавр, 48% /18/ нь магистр, 9% /4/ доктор зэрэгтэй. Заах аргач зэрэгтэй 11, тэргүүлэх зэрэгтэй 11, зөвлөх зэрэгтэй 4 багш ажиллаж байна.",
+    "general_info_en": "Mongol Aspiration School was established on September 28, 2011, by Order No. 370 of the Minister of Education, Culture, Science and Sports, starting with 21 teachers and staff, and 40 students in 2 groups of 9th grade.\n\nThe school was registered as Cambridge International Examination Centre MN014 in March 2012 and has been organizing international examinations according to Cambridge standards for 13 years.\n\nIn the 2025-2026 academic year, the school operates with 382 students (4 grades, 16 groups), 40 core teachers, 2 part-time teachers, 21 other staff, and 10 contract workers. 43% of teachers (18) have bachelor's degrees, 48% (18) have master's degrees, and 9% (4) have doctoral degrees.",
+    "total_students": 382,
+    "total_teachers": 40
+  },
+  "characteristics": [
+    {
+      "id": 1,
+      "title_mn": "Сургуулийн төрөл",
+      "title_en": "School Type",
+      "description_mn": "Төрийн өмчийн, ашгийн бус, ахлах сургуулийн хэв шинжтэй",
+      "description_en": "State-owned, non-profit high school"
+    },
+    {
+      "id": 2,
+      "title_mn": "Ангийн түвшин",
+      "title_en": "Grade Levels",
+      "description_mn": "9-12 дугаар ангийн 14-18 насны суралцагчидтай",
+      "description_en": "Grades 9-12, ages 14-18"
+    },
+    {
+      "id": 3,
+      "title_mn": "Ангийн дүүргэлт",
+      "title_en": "Class Size",
+      "description_mn": "Анги дүүргэлт 24. Сургалт сонголтын бүлэг 5-24. Нэг багшид ногдох хүүхдийн тоо 10",
+      "description_en": "24 students per class, 5-24 students per elective group"
+    },
+    {
+      "id": 4,
+      "title_mn": "Хөтөлбөр",
+      "title_en": "Programs",
+      "description_mn": "Үндэсний болон Кембрижийн олон улсын хөтөлбөрийг хэрэгжүүлдэг",
+      "description_en": "National and Cambridge International programs"
+    },
+    {
+      "id": 5,
+      "title_mn": "Хэл",
+      "title_en": "Language",
+      "description_mn": "Монгол болон англи хэл дээр сургалтаа явуулдаг хос хэлний сургууль",
+      "description_en": "Bilingual school teaching in Mongolian and English"
+    },
+    {
+      "id": 6,
+      "title_mn": "Диплом",
+      "title_en": "Diploma",
+      "description_mn": "Суралцагчид Монгол улсын бүрэн дунд болон Кембрижийн олон улсын ахлах түвшний боловсролын хос дипломтой төгсдөг",
+      "description_en": "Dual diploma: Mongolian high school diploma and Cambridge International A-Level certificate"
+    }
+  ],
+  "national_program": {
+    "performance_rate": 88.5,
+    "success_rate": 100.0,
+    "quality_rate": 86.4,
+    "description_mn": "2024-2025 оны Сургалтийн жилд 9 дүгээр ангийн дөрвөн бүлгийн 96 сурагч, 12 дугаар ангийн 4 бүлгийн 95 сурагч улсын шалгалт өгсөн бол 10 дугаар ангийн 4 бүлгийн 94 сурагч, 11 дүгээр ангийн 4 бүлгийн 95 сурагч дэвших шалгалт өгч 100% амжилттай шалгагдлаа.",
+    "description_en": "In the 2024-2025 academic year, 96 students from 4 groups of 9th grade and 95 students from 4 groups of 12th grade took the national examination, while 94 students from 4 groups of 10th grade and 95 students from 4 groups of 11th grade took the advancement examination, all with 100% success rate."
+  },
+  "international_program": {
+    "year": "2024-2025",
+    "igcse_count": 18,
+    "as_level_count": 16,
+    "a_level_count": 14,
+    "ice_eligible": 526,
+    "ice_received": 505,
+    "ice_excellent": 183,
+    "ice_good": 281,
+    "ice_satisfactory": 41,
+    "aice_eligible": 106,
+    "aice_excellent": 42,
+    "aice_good": 53,
+    "aice_satisfactory": 11
+  },
+  "student_programs": [
+    {
+      "id": 1,
+      "program_name_mn": "DofE (The Duke of Edinburgh's International Award)",
+      "program_name_en": "DofE (The Duke of Edinburgh's International Award)",
+      "total_participants": 244,
+      "bronze_count": 106,
+      "silver_count": 138,
+      "gold_count": 0,
+      "skills_programs": 17,
+      "physical_programs": 5,
+      "description_mn": "Монгол тэмүүлэл сургууль нь DofE (The Duke of Edinburgh's International Award) хөтөлбөрийг албан ёсоор хэрэгжүүлж, нийт 244 сурагчийг платформд бүртгэв. Хүрэл медалийн болзлыг 106 сурагч, мөнгөн медалийн болзлыг 138 сурагч хангахаар хөтөлбөрөө эхлээд байна.",
+      "description_en": "The school officially implements the DofE (The Duke of Edinburgh's International Award) program, with 244 students registered on the platform. 106 students are working towards Bronze medal requirements and 138 students towards Silver medal requirements."
+    }
+  ],
+  "achievements": [
+    {
+      "id": 1,
+      "year": 2016,
+      "type": "world_ranking",
+      "title_mn": "IGCSE түвшин Математикийн Сургалтээр Top in the World",
+      "title_en": "IGCSE Mathematics Top in the World"
+    },
+    {
+      "id": 2,
+      "year": 2022,
+      "type": "world_ranking",
+      "title_mn": "AS түвшин Математикийн Сургалтааар Top in the World",
+      "title_en": "AS Level Mathematics Top in the World"
+    },
+    {
+      "id": 3,
+      "year": 2022,
+      "type": "world_ranking",
+      "title_mn": "PISA олон улсын үнэлгээгээр математик, шинжлэх ухаан, унших чадварын тус бүрээр Монгол улс болон олон улсад TOP үнэлгээ",
+      "title_en": "PISA: Top results in Mongolia and internationally"
+    },
+    {
+      "id": 4,
+      "year": 2024,
+      "type": "world_ranking",
+      "title_mn": "Country award - 13 сурагч",
+      "title_en": "Country award - 13 students"
+    },
+    {
+      "id": 5,
+      "year": 2025,
+      "type": "world_ranking",
+      "title_mn": "Country award - 12 сурагч",
+      "title_en": "Country award - 12 students"
+    },
+    {
+      "id": 6,
+      "year": 0,
+      "type": "test_score",
+      "title_mn": "IELTS дундаж оноо: 7.5",
+      "title_en": "IELTS Average: 7.5"
+    },
+    {
+      "id": 7,
+      "year": 0,
+      "type": "test_score",
+      "title_mn": "SAT-ын дундаж оноо: 1431",
+      "title_en": "SAT Average: 1431"
+    },
+    {
+      "id": 8,
+      "year": 0,
+      "type": "test_score",
+      "title_mn": "ЭЕШ-ийн дундаж оноо: 702",
+      "title_en": "National Exam Average: 702"
+    }
+  ],
+  "graduate_stats": [
+    { "year": 2015, "total_graduates": 38, "abroad_count": 10, "scholarship_amount": 45000000, "percentage": 26 },
+    { "year": 2016, "total_graduates": 45, "abroad_count": 14, "scholarship_amount": 68000000, "percentage": 31 },
+    { "year": 2017, "total_graduates": 52, "abroad_count": 18, "scholarship_amount": 92000000, "percentage": 35 },
+    { "year": 2018, "total_graduates": 64, "abroad_count": 23, "scholarship_amount": 135000000, "percentage": 36 },
+    { "year": 2019, "total_graduates": 72, "abroad_count": 27, "scholarship_amount": 168000000, "percentage": 38 },
+    { "year": 2020, "total_graduates": 78, "abroad_count": 28, "scholarship_amount": 172000000, "percentage": 36 },
+    { "year": 2021, "total_graduates": 82, "abroad_count": 32, "scholarship_amount": 215000000, "percentage": 39 },
+    { "year": 2022, "total_graduates": 88, "abroad_count": 36, "scholarship_amount": 264000000, "percentage": 41 },
+    { "year": 2023, "total_graduates": 91, "abroad_count": 39, "scholarship_amount": 298000000, "percentage": 43 },
+    { "year": 2024, "total_graduates": 95, "abroad_count": 42, "scholarship_amount": 342000000, "percentage": 44 }
+  ],
+  "total_graduates": 705,
+  "total_abroad": 269,
+  "total_scholarship": 1799000000,
+  "counseling_services": [
+    {
+      "id": 1,
+      "title_mn": "Үзүүлж буй үйлчилгээ",
+      "title_en": "Services Provided",
+      "description_mn": "• Bridge U Common app зэрэг өргөдлийн платформ дээр ажиллах чиглэлээр сургалт зөвлөгөө өгөх\n• Боловсролын үзэсгэлэнд оролцуулах, зохион байгуулах\n• Мэргэжил сонголтын чиглэлээр эцэг эх, сурагчдад нэгдсэн болон ганцаарчилсан мэдээлэл, зөвлөгөө өгөх\n• Гадаадын их дээд сургуульд өргөдөл илгээх үйл явцыг чиглүүлэх зөвлөгөө өгөх",
+      "description_en": "• Training and guidance on application platforms (Bridge U, Common App)\n• Organizing and participating in education fairs\n• Career guidance for students and parents\n• Guidance on international university applications"
+    },
+    {
+      "id": 2,
+      "title_mn": "Нэмэлт үйлчилгээ",
+      "title_en": "Additional Services",
+      "description_mn": "• Тодорхойлох захидал бичих, бусад багш нарт сургалт хийх\n• Гадаад харилцааг хөгжүүлэх, туршлага судлах\n• Төгсөгчдийн холбоог удирдах",
+      "description_en": "• Writing recommendation letters\n• Teacher training\n• Developing international relations\n• Managing alumni network"
+    }
+  ]
+}

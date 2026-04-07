@@ -21,7 +21,7 @@ function renderPreview(
   isEnglish: boolean
 ) {
   switch (pageKey) {
-    case 'school':
+    case 'about':
       return <AboutPageEditor content={content} onUpdate={onUpdate} />;
     case 'alumni':
       return <AlumniContentPreview content={content} onUpdate={onUpdate} />;
@@ -34,7 +34,7 @@ function renderPreview(
 
 export function ContentEditorPage() {
   const { isEnglish } = useLanguage();
-  const [selectedPageKey, setSelectedPageKey] = useState('school');
+  const [selectedPageKey, setSelectedPageKey] = useState('about');
   const [successMessage, setSuccessMessage] = useState('');
 
   const currentPage = getContentPageByKey(selectedPageKey);
