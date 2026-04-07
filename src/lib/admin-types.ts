@@ -43,7 +43,7 @@ export interface CreateAdminRequest {
 export type NewsStatus = 'draft' | 'pending' | 'published';
 
 export interface News {
-  id: number;
+  id: string;
   slug: string;
   title_mn: string;
   title_en: string;

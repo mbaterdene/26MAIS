@@ -129,8 +129,8 @@ export function useDeleteNews() {
   const { token } = useAuth();
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (id: string) {
+  return useMutation<any, Error, string>({
+    mutationFn: async (id: string) => {
       if (!token) throw new Error("Not authenticated");
 
       const response = await fetch(`${BACKEND_URL}/api/news/${id}`, {
@@ -157,8 +157,8 @@ export function useSubmitNews() {
   const { token } = useAuth();
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (id: string) {
+  return useMutation<any, Error, string>({
+    mutationFn: async (id: string) => {
       if (!token) throw new Error("Not authenticated");
 
       const response = await fetch(`${BACKEND_URL}/api/news/${id}/submit`, {
@@ -185,8 +185,8 @@ export function useApproveNews() {
   const { token } = useAuth();
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (id: string) {
+  return useMutation<any, Error, string>({
+    mutationFn: async (id: string) => {
       if (!token) throw new Error("Not authenticated");
 
       const response = await fetch(`${BACKEND_URL}/api/news/${id}/approve`, {
@@ -213,8 +213,8 @@ export function useRejectNews() {
   const { token } = useAuth();
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (id: string) {
+  return useMutation<any, Error, string>({
+    mutationFn: async (id: string) => {
       if (!token) throw new Error("Not authenticated");
 
       const response = await fetch(`${BACKEND_URL}/api/news/${id}/reject`, {

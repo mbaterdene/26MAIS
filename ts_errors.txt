@@ -1,3 +1,3 @@
-src/components/shared/ProtectedRoute.tsx(2,25): error TS2307: Cannot find module '../context/AuthContext' or its corresponding type declarations.
-src/features/academics/CourseCatalogPage.tsx(4,31): error TS6133: 'Filter' is declared but its value is never read.
-src/features/admin/ContentEditorModal.tsx(2,13): error TS6133: 'UploadCloud' is declared but its value is never read.
+PLAN FOR ADMIN PAGE
+This is regarding the static json files to be updated by github api. 
+For these I wanted an approach where on the admin page the admin could see the entire page
