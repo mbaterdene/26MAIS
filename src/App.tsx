@@ -16,6 +16,7 @@ import { AdminLayout } from './features/admin/AdminLayout';
 import { AdminDashboard } from './features/admin/AdminDashboard';
 import { AdminNewsList } from './features/admin/AdminNewsList';
 import { NewsEditorPage } from './features/admin/NewsEditor';
+import { ContentEditorPage } from './features/admin/ContentEditorPage';
 import { AdminLogin } from './features/admin/AdminLogin';
 
 // Providers
@@ -67,8 +68,7 @@ function App() {
                 <Route index element={<AdminDashboard />} />
                 <Route path="news" element={<AdminNewsList />} />
                 <Route path="news/new" element={<NewsEditorPage mode="create" />} />
-                <Route path="news/:id/edit" element={<NewsEditorPage mode="edit" />} />
-                <Route path="*" element={
+                <Route path="news/:id/edit" element={<NewsEditorPage mode="edit" />} />                <Route path="content" element={<ContentEditorPage />} />                <Route path="*" element={
                   <div className="p-8"><h2 className="text-2xl font-bold">Module coming soon</h2></div>
                 } />
               </Route>

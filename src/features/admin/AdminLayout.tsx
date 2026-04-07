@@ -1,10 +1,11 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Newspaper, Users, LogOut, BarChart2 } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Users, LogOut, BarChart2, FileText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const sidebarLinks = [
   { label: 'Dashboard', href: '/admin', icon: <LayoutDashboard size={18} /> },
   { label: 'News', href: '/admin/news', icon: <Newspaper size={18} /> },
+  { label: 'Content', href: '/admin/content', icon: <FileText size={18} /> },
   { label: 'Users', href: '/admin/users', icon: <Users size={18} /> },
   { label: 'Analytics', href: '/admin/analytics', icon: <BarChart2 size={18} /> },
 ];
