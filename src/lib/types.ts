@@ -89,7 +89,7 @@ export interface Club {
   category: "student" | "school";
   description_en: string;
   description_mn: string;
-  icon: string;
+  image_url: string;
 }
 
 export interface AlumniCountry {

@@ -1,92 +1,263 @@
 [
   {
-    "id": 601,
-    "name_en": "Debate Club",
-    "name_mn": "Сорилцоо ярилцлагын клуб",
+    "id": 1,
+    "name_en": "Mogul Robotics Club",
+    "name_mn": "Могул Робоцид Клуб",
     "category": "student",
-    "description_en": "A platform for students to develop critical thinking and public speaking skills through competitive debates on various topics.",
-    "description_mn": "Сурагчдад сорилцоо ярилцлагын дамжуулан авхаалж самуунсан сэтгэлгээ, олон нийтэд илэрхийлэх чадварыг хөгжүүлэх платформ.",
-    "icon": "🎤"
+    "description_en": "Explore cutting-edge robotics technology and build innovative mechanical solutions through hands-on projects and competitions.",
+    "description_mn": "Робоцид технологийг үзэж сургалжуулж, практик төслүүд ба уралдаанаар дамжуулан инновацын механик шийдлүүдийг бий болгох.",
+    "image_url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&h=300&fit=crop"
   },
   {
-    "id": 602,
-    "name_en": "Science & Innovation Club",
-    "name_mn": "Шинжлэх ухаан & Инноваци Клуб",
+    "id": 2,
+    "name_en": "Chemhacks Club",
+    "name_mn": "Химийн Сургалж Клуб",
     "category": "student",
-    "description_en": "Dedicated to scientific exploration, hands-on experiments, and innovative project development for curious minds.",
-    "description_mn": "Шинжлэх ухааны судалгаа, практик туршилтууд, инновацийн төсөл боловсруулахад зориулсан.",
-    "icon": "🔬"
+    "description_en": "Discover the wonders of chemistry through interactive experiments, demonstrations, and hands-on learning activities.",
+    "description_mn": "Интерактив туршилт, үзүүлэлт, практик сургалжих үйл ажиллагаар дамжуулан химийн сайхан нээлтүүдийг танин мэдэх.",
+    "image_url": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=500&h=300&fit=crop"
   },
   {
-    "id": 603,
-    "name_en": "Environmental Club",
-    "name_mn": "Экологийн клуб",
+    "id": 3,
+    "name_en": "MOMENTUM Physics Club",
+    "name_mn": "MOMENTUM Физикийн Клуб",
     "category": "student",
-    "description_en": "Engaging students in environmental conservation, sustainability projects, and ecological awareness initiatives.",
-    "description_mn": "Сурагчдыг байгаль хайраулах, тогтвортой хөгжил, эко-ухамсарын төсөлд оролцуулж байна.",
-    "icon": "♻️"
+    "description_en": "Engage with fundamental physics principles through experiments, demonstrations, and collaborative problem-solving.",
+    "description_mn": "Туршилт, үзүүлэлт, хамтарсан асуудлыг шийдвэрлэхийн дамжуулан физикийн үндсэн зарчмуудтай ажиллах.",
+    "image_url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=500&h=300&fit=crop"
   },
   {
-    "id": 604,
-    "name_en": "Arts & Culture Club",
-    "name_mn": "Урлаг & Соёл Клуб",
+    "id": 4,
+    "name_en": "Creative Media Club",
+    "name_mn": "Бүтээлэгч Медиа Клуб",
     "category": "student",
-    "description_en": "Celebrating creative expression through visual arts, performing arts, and cultural heritage preservation.",
-    "description_mn": "Урлагийн үзүүлбэр, соёлын үүргийн дамжуулан сурагчдын сэтгэж бүтээх чадварыг хөгжүүлнэ.",
-    "icon": "🎨"
+    "description_en": "Create engaging content through photography, videography, graphic design, and digital storytelling projects.",
+    "description_mn": "Зураг авалт, видео бичлэг, график дизайн, цифрийн түүхүүлэлийн төслүүр дамжуулан ажилтай контент бүтээх.",
+    "image_url": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&h=300&fit=crop"
   },
   {
-    "id": 605,
-    "name_en": "Sports & Fitness Club",
-    "name_mn": "Спорт & Идэвхтэй амьдрал Клуб",
+    "id": 5,
+    "name_en": "Crochet Club",
+    "name_mn": "Өргм Клуб",
     "category": "student",
-    "description_en": "Promoting physical wellness, team sports, and an active lifestyle among students.",
-    "description_mn": "Сурагчдын биеийн эргүүлэлт, спортын уралдаани, идэвхтэй амьдралыг сурталчилнэ.",
-    "icon": "⚽"
+    "description_en": "Learn and practice the relaxing art of crochet with fellow enthusiasts, creating beautiful handmade crafts.",
+    "description_mn": "Өргмийн урамшил дараалан практик хийж, сайхан гараар хийсэн шилмэлүүдийг үүсгэх.",
+    "image_url": "https://images.unsplash.com/photo-1585399926037-7ee4f7c9b6e9?w=500&h=300&fit=crop"
   },
   {
-    "id": 606,
-    "name_en": "Technology & Coding Club",
-    "name_mn": "Технологи & Программчлал Клуб",
+    "id": 6,
+    "name_en": "German Language & Culture Club",
+    "name_mn": "Герман Хэл ба Соёл Клуб",
     "category": "student",
-    "description_en": "Learning programming, robotics, and emerging technologies through collaborative projects.",
-    "description_mn": "Программчлал, робототехник, шинэ технологийг хамтарч сурч байна.",
-    "icon": "💻"
+    "description_en": "Learn the German language through conversation practice, grammar workshops, and cultural immersion. Explore German traditions, literature, film, and history while building practical language skills for international communication.",
+    "description_mn": "Ярилцлагын дадлага, дүүрэмжийн сургалтаар герман хэлийг сурах. Герман соёл, өгүүлэл, кино, түүхийг судлаж, олон улсын харилцааны практик хэлний чадварыг хөгжүүлэх.",
+    "image_url": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=500&h=300&fit=crop"
   },
   {
-    "id": 607,
-    "name_en": "Language Exchange Club",
-    "name_mn": "Хэлний солилцоо Клуб",
-    "category": "school",
-    "description_en": "School-organized program to enhance language skills and cultural understanding through international exchanges.",
-    "description_mn": "Сугалалтын хүнд хэлнийг сайжруулах, соёлын ойлголтыг гүнзгийрүүлэх сургуулийн төсөл.",
-    "icon": "🌍"
+    "id": 7,
+    "name_en": "LEGO Robotics Club",
+    "name_mn": "LEGO Робоцид Клуб",
+    "category": "student",
+    "description_en": "Build and program robots using LEGO sets, developing problem-solving and coding skills through creative projects.",
+    "description_mn": "LEGO иж бүтэцийг ашиглах замаар робот бүтээж, програмчлан кодлох ба өөрийнхөө асуудлыг шийдвэрлэхийн урамшлыг хөгжүүлэх.",
+    "image_url": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500&h=300&fit=crop"
   },
   {
-    "id": 608,
-    "name_en": "Leadership Development Program",
-    "name_mn": "Удирдамжийн хөгжлийн хөтөлбөр",
-    "category": "school",
-    "description_en": "School-organized leadership training and mentoring program for student representatives and future leaders.",
-    "description_mn": "Төлөөлөл, ирээдүйн удирдагчдын удирдамжийн сургалт, дамжүүлэх сургуулийн хөтөлбөр.",
-    "icon": "👥"
+    "id": 8,
+    "name_en": "Research Club",
+    "name_mn": "Судалгааны Клуб",
+    "category": "student",
+    "description_en": "Develop research skills by conducting investigations, analyzing data, and presenting findings on topics of interest.",
+    "description_mn": "Судалгааны коллегүүд хийж мэдээллийг шинжилж, сонирхолтой сэдвүүдэд заалтуудыг танилцуулан судалгааны ур чадварыг хөгжүүлэх.",
+    "image_url": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop"
   },
   {
-    "id": 609,
-    "name_en": "Community Service Club",
-    "name_mn": "Нийгмийн үйлсийн клуб",
-    "category": "school",
-    "description_en": "School-organized volunteer and community service initiatives focused on social responsibility.",
-    "description_mn": "Сурагчдын сайн сэтгэлийн ажил, нийгмийн ёс зүйг сурталчилдаг сургуулийн төсөл.",
-    "icon": "🤝"
+    "id": 9,
+    "name_en": "Career Compass Club",
+    "name_mn": "Карьер Чиглүүлэлт Клуб",
+    "category": "student",
+    "description_en": "Explore career paths, connect with professionals, and develop skills needed for successful career planning and development.",
+    "description_mn": "Карьерын замуудыг судлаж, мэргэжлийн хүмүүстэй холбоо тогтоож, үүргийн төлөвлөлт дээр үр дүнтэй байхын хэрэгтэй уран чадварыг хөгжүүлэх.",
+    "image_url": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop"
   },
   {
-    "id": 610,
-    "name_en": "Entrepreneurship Club",
-    "name_mn": "Бизнесийн сүүлийн клуб",
-    "category": "school",
-    "description_en": "School-organized program to develop entrepreneurial mindset and business acumen among students.",
-    "description_mn": "Сурагчдын бизнесийн ухаан, хөгжил, удирдлагын чадварыг сурталчилдаг сургуулийн төсөл.",
-    "icon": "💼"
+    "id": 10,
+    "name_en": "Money Minds Club",
+    "name_mn": "Мөнгөний Ухаан Клуб",
+    "category": "student",
+    "description_en": "Learn financial literacy, investment basics, and money management skills through interactive workshops and discussions.",
+    "description_mn": "Интерактив семинаруүд ба яриудаар дамжуулан санхүүгийн грамотлол, хөрөнгө оруулалтын үндсүүлэлүүд, мөнгө удирдлагын ур чадвараа сурах.",
+    "image_url": "https://images.unsplash.com/photo-1579621970795-f8f2d5df60d8?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 11,
+    "name_en": "Chinese Language & Culture Club",
+    "name_mn": "Хитад Хэл ба Соёл Клуб",
+    "category": "student",
+    "description_en": "Study Chinese language, calligraphy, traditions, and cultural practices through engaging and immersive experiences.",
+    "description_mn": "Хитадын хэл, каллиграфи, уламжлал, соёлын үйлийн үйлийг ажиллах замаар судлах.",
+    "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 12,
+    "name_en": "Book Club",
+    "name_mn": "Номын Клуб",
+    "category": "student",
+    "description_en": "Discuss and analyze literature, share book recommendations, and explore diverse genres with fellow book enthusiasts.",
+    "description_mn": "Уран зохиолыг ярилцаж, шинжилж, номын санал болгол хуваалцаж, төрөл бүрийн жанруудыг сонирхоотой хүмүүстэй эргүүлэх.",
+    "image_url": "https://images.unsplash.com/photo-1507842217343-583f7270bfed?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 13,
+    "name_en": "Clean MAIS Club",
+    "name_mn": "Цэвэр MAIS Клуб",
+    "category": "student",
+    "description_en": "Promote environmental sustainability and community cleanliness through awareness campaigns and hands-on conservation projects.",
+    "description_mn": "Байгаль сүүлийн хөгжил ба нийт цэвэр хүлээл сэргээх үйлийн дамжуулан баялаг сэргээлэх төслүүдийг явуулах.",
+    "image_url": "https://images.unsplash.com/photo-1532996122724-8f3c2cd83c5d?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 14,
+    "name_en": "MAB",
+    "name_mn": "MAB",
+    "category": "student",
+    "description_en": "A dynamic student organization dedicated to fostering community engagement and school spirit through organized initiatives.",
+    "description_mn": "Нийслэлийн оролцуулалт ба сургуулийн сэтгэгдэлийг хөгжүүлэхэд энхийлүүлсэн оюутан сангийн байгууллага.",
+    "image_url": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 15,
+    "name_en": "MultiMedia Club",
+    "name_mn": "Олон Хэлбэрийн Медиа Клуб",
+    "category": "student",
+    "description_en": "Create multimedia projects combining audio, video, graphics, and animation with cutting-edge production techniques.",
+    "description_mn": "Аудио, видео, график, анимэйшн хослуулан орчин үеийн үйлдвэрлэлийн аргуудаар олон хэлбэрийн төслүүдийг үүсгэх.",
+    "image_url": "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 16,
+    "name_en": "Econobusiness Club",
+    "name_mn": "Эконом Хэргийн Клуб",
+    "category": "student",
+    "description_en": "Explore economics, business principles, entrepreneurship, and develop skills for economic understanding and business ventures.",
+    "description_mn": "Эдийн засаг, хэргийн зарчмууд, үйлдвэрлэлийг судлаж, эдийн засгийн ойлголт болон хэрэглэх ур чадварыг хөгжүүлэх.",
+    "image_url": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 17,
+    "name_en": "Model Aspiration Speaking Club",
+    "name_mn": "Загвар Сургаалтай Ярилцаа Клуб",
+    "category": "student",
+    "description_en": "Develop public speaking, presentation, and debate skills through Model UN, speeches, and leadership experiences.",
+    "description_mn": "Нийтлэг ярилцаа, танилцуулга, маргаалтын сургалжуулан Model UN, яруу уран явцаар удирдлагын туршлагыг хөгжүүлэх.",
+    "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 18,
+    "name_en": "IBO Club",
+    "name_mn": "IBO Клуб",
+    "category": "student",
+    "description_en": "Support and celebrate the International Baccalaureate program through collaborative learning and development initiatives.",
+    "description_mn": "Олон улсын Бакалавр хөтөлбөрийг хамтарсан сургалжуулан болон хөгжлийн үйлийн дамжуулан дэмжиж, сонцлох.",
+    "image_url": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 19,
+    "name_en": "Astronomy Club",
+    "name_mn": "Одон Орны Клуб",
+    "category": "student",
+    "description_en": "Explore the cosmos through stargazing sessions, planetarium visits, and studying celestial phenomena and space science.",
+    "description_mn": "Одны ажиглалт, планетарийн үзэлт, селестиал үзэгдэл болон сансрын шинжлэх ухаан судлаар дамжуулан сансарыг судлах.",
+    "image_url": "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 20,
+    "name_en": "Study Simple Club",
+    "name_mn": "Энгийн Сургалжа Клуб",
+    "category": "student",
+    "description_en": "Build effective study techniques, share learning strategies, and support academic success through collaborative learning groups.",
+    "description_mn": "Үр дүнтэй сургалжаа техникүүдийг бий болгож, сургалжаа стротегиуудыг хуваалцаж, хамтарсан сургалжуулын бүлгээр академик амжилтыг дэмжих.",
+    "image_url": "https://images.unsplash.com/photo-1503676260728-cf86b92c6b8f?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 21,
+    "name_en": "Red Cross Club",
+    "name_mn": "Улаан Загалмай Клуб",
+    "category": "student",
+    "description_en": "Engage in humanitarian service, learn first aid and health awareness, and contribute to community welfare initiatives.",
+    "description_mn": "Эргүүлэл эмчилгээ үйлчилгээнд оролцож, түрүүний тусламж болон эрүүл мэнд сэргээлэхийн талаар суралцаж, нийслэлийн сайн сайхан үйлшлүүд дээр оруулах.",
+    "image_url": "https://images.unsplash.com/photo-1532996122724-8f3c2cd83c5d?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 22,
+    "name_en": "Future Givers FutureCEF Club",
+    "name_mn": "Ирээдүйн Өгөгчид FutureCEF Клуб",
+    "category": "student",
+    "description_en": "Foster philanthropy, social responsibility, and community service through charitable initiatives and awareness campaigns.",
+    "description_mn": "Филантроп, нийтийн эрэмбэ, үйлийн эргүүлэл дээр ашигтай хүмүүсийг хөгжүүлэх ба сэргээлэх үйлш дамжуулан сэргээлэхэй дэмжих.",
+    "image_url": "https://images.unsplash.com/photo-1559027615-cd2628902d4a?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 23,
+    "name_en": "Calligraphy Club",
+    "name_mn": "Каллиграфи Клуб",
+    "category": "student",
+    "description_en": "Master the beautiful art of calligraphy, exploring various styles and techniques to create stunning written artwork.",
+    "description_mn": "Каллиграфийн сайхан урлагыг эзэмшиж, төрөл бүрийн хэв маягийг судлаж, гоё бичгийн урлагийг үүсгэх.",
+    "image_url": "https://images.unsplash.com/photo-1577720643272-265a6fd47f95?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 24,
+    "name_en": "Minds Matter Club",
+    "name_mn": "Сана Санаа Клуб",
+    "category": "student",
+    "description_en": "Promote mental health awareness, well-being initiatives, and peer support through discussions and educational workshops.",
+    "description_mn": "Сэтгэцийн эрүүл мэнд сэргээлэл, сайн сайхан байдлын үйлшлүүдийг идэвхжүүлж, яриулал болон боловсрол семинарын дамжуулан нэгдэл дэмжих.",
+    "image_url": "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 25,
+    "name_en": "Earth Science Club",
+    "name_mn": "Дэлхийн Шинжлэх Ухаан Клуб",
+    "category": "student",
+    "description_en": "Study geology, meteorology, oceanography, and environmental science through field trips and hands-on laboratory work.",
+    "description_mn": "Геологи, цаг уур судлал, далайн судлал, байгаль орчны шинжлэх ухааны талаар талбайн аялал болон практик лаборатор ажилаар судлах.",
+    "image_url": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 26,
+    "name_en": "Writing, Debating, Speech Club",
+    "name_mn": "Бичих, Маргаалтын Ярилцаа Клуб",
+    "category": "student",
+    "description_en": "Enhance writing skills, debate techniques, and public speaking abilities through workshops, competitions, and performances.",
+    "description_mn": "Семинарууд, уралдаан, явцын дамжуулан бичих ур чадвар, маргаалтын техник, нийтлэг ярилцаа чадварыг сайжруулах.",
+    "image_url": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 27,
+    "name_en": "Young Engineers Club",
+    "name_mn": "Залуу Инженер Клуб",
+    "category": "student",
+    "description_en": "Design, build, and test mechanical and electronic projects, developing engineering skills and innovation thinking.",
+    "description_mn": "Механик болон электрон төслүүдийг зохиож, барьж, туршиж, инженерийн ур чадвар болон инновацын сануулалыг хөгжүүлэх.",
+    "image_url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 28,
+    "name_en": "Go Aspiration Club",
+    "name_mn": "Go Сургаалта Клуб",
+    "category": "student",
+    "description_en": "Learn the ancient game of Go, develop strategic thinking, and compete in friendly matches and tournaments.",
+    "description_mn": "Эртний GO тоглоомойг сурч, стратегийн сануулалыг хөгжүүлж, ээлтэй ээлж болон уралдаанд оролцох.",
+    "image_url": "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=500&h=300&fit=crop"
+  },
+  {
+    "id": 29,
+    "name_en": "Chess Club",
+    "name_mn": "Шатрын Клуб",
+    "category": "student",
+    "description_en": "Master the game of chess through training sessions, match play, and tournaments with fellow chess enthusiasts.",
+    "description_mn": "Сургалтын үе, ээлж тоглолт, шатрын сонирхоотой хүмүүстэй уралдаанзаар шатрын тоглоомыг эзэмших.",
+    "image_url": "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=500&h=300&fit=crop"
   }
 ]

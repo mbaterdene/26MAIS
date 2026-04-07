@@ -21,55 +21,40 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     label: 'About',
-    href: '/about',
     children: [
       { label: 'About Us', href: '/about', desc: 'Our mission, history, and leadership.' },
       { label: 'Community News', href: '/news', desc: 'Latest stories from our global community.' },
-      { label: 'Take the Tour', href: '/tour', desc: 'See OHS in action with a virtual walkthrough.' },
-    ],
-  },
-  {
-    label: 'Admissions',
-    href: '/admissions',
-    children: [
-      { label: 'Overview', href: '/admissions', desc: 'Everything you need to know about applying.' },
-      { label: 'Apply', href: '/apply', desc: 'Start your application today.' },
-      { label: 'Events', href: '/events', desc: 'Open houses and info sessions.' },
-      { label: 'Enrollment Options', href: '/admissions', desc: 'Full-time, part-time, and single courses.' },
-      { label: 'Tuition', href: '/admissions', desc: 'Pricing and payment information.' },
-      { label: 'Financial Aid', href: '/admissions', desc: 'Need-based awards for all students.' },
-      { label: 'Criteria', href: '/admissions', desc: 'What we look for in applicants.' },
+      { label: 'Admission', href: '/admissions', desc: 'Everything you need to know about applying.' },
     ],
   },
   {
     label: 'Academics',
-    href: '/academics',
     children: [
-      { label: 'Overview', href: '/academics', desc: 'Our philosophy and approach to learning.' },
-      { label: 'Course Catalog', href: '/course-catalog', desc: 'Browse 40+ college-level courses.' },
-      { label: 'Middle School', href: '/academics', desc: 'Grades 7–8 specialized curriculum.' },
-      { label: 'Graduation Requirements', href: '/academics', desc: '20 full-year credits to graduate.' },
-      { label: 'College-Style Schedule', href: '/academics', desc: 'Flexible, university-style timetable.' },
-      { label: 'Curriculum', href: '/academics', desc: 'The Core Sequence and beyond.' },
+      { label: 'All Courses', href: '/academics', desc: 'Browse all available courses.' },
+      { label: 'International Program', href: '/academics?program=international', desc: 'Cambridge IGCSE and A-Level.' },
+      { label: 'National Program', href: '/academics?program=national', desc: 'Mongolian national curriculum.' },
+      { label: 'PDQ', href: '/courses/pdq', desc: 'Program Development and Quality.' },
+    ],
+  },
+  {
+    label: 'Staff',
+    children: [
+      { label: 'Staff Directory', href: '/teachers', desc: 'Meet our faculty and staff.' },
     ],
   },
   {
     label: 'Student Life',
-    href: '/student-life',
     children: [
-      { label: 'Clubs & Community', href: '/student-life', desc: '60+ student-run clubs and societies.' },
-      { label: 'Events', href: '/events', desc: 'Summer @ Stanford, retreats, and more.' },
+      { label: 'Student Life', href: '/student-life', desc: 'Overview and activities.' },
+      { label: 'Student Clubs', href: '/clubs', desc: 'All student clubs and societies.' },
+      { label: 'DOFE', href: '/dofe', desc: 'Duke of Edinburgh\'s Award.' },
+      { label: 'Events', href: '/events', desc: 'School events and activities.' },
     ],
   },
   {
     label: 'Student Support',
-    href: '/student-support',
     children: [
-      { label: 'Overview', href: '/student-support', desc: 'All the support resources at OHS.' },
-      { label: 'Academic Advising', href: '/student-support', desc: 'Personalized course planning.' },
-      { label: 'College Counseling', href: '/student-support', desc: 'Expert guidance for university admissions.' },
-      { label: 'Counseling & Wellness', href: '/student-support', desc: 'SEL and mental health support.' },
-      { label: 'Writing & Tutoring Center', href: '/student-support', desc: 'Peer and instructor-led academic help.' },
+      { label: 'School Therapist', href: '/student-support', desc: 'Mental health and wellness support.' },
     ],
   },
 ];

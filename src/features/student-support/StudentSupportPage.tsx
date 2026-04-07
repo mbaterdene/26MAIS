@@ -1,9 +1,12 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { Heart, BookOpen, Users, MessageCircle } from 'lucide-react';
+import { Heart, BookOpen, Users, MessageCircle, Calendar, Clock } from 'lucide-react';
 
 export function StudentSupportPage() {
-  const { t } = useLanguage();
+  const { t, isEnglish } = useLanguage();
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
 
   const services = [
     {
@@ -80,6 +83,133 @@ export function StudentSupportPage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Counseling & Wellness Appointment Booking */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <div className="mb-12">
+              <h2 className="text-4xl font-serif font-bold text-black mb-4 flex items-center gap-3">
+                <Heart className="text-cardinal-red" size={36} />
+                {t('Book a Counseling Session', 'Зөвлөгөө авах үе сонгох')}
+              </h2>
+              <p className="text-gray-600 text-lg">
+                {t(
+                  'Connect with our school counselor to discuss academic, social, or personal concerns in a safe and supportive environment.',
+                  'Сургуулийн зөвлөлгчтэй уулзаж сурлага, нийгэм, хувийн асуудлуудын талаар нээлттэй орчинд ярилцана.'
+                )}
+              </p>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-8 md:p-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Date Selection */}
+                <div>
+                  <label className="block text-lg font-bold text-black mb-4 flex items-center gap-2">
+                    <Calendar size={20} className="text-cardinal-red" />
+                    {t('Select Date', 'Өдөр сонгох')}
+                  </label>
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-cardinal-red font-sans"
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    {isEnglish ? 'Available: Monday - Friday' : 'Боломжит: Даваа - Баасан'}
+                  </p>
+                </div>
+
+                {/* Time Selection */}
+                <div>
+                  <label className="block text-lg font-bold text-black mb-4 flex items-center gap-2">
+                    <Clock size={20} className="text-cardinal-red" />
+                    {t('Select Time', 'Цаг сонгох')}
+                  </label>
+                  <select
+                    value={selectedTime}
+                    onChange={(e) => setSelectedTime(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-cardinal-red font-sans"
+                  >
+                    <option value="">{t('Choose a time slot', 'Цагийн үе сонгох')}</option>
+                    <option value="09:00">09:00 AM - 09:30 AM</option>
+                    <option value="09:30">09:30 AM - 10:00 AM</option>
+                    <option value="10:00">10:00 AM - 10:30 AM</option>
+                    <option value="10:30">10:30 AM - 11:00 AM</option>
+                    <option value="11:00">11:00 AM - 11:30 AM</option>
+                    <option value="13:00">01:00 PM - 01:30 PM</option>
+                    <option value="13:30">01:30 PM - 02:00 PM</option>
+                    <option value="14:00">02:00 PM - 02:30 PM</option>
+                    <option value="14:30">02:30 PM - 03:00 PM</option>
+                    <option value="15:00">03:00 PM - 03:30 PM</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Counselor Info Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="mt-8 bg-white rounded-xl p-6 border-2 border-cardinal-red"
+              >
+                <h3 className="font-bold text-black mb-2">{t('Your Counselor', 'Таны зөвлөлгч')}</h3>
+                <p className="text-gray-700 font-sans">{isEnglish ? 'Ms. Eleanor Thompson' : 'Элеонор Томпсон эмэгтэй'}</p>
+                <p className="text-sm text-gray-600 font-sans mt-2">
+                  {isEnglish
+                    ? 'School Counselor & Mental Health Specialist'
+                    : 'Сургуулийн зөвлөлгч & сэтгэцийн эрүүл мэндийн мэргэжилтэн'}
+                </p>
+              </motion.div>
+
+              {/* Session Details */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4"
+              >
+                <div className="bg-white rounded-lg p-4 text-center">
+                  <p className="text-sm text-gray-600 font-sans">{t('Duration', 'Үргэлжлэх хугацаа')}</p>
+                  <p className="text-xl font-bold text-black mt-1">30 min</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 text-center">
+                  <p className="text-sm text-gray-600 font-sans">{t('Location', 'Байршил')}</p>
+                  <p className="text-xl font-bold text-black mt-1">{isEnglish ? 'Counseling Office' : 'Зөвлөгөө кабинет'}</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 text-center">
+                  <p className="text-sm text-gray-600 font-sans">{t('Cost', 'Үнэ')}</p>
+                  <p className="text-xl font-bold text-black mt-1">{isEnglish ? 'Free' : 'Үнэгүй'}</p>
+                </div>
+              </motion.div>
+
+              {/* Book Button */}
+              <motion.button
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                disabled={!selectedDate || !selectedTime}
+                className={`w-full mt-8 py-4 rounded-lg font-bold text-lg transition-all ${
+                  selectedDate && selectedTime
+                    ? 'bg-cardinal-red text-white hover:bg-red-700 cursor-pointer'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                {t('Book Appointment', 'Уулзалт захиалах')}
+              </motion.button>
+
+              <p className="text-xs text-gray-500 text-center font-sans mt-4">
+                {isEnglish
+                  ? 'You will receive a confirmation email once your appointment is booked.'
+                  : 'Уулзалт баталгаажуулахын дараа та баталгаажуулах электрон захидал хүлээж авах болно.'}
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>

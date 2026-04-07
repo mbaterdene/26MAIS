@@ -4,12 +4,16 @@ import { Footer } from './components/layout/Footer';
 import { HomePage } from './features/home/HomePage';
 import { AboutPage } from './features/about/AboutPage';
 import { AcademicsPage } from './features/academics/AcademicsPage';
+import { PDQPage } from './features/academics/PDQPage';
 import { AdmissionsPage } from './features/admissions/AdmissionsPage';
 import { StudentLifePage } from './features/student-life/StudentLifePage';
+import { ClubsPage } from './features/student-life/ClubsPage';
+import { DOFEPage } from './features/student-life/DOFEPage';
 import { StudentSupportPage } from './features/student-support/StudentSupportPage';
 import { NewsPage } from './features/news/NewsPage';
 import { NewsDetailPage } from './features/news/NewsDetailPage';
 import { EventsPage } from './features/events/EventsPage';
+import { TeachersPage } from './features/teachers/TeachersPage';
 
 // Admin Imports
 import { AdminLayout } from './features/admin/AdminLayout';
@@ -50,8 +54,12 @@ function App() {
                 <Route index element={<HomePage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="academics" element={<AcademicsPage />} />
+                <Route path="courses/pdq" element={<PDQPage />} />
                 <Route path="admissions" element={<AdmissionsPage />} />
+                <Route path="teachers" element={<TeachersPage />} />
                 <Route path="student-life" element={<StudentLifePage />} />
+                <Route path="clubs" element={<ClubsPage />} />
+                <Route path="dofe" element={<DOFEPage />} />
                 <Route path="student-support" element={<StudentSupportPage />} />
                 <Route path="news" element={<NewsPage />} />
                 <Route path="news/:slug" element={<NewsDetailPage />} />
