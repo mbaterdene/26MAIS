@@ -401,7 +401,7 @@ app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, re
     }
 
     // Check permissions: only creator or admin can edit
-    if (req.auth.role === "news_editor" && existing.createdBy.toString() !== req.auth.adminId) {
+    if (req.auth.role === "news_editor" && existing.createdBy !== req.auth.adminId) {
       return res.status(403).json({ error: "You can only edit your own articles" });
     }
 

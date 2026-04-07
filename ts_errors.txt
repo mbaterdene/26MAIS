@@ -1,3 +1,4 @@
 PLAN FOR ADMIN PAGE
 This is regarding the static json files to be updated by github api. 
-For these I wanted an approach where on the admin page the admin could see the entire page
+For these I wanted an approach where on the admin page the admin could see the entire page as it looks to user and the editable json contents would be highlighted and editable. (it would only be text). We do not need to implement image yet.
+ 

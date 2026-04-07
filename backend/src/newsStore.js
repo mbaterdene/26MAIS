@@ -12,8 +12,8 @@ const newsSchema = new mongoose.Schema(
     category: { type: String, default: "news" },
     author: { type: String, default: "Anonymous" },
     status: { type: String, enum: ["draft", "pending", "published"], default: "draft" },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, default: null },
-    approvedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
+    createdBy: { type: String, default: null },
+    approvedBy: { type: String, default: null },
     approvedAt: { type: Date, default: null },
   },
   {
