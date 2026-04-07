@@ -23,9 +23,9 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch existing news if editing
-  const { data: existingNews, isLoading: isFetching } = useNewsById(id ? parseInt(id) : null);
+  const { data: existingNews, isLoading: isFetching } = useNewsById(id || null);
   const createMutation = useCreateNews();
-  const updateMutation = useUpdateNews(id ? parseInt(id) : 0);
+  const updateMutation = useUpdateNews(id || '');
 
   useEffect(() => {
     if (existingNews) {
@@ -77,7 +77,6 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
         await createMutation.mutateAsync(formData as any);
       } else if (id) {
         await updateMutation.mutateAsync({
-          id: parseInt(id),
           ...formData,
         } as any);
       }
