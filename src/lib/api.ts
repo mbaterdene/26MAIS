@@ -72,7 +72,7 @@ export const getHomeData = async (): Promise<HomeData> => {
     return {
       slides: jsonSlides,
       latest_news: latest_news,
-      upcoming_events: jsonEvents.slice(0, 4),
+      upcoming_events: jsonEvents.slice(0, 3),
       school_info: jsonSchoolInfo,
     };
   } catch (error) {
@@ -81,7 +81,7 @@ export const getHomeData = async (): Promise<HomeData> => {
     return {
       slides: jsonSlides,
       latest_news: [],
-      upcoming_events: jsonEvents.slice(0, 4),
+      upcoming_events: jsonEvents.slice(0, 3),
       school_info: jsonSchoolInfo,
     };
   }

@@ -1,4 +1,4 @@
-import { BookOpen, Users, Award, Compass } from 'lucide-react';
+import { Compass, MapPin, Building } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -6,20 +6,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import { getHomeData, getAlumniStats } from '../../lib/api';
 import type { HomeData, AlumniStatsData } from '../../lib/api';
 import { bil, formatDate, formatNumber, truncateWords } from '../../lib/utils';
-import { jsonCourses } from '../../data/contentJson';
 import { pageText } from '../../data/pageText';
-import type { Course } from '../../lib/types';
 import WorldMap from '../../components/WorldMap';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-};
 
 export function HomePage() {
   const { isEnglish, t } = useLanguage();
@@ -43,44 +31,7 @@ export function HomePage() {
 
   const latestNews = homeData?.latest_news ?? [];
   const upcomingEvents = homeData?.upcoming_events ?? [];
-  const featuredCourses: Course[] = jsonCourses.slice(0, 3);
   const alumniStats = alumniData?.statistics;
-
-  const featureCards = [
-    {
-      id: 'academics',
-      title: t('Academics', 'Сургалт'),
-      description: t(
-        'National and international programs with Cambridge IGCSE, AS & A Level curriculum.',
-        'Кэмбрижийн IGCSE, AS & A Level хөтөлбөртэй үндэсний болон олон улсын сургалт.'
-      ),
-      gradient: 'from-cardinal-red to-digital-red',
-      icon: <BookOpen size={64} className="text-white opacity-80 group-hover:scale-110 transition-transform duration-300" />,
-      href: '/academics',
-    },
-    {
-      id: 'admissions',
-      title: t('Admissions', 'Элсэлт'),
-      description: t(
-        'Annual entrance examination selecting top 96 students. Registration opens in June.',
-        'Жилийн орох шалгалтаар топ 96 сурагч сонгогдоно. Бүртгэл 6-р сард нээгдэнэ.'
-      ),
-      gradient: 'from-digital-blue to-black',
-      icon: <Award size={64} className="text-white opacity-80 group-hover:scale-110 transition-transform duration-300" />,
-      href: '/admissions',
-    },
-    {
-      id: 'student-life',
-      title: t('Student Life', 'Сурагчийн амьдрал'),
-      description: t(
-        'Clubs, activities, events, and development programs for holistic student growth.',
-        'Клубүүд, үйл ажиллагаа, арга хэмжээ, хөгжлийн хөтөлбөрүүд.'
-      ),
-      gradient: 'from-sand to-gray-500',
-      icon: <Users size={64} className="text-white opacity-80 group-hover:scale-110 transition-transform duration-300" />,
-      href: '/student-life',
-    },
-  ];
 
   return (
     <div className="w-full">
@@ -156,41 +107,36 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ── Feature Cards ─────────────────────────────────────────────── */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-10"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            variants={containerVariants}
-          >
-            {featureCards.map((card) => (
-              <motion.div
-                key={card.id}
-                variants={cardVariants}
-                whileHover={{ y: -8 }}
-                transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-                className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 group"
+      {/* ── Admissions Status Banner ────────────────────────────────────────── */}
+      <section className="bg-cardinal-red">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Thin border line */}
+          <div className="border-b border-white/20 pb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center text-white"
+            >
+              <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4 leading-tight">
+                {isEnglish
+                  ? 'The 2026-27 Application is Now Closed'
+                  : '2026-27 оны элсэлт хаагдлаа'}
+              </h2>
+              <p className="text-lg text-white/90 font-sans mb-6 max-w-2xl mx-auto">
+                {isEnglish
+                  ? 'Thank you for your interest in Mongol Aspiration School. We received an overwhelming response to this year\'s application. Registration for next year will open in June.'
+                  : 'Монгол Тэмүүлэл сургуульд сонирхож үзсэний төлөө баярлалаа. Энэ жилийн элсэлтэд маш их хүн хүсэлтийн гүйцэтгэл илгээсэн. Дараа жилийн бүртгэл 6-р сарын үед нээгдэх болно.'}
+              </p>
+              <Link
+                to="/admissions"
+                className="inline-block text-cardinal-red bg-white hover:bg-gray-100 px-8 py-3 rounded-lg font-bold text-base transition-all hover:-translate-y-0.5 shadow-md"
               >
-                <div className={`h-48 bg-gradient-to-br ${card.gradient} flex items-center justify-center`}>
-                  {card.icon}
-                </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-serif font-bold mb-4 text-black">{card.title}</h3>
-                  <p className="text-gray-600 mb-6 font-sans leading-relaxed">{card.description}</p>
-                  <Link
-                    to={card.href}
-                    className="text-digital-blue font-bold flex items-center group-hover:text-cardinal-red transition-colors"
-                  >
-                    {t('Learn More', 'Дэлгэрэнгүй')}{' '}
-                    <span className="ml-2 group-hover:translate-x-2 transition-transform inline-block">→</span>
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                {isEnglish ? 'Learn About Admissions' : 'Элсэлтийн мэдээлэл'}
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -344,43 +290,75 @@ export function HomePage() {
       {/* ── Global Alumni Network ──────────────────────────────────── */}
       <WorldMap />
 
-      {/* ── Featured Courses ─────────────────────────────────────────── */}
-      {featuredCourses.length > 0 && (
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-serif font-bold text-center mb-12 text-black">{tr(ui.featuredCourses)}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-              {featuredCourses.map((course) => (
-                <motion.div
-                  key={course.id}
-                  whileHover={{ y: -4 }}
-                  className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 group"
-                >
-                  <div className="h-48 bg-gradient-to-br from-digital-blue/20 to-cardinal-red/10 flex items-center justify-center">
-                    <BookOpen size={48} className="text-gray-300" />
-                  </div>
-                  <div className="p-6">
-                    {course.grade_display && (
-                      <span className="inline-block bg-cardinal-red text-white px-3 py-1 rounded-full text-xs font-bold mb-3">{course.grade_display}</span>
-                    )}
-                    <h3 className="text-xl font-serif font-bold mb-2 text-black group-hover:text-cardinal-red transition-colors">
-                      <Link to={`/courses/${course.slug}`}>{course.name}</Link>
-                    </h3>
-                    {course.teacher && <p className="text-sm text-gray-500 mb-2">{tr(ui.teacher)}: {course.teacher}</p>}
-                    <p className="text-gray-600 mb-4 text-sm line-clamp-3">{truncateWords(course.description, 15)}</p>
-                    <Link to={`/courses/${course.slug}`} className="text-digital-blue font-bold hover:text-cardinal-red text-sm">{tr(ui.readMoreArrow)}</Link>
-                  </div>
-                </motion.div>
-              ))}
+      {/* Location Map Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-serif font-bold text-black mb-4">{isEnglish ? 'Find Us' : 'Бидийг探す'}</h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              {isEnglish 
+                ? 'Located in the heart of Ulaanbaatar, Mongolia'
+                : 'Улаанбаатар, Монголын төвөд байрлах'}
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="rounded-2xl overflow-hidden shadow-lg"
+          >
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3172.650542986599!2d106.97919947671312!3d47.90468146734578!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5d96919a07dfcf83%3A0xc37dcc5f0d801dee!2sMongol%20Aspiration%20International%20School!5e1!3m2!1sen!2smn!4v1775751886153!5m2!1sen!2smn"
+              width="100%"
+              height="500"
+              style={{ border: 0 }}
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            <div className="bg-white rounded-xl p-6 shadow-sm text-center">
+              <Compass size={32} className="text-cardinal-red mx-auto mb-3" />
+              <h3 className="font-bold text-black mb-2">{isEnglish ? 'Address' : 'Хаяг'}</h3>
+              <p className="text-sm text-gray-600">WX3J+RMP, BZD - 36 khoroo, Ulaanbaatar 13271</p>
             </div>
-            <div className="text-center">
-              <Link to="/courses" className="inline-block bg-cardinal-red hover:bg-digital-red text-white px-8 py-3 rounded-full font-bold transition-all hover:-translate-y-1 shadow-lg">
-                {tr(ui.allCourses)}
-              </Link>
+            <div className="bg-white rounded-xl p-6 shadow-sm text-center">
+              <MapPin size={32} className="text-digital-blue mx-auto mb-3" />
+              <h3 className="font-bold text-black mb-2">{isEnglish ? 'Get Directions' : 'Чиглэлүүл авах'}</h3>
+              <a 
+                href="https://maps.app.goo.gl/bkJdU7xnNe588o6V9" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-cardinal-red font-bold hover:underline"
+              >
+                {isEnglish ? 'Open in Google Maps' : 'Google Maps-д нээх'}
+              </a>
             </div>
-          </div>
-        </section>
-      )}
+            <div className="bg-white rounded-xl p-6 shadow-sm text-center">
+              <Building size={32} className="text-sand mx-auto mb-3" />
+              <h3 className="font-bold text-black mb-2">{isEnglish ? 'Campus' : 'Сургуулийн байр'}</h3>
+              <p className="text-sm text-gray-600">{isEnglish ? 'Modern facilities in central UB' : 'Төв Улаанбаатарт орч орчин'}</p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
