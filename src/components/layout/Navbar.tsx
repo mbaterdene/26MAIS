@@ -158,11 +158,9 @@ function DesktopNavItem({ item }: { item: NavItem }) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50"
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-white shadow-2xl border border-gray-100 overflow-hidden z-50"
             role="menu"
           >
-            {/* Accent bar */}
-            <div className="h-1 bg-gradient-to-r from-cardinal-red to-digital-blue" />
             <div className="py-2">
               {item.children.map((child) => (
                 <Link
