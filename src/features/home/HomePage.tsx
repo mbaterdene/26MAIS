@@ -1,11 +1,12 @@
-import { Compass, MapPin, Building } from 'lucide-react';
+import { Compass } from 'lucide-react';
+import { FaUsers, FaUserGraduate, FaBookOpen, FaTree } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { getHomeData, getAlumniStats } from '../../lib/api';
-import type { HomeData, AlumniStatsData } from '../../lib/api';
-import { bil, formatDate, formatNumber, truncateWords } from '../../lib/utils';
+import { getHomeData } from '../../lib/api';
+import type { HomeData } from '../../lib/api';
+import { bil, formatDate, truncateWords } from '../../lib/utils';
 import { pageText } from '../../data/pageText';
 import WorldMap from '../../components/WorldMap';
 
@@ -15,60 +16,94 @@ export function HomePage() {
   const tr = (label: { en: string; mn: string }) => t(label.en, label.mn);
 
   const [homeData, setHomeData] = useState<HomeData | null>(null);
-  const [alumniData, setAlumniData] = useState<AlumniStatsData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  type StatItem = {
+    icon: React.ReactNode;
+    value: string;
+    label: { en: string; mn: string };
+    colors: {
+      bg: string;
+      icon: string;
+      border: string;
+    };
+  };
+
+  const stats: StatItem[] = [
+    {
+      icon: <FaUsers className="w-8 h-8" />,
+      value: "384",
+      label: { en: "Students", mn: "Сураагчид" },
+      colors: {
+        bg: "bg-red-500/20",
+        icon: "text-red-400",
+        border: "hover:border-red-500/50",
+      },
+    },
+    {
+      icon: <FaUserGraduate className="w-8 h-8" />,
+      value: "42",
+      label: { en: "Teachers", mn: "Багш нар" },
+      colors: {
+        bg: "bg-digital-blue/20",
+        icon: "text-digital-blue",
+        border: "hover:border-digital-blue/50",
+      },
+    },
+    {
+      icon: <FaBookOpen className="w-8 h-8" />,
+      value: "44",
+      label: { en: "Programs", mn: "Хичээлүүд" },
+      colors: {
+        bg: "bg-sand/20",
+        icon: "text-sand",
+        border: "hover:border-sand/50",
+      },
+    },
+    {
+      icon: <FaTree className="w-8 h-8" />,
+      value: "$3.4M",
+      label: { en: "2024 Scholarship", mn: "2024 төгөлгөлүүд" },
+      colors: {
+        bg: "bg-green-400/20",
+        icon: "text-green-400",
+        border: "hover:border-green-400/50",
+      },
+    },
+  ];
+
   useEffect(() => {
-    Promise.all([
-      getHomeData().catch(() => null),
-      getAlumniStats().catch(() => null),
-    ]).then(([home, alumni]) => {
-      setHomeData(home);
-      setAlumniData(alumni);
+    getHomeData().then((data) => {
+      setHomeData(data);
       setLoading(false);
-    });
+    }).catch(() => setLoading(false));
   }, []);
 
   const latestNews = homeData?.latest_news ?? [];
   const upcomingEvents = homeData?.upcoming_events ?? [];
-  const alumniStats = alumniData?.statistics;
 
   return (
     <div className="w-full">
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative bg-black text-white py-32 md:py-48 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-40 mix-blend-multiply bg-gradient-to-r from-cardinal-red to-black" />
-
-        <motion.div
-          className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-cardinal-red/10 blur-3xl"
-          animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-digital-blue/10 blur-3xl"
-          animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.15, 0.08] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-        />
+      <section 
+        className="relative bg-black text-white py-32 md:py-48 overflow-hidden bg-cover bg-center"
+        style={{
+          backgroundImage: 'url(/pic1.jpg)',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        <div className="absolute inset-0 z-0 bg-black/60" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.22em] uppercase text-white/50 bg-white/10 px-4 py-1.5 rounded-full mb-8"
-          >
-            {t('Mongol Aspiration School', 'Монгол Тэмүүлэл Сургууль')}
-          </motion.div>
-
           <motion.h1
-            className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight"
+            className="text-5xl md:text-7xl font-serif font-bold mb-10 leading-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
             {t('World-class', 'Дэлхийн түвшний')} <br />
-            <span className="text-cardinal-red bg-white/10 px-2 rounded backdrop-blur-sm shadow-lg border border-white/20">
+            <span className="text-cardinal-red">
               {t('education', 'боловсрол')}
             </span>
           </motion.h1>
@@ -151,19 +186,18 @@ export function HomePage() {
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {latestNews.map((news, i) => (
+              {latestNews.slice(0, 4).map((news, i) => (
                 <motion.article
                   key={news.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-cardinal-red/20 group"
+                  className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:border-cardinal-red/30 group"
                 >
                   {news.image ? (
-                    <div className="relative overflow-hidden h-48">
+                    <div className="overflow-hidden h-48">
                       <img src={news.image} alt={bil(isEnglish, news.title_en, news.title_mn)} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      <div className="absolute top-3 right-3 bg-cardinal-red text-white px-2.5 py-0.5 rounded-full text-xs font-bold">{tr(ui.newsTag)}</div>
                     </div>
                   ) : (
                     <div className="h-48 bg-gradient-to-br from-cardinal-red/10 to-digital-blue/10 flex items-center justify-center">
@@ -171,7 +205,7 @@ export function HomePage() {
                     </div>
                   )}
                   <div className="p-6">
-                    <p className="text-xs text-gray-400 mb-2">{formatDate(news.created_at)} • {news.author}</p>
+                    <p className="text-xs text-gray-400 mb-2">{formatDate(news.created_at)}</p>
                     <h3 className="text-lg font-serif font-bold text-black mb-3 line-clamp-2 group-hover:text-cardinal-red transition-colors">
                       <Link to={`/news/${news.slug}`}>{bil(isEnglish, news.title_en, news.title_mn)}</Link>
                     </h3>
@@ -260,32 +294,31 @@ export function HomePage() {
         </section>
       )}
 
-      {/* ── Alumni Stats ──────────────────────────────────────────────── */}
-      {alumniStats && (
-        <section className="py-20 bg-black text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl font-serif font-bold mb-12">{tr(ui.worldAlumniNetwork)}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div>
-                <p className="text-4xl md:text-5xl font-bold text-cardinal-red">{formatNumber(alumniStats.total_alumni)}</p>
-                <p className="text-gray-400 mt-2">{tr(ui.alumniAbroad)}</p>
-              </div>
-              <div>
-                <p className="text-4xl md:text-5xl font-bold text-digital-blue">{formatNumber(alumniStats.total_countries)}</p>
-                <p className="text-gray-400 mt-2">{tr(ui.countries)}</p>
-              </div>
-              <div>
-                <p className="text-4xl md:text-5xl font-bold text-sand">{formatNumber(alumniStats.total_universities)}</p>
-                <p className="text-gray-400 mt-2">{tr(ui.universities)}</p>
-              </div>
-              <div>
-                <p className="text-4xl md:text-5xl font-bold text-green-400">${formatNumber(alumniStats.total_scholarship)}</p>
-                <p className="text-gray-400 mt-2">{tr(ui.totalScholarship)}</p>
-              </div>
-            </div>
+      {/* ── School Stats ──────────────────────────────────────────────── */}
+      <section className="py-20 bg-black border-b-8 border-cardinal-red">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`rounded-xl p-6 border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] hover:from-white/10 hover:to-white/[0.05] transition-all duration-300 flex flex-col items-center text-center backdrop-blur-sm ${stat.colors.border}`}
+              >
+                <div className={`mb-3 p-3 ${stat.colors.bg} rounded-lg hover:opacity-80 transition-opacity`}>
+                  <div className={stat.colors.icon}>{stat.icon}</div>
+                </div>
+                <p className="text-5xl font-bold text-white mb-1">{stat.value}</p>
+                <p className="text-gray-400 font-sans text-xs uppercase tracking-wider">
+                  {isEnglish ? stat.label.en : stat.label.mn}
+                </p>
+              </motion.div>
+            ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* ── Global Alumni Network ──────────────────────────────────── */}
       <WorldMap />
@@ -300,12 +333,7 @@ export function HomePage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-serif font-bold text-black mb-4">{isEnglish ? 'Find Us' : 'Бидийг探す'}</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              {isEnglish 
-                ? 'Located in the heart of Ulaanbaatar, Mongolia'
-                : 'Улаанбаатар, Монголын төвөд байрлах'}
-            </p>
+            <h2 className="text-4xl font-serif font-bold text-black mb-4">{isEnglish ? 'Our Location' : 'Бидний Байршил'}</h2>
           </motion.div>
 
           <motion.div
@@ -325,37 +353,6 @@ export function HomePage() {
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full"
             />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
-          >
-            <div className="bg-white rounded-xl p-6 shadow-sm text-center">
-              <Compass size={32} className="text-cardinal-red mx-auto mb-3" />
-              <h3 className="font-bold text-black mb-2">{isEnglish ? 'Address' : 'Хаяг'}</h3>
-              <p className="text-sm text-gray-600">WX3J+RMP, BZD - 36 khoroo, Ulaanbaatar 13271</p>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm text-center">
-              <MapPin size={32} className="text-digital-blue mx-auto mb-3" />
-              <h3 className="font-bold text-black mb-2">{isEnglish ? 'Get Directions' : 'Чиглэлүүл авах'}</h3>
-              <a 
-                href="https://maps.app.goo.gl/bkJdU7xnNe588o6V9" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm text-cardinal-red font-bold hover:underline"
-              >
-                {isEnglish ? 'Open in Google Maps' : 'Google Maps-д нээх'}
-              </a>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm text-center">
-              <Building size={32} className="text-sand mx-auto mb-3" />
-              <h3 className="font-bold text-black mb-2">{isEnglish ? 'Campus' : 'Сургуулийн байр'}</h3>
-              <p className="text-sm text-gray-600">{isEnglish ? 'Modern facilities in central UB' : 'Төв Улаанбаатарт орч орчин'}</p>
-            </div>
           </motion.div>
         </div>
       </section>

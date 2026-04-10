@@ -279,6 +279,7 @@ function LanguageToggle() {
 }
 
 export function Navbar() {
+  const { lang } = useLanguage();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
@@ -337,7 +338,11 @@ export function Navbar() {
               MAIS
             </span>
             <span className="text-black font-sans font-semibold text-sm border-l-2 border-gray-300 pl-3 leading-tight hidden sm:block">
-              Монгол<br />Тэмүүлэл
+              {lang === 'mn' ? (
+                <>Монгол<br />Тэмүүлэл</>
+              ) : (
+                <>Mongol<br />Aspiration</>
+              )}
             </span>
           </Link>
 
@@ -404,7 +409,11 @@ export function Navbar() {
                 <Link to="/" onClick={closeDrawer} className="flex items-center gap-2">
                   <span className="text-cardinal-red font-serif font-bold text-xl">MAIS</span>
                   <span className="text-black font-sans text-xs font-semibold leading-tight">
-                    Монгол<br />Тэмүүлэл
+                    {lang === 'mn' ? (
+                      <>Монгол<br />Тэмүүлэл</>
+                    ) : (
+                      <>Mongol<br />Aspiration</>
+                    )}
                   </span>
                 </Link>
                 <button

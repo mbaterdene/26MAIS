@@ -119,18 +119,7 @@ export default function WorldMap() {
     }
   `;
 
-  const filteredCountryData = useMemo(() => {
-    if (searchTerm === '') return countryData;
-    
-    return countryData.filter(country => {
-      const countryName = getCountryNameTranslated(country.country);
-      const universities = getUniversitiesByCountry(country.country);
-      
-      return countryName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-             universities.some(uni => uni.name.toLowerCase().includes(searchTerm.toLowerCase()));
-    });
-  }, [searchTerm]);
-
+  // Define translation function BEFORE using it in useMemo
   const getCountryNameTranslated = (code: string): string => {
     // Country name mapping for translations
     const countryNames: { [key: string]: { en: string; mn: string } } = {
@@ -161,6 +150,18 @@ export default function WorldMap() {
     const names = countryNames[code];
     return names ? (isEnglish ? names.en : names.mn) : code;
   };
+
+  const filteredCountryData = useMemo(() => {
+    if (searchTerm === '') return countryData;
+    
+    return countryData.filter(country => {
+      const countryName = getCountryNameTranslated(country.country);
+      const universities = getUniversitiesByCountry(country.country);
+      
+      return countryName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+             universities.some(uni => uni.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    });
+  }, [searchTerm]);
 
   const getTooltipContent = (ctx: CountryContext) => {
     const data = filteredCountryData.find(item => item.country === ctx.countryCode);
@@ -229,7 +230,7 @@ export default function WorldMap() {
         <div className="container mx-auto px-4">
         {/* Header Section */}
         <motion.div variants={itemVariants} className="py-8 md:py-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2 text-center">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-2 text-center">
             {t('Global Alumni Network', 'Дэлхийн Төгсөгчдийн Сүлжээ')}
           </h2>
           <p className="text-lg text-gray-600 text-center max-w-2xl mx-auto">

@@ -214,7 +214,7 @@ const AlumniPostersSlider: React.FC = () => {
     return (
       <div className="w-full py-12">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
+          <h2 className="text-4xl font-bold text-center mb-8 text-gray-900">
             {title}
           </h2>
           <div className="flex justify-center items-center py-16">
@@ -247,7 +247,7 @@ const AlumniPostersSlider: React.FC = () => {
     <div className="w-full pt-12 pb-6">
       <div className="container mx-auto px-4">
         <motion.h2
-          className="text-3xl font-bold text-center mb-8 text-gray-900"
+          className="text-3xl font-serif font-bold text-center mb-8 text-gray-900"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
