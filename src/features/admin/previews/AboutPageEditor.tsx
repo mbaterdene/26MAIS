@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useLanguage } from '../../../context/LanguageContext';
 import { bil, formatNumber } from '../../../lib/utils';
 import { pageText } from '../../../data/pageText';

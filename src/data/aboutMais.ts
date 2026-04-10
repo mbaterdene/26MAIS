@@ -30,83 +30,28 @@ In the 2025-2026 academic year, the school operates with 382 students (4 grades,
     total_teachers: 40,
   },
 
-  // ─── School Characteristics ───────────────────────────────────────────────
-  characteristics: [
-    {
-      id: 1,
-      title_mn: "Сургуулийн төрөл",
-      title_en: "School Type",
-      description_mn: "Төрийн өмчийн, ашгийн бус, ахлах сургуулийн хэв шинжтэй",
-      description_en: "State-owned, non-profit high school",
-    },
-    {
-      id: 2,
-      title_mn: "Ангийн түвшин",
-      title_en: "Grade Levels",
-      description_mn: "9-12 дугаар ангийн 14-18 насны суралцагчидтай",
-      description_en: "Grades 9-12, ages 14-18",
-    },
-    {
-      id: 3,
-      title_mn: "Ангийн дүүргэлт",
-      title_en: "Class Size",
-      description_mn:
-        "Анги дүүргэлт 24. Сургалт сонголтын бүлэг 5-24. Нэг багшид ногдох хүүхдийн тоо 10",
-      description_en: "24 students per class, 5-24 students per elective group",
-    },
-    {
-      id: 4,
-      title_mn: "Хөтөлбөр",
-      title_en: "Programs",
-      description_mn:
-        "Үндэсний болон Кембрижийн олон улсын хөтөлбөрийг хэрэгжүүлдэг",
-      description_en: "National and Cambridge International programs",
-    },
-    {
-      id: 5,
-      title_mn: "Хэл",
-      title_en: "Language",
-      description_mn:
-        "Монгол болон англи хэл дээр сургалтаа явуулдаг хос хэлний сургууль",
-      description_en: "Bilingual school teaching in Mongolian and English",
-    },
-    {
-      id: 6,
-      title_mn: "Диплом",
-      title_en: "Diploma",
-      description_mn:
-        "Суралцагчид Монгол улсын бүрэн дунд болон Кембрижийн олон улсын ахлах түвшний боловсролын хос дипломтой төгсдөг",
-      description_en:
-        "Dual diploma: Mongolian high school diploma and Cambridge International A-Level certificate",
-    },
-  ],
-
-  // ─── National Program Results (2024-2025) ────────────────────────────────
-  national_program: {
-    performance_rate: 88.5,
-    success_rate: 100.0,
-    quality_rate: 86.4,
-    description_mn:
-      "2024-2025 оны Сургалтийн жилд 9 дүгээр ангийн дөрвөн бүлгийн 96 сурагч, 12 дугаар ангийн 4 бүлгийн 95 сурагч улсын шалгалт өгсөн бол 10 дугаар ангийн 4 бүлгийн 94 сурагч, 11 дүгээр ангийн 4 бүлгийн 95 сурагч дэвших шалгалт өгч 100% амжилттай шалгагдлаа.",
-    description_en:
-      "In the 2024-2025 academic year, 96 students from 4 groups of 9th grade and 95 students from 4 groups of 12th grade took the national examination, while 94 students from 4 groups of 10th grade and 95 students from 4 groups of 11th grade took the advancement examination, all with 100% success rate.",
-  },
-
   // ─── International Program (2024-2025) ───────────────────────────────────
   international_program: {
-    year: "2024-2025",
-    igcse_count: 18,
-    as_level_count: 16,
-    a_level_count: 14,
-    ice_eligible: 526,
-    ice_received: 505,
-    ice_excellent: 183,
-    ice_good: 281,
-    ice_satisfactory: 41,
-    aice_eligible: 106,
-    aice_excellent: 42,
-    aice_good: 53,
-    aice_satisfactory: 11,
+    igcse: 17,
+    igcse_en: "IGCSE",
+    igcse_mn: "IGCSE",
+    igcse_desc_en: "International General Certificate of Secondary Education",
+    igcse_desc_mn: "Олон улсын ерөнхий дунд боловсролын гэрчилгээ",
+    as_level: 16,
+    as_level_en: "AS Level",
+    as_level_mn: "AS Level",
+    as_level_desc_en: "Advanced Subsidiary Level",
+    as_level_desc_mn: "Дээд түвшний туслах түвшин",
+    a2_level: 11,
+    a2_level_en: "A2 Level",
+    a2_level_mn: "A2 Level",
+    a2_level_desc_en: "Advanced Level",
+    a2_level_desc_mn: "Дээд түвшин",
+    pdq: 2,
+    pdq_en: "PDQ",
+    pdq_mn: "PDQ",
+    pdq_desc_en: "Professional Development Qualification",
+    pdq_desc_mn: "Мэргэжлийн хөгжлийн гэрчилгээ",
   },
 
   // ─── Student Development Programs ─────────────────────────────────────────
@@ -236,4 +181,72 @@ In the 2025-2026 academic year, the school operates with 382 students (4 grades,
 • Managing alumni network`,
     },
   ],
+
+  // ─── Principal ────────────────────────────────────────────────────────────
+  principal: {
+    name_en: "Dr. Leadership Name",
+    name_mn: "Нэмэлт нэр",
+    title_en: "Principal",
+    title_mn: "Сургуулийн захирал",
+    photo: null,
+    message_en:
+      "At Mongol Aspiration School, we believe in nurturing not just academic excellence, but also character, creativity, and critical thinking. Our commitment is to provide every student with a world-class education that prepares them for the challenges and opportunities of the 21st century. We foster a community where students are encouraged to think independently, embrace innovation, and develop a global perspective. Together with our dedicated faculty and supportive parents, we create an environment where each student can flourish and reach their full potential.",
+    message_mn:
+      "Монгол Тэмүүлэл сургууль нь зөвхөн сурлагын гүйцэтгэлээ төдийгүй оюуны нөлөө, сэтгэцийн хөгжлийг хөгжүүлэхэд итгэдэг. Бид сурагч бүрд 21-р зууны сорилтууд болон боломжуудын өмнө тэднийг бэлтгэх дэлхийн түвшний боловсрол олгох үзэл баримтлалтай. Бид сурагчдыг өөрийн сэтгэл санаагаар бодлогдож, инновац үзэл баримтлалыг хүлээн авч, дэлхийн өргөн үзэлтэй байхуулдаг орчин бүрдүүлдэг.",
+  },
+
+  // ─── Timeline ─────────────────────────────────────────────────────────────
+  timeline: [
+    {
+      id: 1,
+      year: 2011,
+      title_en: "School Established",
+      title_mn: "Сургуулийг байгуулсан",
+      description_en:
+        "Mongol Aspiration School founded with 40 students and 21 staff members, starting with grades 9.",
+      description_mn:
+        "Монгол Тэмүүлэл сургууль 40 сурагч, 21 багш нартай 9-р ангаас эхлэн байгуулагдсан.",
+    },
+    {
+      id: 2,
+      year: 2012,
+      title_en: "Cambridge Center Registration",
+      title_mn: "Кембриджийн төвөөр бүртгүүлэх",
+      description_en:
+        "Registered as Cambridge International Examination Centre MN014, beginning international education programs.",
+      description_mn:
+        "Кембриджийн олон улсын шалгалтын төв MN014 болж бүртгүүлүүлээд олон улсын боловсролын хөтөлбөр эхлүүлсэн.",
+    },
+    {
+      id: 3,
+      year: 2016,
+      title_en: "World Recognition",
+      title_mn: "Дэлхийн түвшинд мэдэгдэх",
+      description_en:
+        "Achieved Top in the World recognition in IGCSE Mathematics, marking international excellence.",
+      description_mn:
+        "IGCSE Математикийн сорилгоор дэлхийд төп байр эзэлж дэлхийн түвшний амжилт үзүүллээ.",
+    },
+    {
+      id: 4,
+      year: 2018,
+      title_en: "Program Expansion",
+      title_mn: "Хөтөлбөр өргөтгөх",
+      description_en:
+        "Expanded to all four grade levels (9-12) with comprehensive national and international curriculum offerings.",
+      description_mn:
+        "9-12 дугаар ангийн бүх анги түвшнүүдэд өргөтгөж үндэсний болон олон улсын иж бүрэн хөтөлбөрийг хэрэгжүүлэх болсон.",
+    },
+    {
+      id: 5,
+      year: 2023,
+      title_en: "Excellence Achievement",
+      title_mn: "Чадварын оргил",
+      description_en:
+        "91 graduates with 43% studying abroad on scholarships, continuing a tradition of academic excellence.",
+      description_mn:
+        "91 төгсөгчөөс 43% нь стипендиэр гадаадын сургуульд сурч байхдаа сурлагын шинэ оргилд хүрэлээ.",
+    },
+  ],
 };
+

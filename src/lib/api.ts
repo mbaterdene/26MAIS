@@ -9,8 +9,6 @@ import type {
   AlumniStats,
   AlumniCountry,
   SchoolInfo,
-  SchoolCharacteristic,
-  NationalProgram,
   InternationalProgram,
   StudentProgram,
 } from "./types";
@@ -130,14 +128,12 @@ export interface TimelineItem {
 }
 export interface AboutData {
   school_info: SchoolInfo | null;
-  characteristics: SchoolCharacteristic[];
-  national_program: NationalProgram | null;
   international_program: InternationalProgram | null;
   student_programs: StudentProgram[];
   achievements: Achievement[];
   graduate_stats: GraduateStat[];
-  principal?: Principal;
-  timeline?: TimelineItem[];
+  principal: Principal;
+  timeline: TimelineItem[];
   total_graduates: number;
   total_abroad: number;
   total_scholarship: number;

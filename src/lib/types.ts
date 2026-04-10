@@ -134,23 +134,26 @@ export interface NationalProgram {
 }
 
 export interface InternationalProgram {
-  year: string;
-  igcse_count: number;
-  as_level_count: number;
-  a_level_count: number;
-  ice_eligible: number;
-  ice_received: number;
-  ice_excellent: number;
-  ice_good: number;
-  ice_satisfactory: number;
-  ice_description_mn?: string | null;
-  ice_description_en?: string | null;
-  aice_eligible: number;
-  aice_excellent: number;
-  aice_good: number;
-  aice_satisfactory: number;
-  aice_description_mn?: string | null;
-  aice_description_en?: string | null;
+  igcse: number;
+  igcse_en: string;
+  igcse_mn: string;
+  igcse_desc_en: string;
+  igcse_desc_mn: string;
+  as_level: number;
+  as_level_en: string;
+  as_level_mn: string;
+  as_level_desc_en: string;
+  as_level_desc_mn: string;
+  a2_level: number;
+  a2_level_en: string;
+  a2_level_mn: string;
+  a2_level_desc_en: string;
+  a2_level_desc_mn: string;
+  pdq: number;
+  pdq_en: string;
+  pdq_mn: string;
+  pdq_desc_en: string;
+  pdq_desc_mn: string;
 }
 
 export interface StudentProgram {
