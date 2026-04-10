@@ -43,16 +43,13 @@ export function AcademicsPage() {
   const [selectedLevel, setSelectedLevel] = useState<string>('');
 
   const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.06, delayChildren: 0.15 },
-    },
+    hidden: {},
+    visible: {},
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    hidden: {},
+    visible: {},
   };
 
   // Apply program filter from query param

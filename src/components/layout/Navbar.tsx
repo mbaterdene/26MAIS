@@ -158,28 +158,26 @@ function DesktopNavItem({ item }: { item: NavItem }) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-white shadow-2xl border border-gray-100 overflow-hidden z-50"
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-cardinal-red shadow-2xl border border-cardinal-red overflow-hidden z-50"
             role="menu"
           >
-            <div className="py-2">
-              {item.children.map((child) => (
+            {item.children.map((child) => (
                 <Link
                   key={child.label}
                   to={child.href}
                   role="menuitem"
                   onClick={() => setOpen(false)}
-                  className="group flex flex-col px-4 py-3 hover:bg-gray-50 transition-colors duration-150 focus:outline-none focus:bg-gray-50"
+                  className="group flex flex-col px-4 py-3 hover:bg-digital-red transition-colors duration-150 focus:outline-none focus:bg-digital-red"
                 >
-                  <span className="text-sm font-semibold text-black group-hover:text-cardinal-red transition-colors">
+                  <span className="text-sm font-semibold text-white group-hover:text-white transition-colors">
                     {child.label}
                   </span>
                   {child.desc && (
-                    <span className="text-xs text-gray-500 mt-0.5 leading-snug">{child.desc}</span>
+                    <span className="text-xs text-gray-100 mt-0.5 leading-snug">{child.desc}</span>
                   )}
                 </Link>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
         )}
       </AnimatePresence>
     </div>

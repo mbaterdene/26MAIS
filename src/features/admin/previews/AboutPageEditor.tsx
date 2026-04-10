@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useLanguage } from '../../../context/LanguageContext';
 import { bil, formatNumber } from '../../../lib/utils';
 import { pageText } from '../../../data/pageText';
@@ -68,104 +69,269 @@ export function AboutPageEditor({ content, onUpdate }: AboutPageEditorProps) {
                 </p>
               </div>
             </div>
-            {(info.total_students || info.total_teachers) && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
-                {info.total_students && (
-                  <div className="text-center">
-                    <p className="text-4xl font-bold text-cardinal-red">
-                      <InlineEdit
-                        value={info.total_students}
-                        onChange={(value) => onUpdate('school_info.total_students', parseInt(value as string) || 0)}
-                      />
-                    </p>
-                    <p className="text-gray-500 mt-1">{tr(ui.totalStudents)}</p>
-                  </div>
-                )}
-                {info.total_teachers && (
-                  <div className="text-center">
-                    <p className="text-4xl font-bold text-digital-blue">
-                      <InlineEdit
-                        value={info.total_teachers}
-                        onChange={(value) => onUpdate('school_info.total_teachers', parseInt(value as string) || 0)}
-                      />
-                    </p>
-                    <p className="text-gray-500 mt-1">{tr(ui.totalTeachers)}</p>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         </section>
       )}
 
-      {/* ── School Characteristics ──────────────── */}
-      {content && content.characteristics.length > 0 && (
+      {/* ── Principal's Greeting ────────────────── */}
+      {content?.principal && (
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-serif font-bold text-center mb-12 text-black">{tr(ui.schoolCharacteristics)}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {content.characteristics.map((c, i) => (
-                <div
-                  key={c.id}
-                  className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow"
-                >
-                  <h3 className="text-xl font-serif font-bold text-black mb-3">
-                    <InlineEdit
-                      value={bil(isEnglish, c.title_en, c.title_mn)}
-                      onChange={(value) => updateArrayItem('characteristics', i, isEnglish ? 'title_en' : 'title_mn', value)}
-                    />
-                  </h3>
-                  <p className="text-gray-600 font-sans leading-relaxed">
-                    <InlineEdit
-                      value={bil(isEnglish, c.description_en, c.description_mn)}
-                      onChange={(value) => updateArrayItem('characteristics', i, isEnglish ? 'description_en' : 'description_mn', value)}
-                      multiline
-                      className="block w-full"
-                    />
-                  </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+              <div>
+                <div className="bg-gradient-to-br from-cardinal-red to-digital-blue rounded-2xl overflow-hidden shadow-lg h-96 flex items-center justify-center">
+                  {content.principal.photo ? (
+                    <img src={content.principal.photo} alt="Principal" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-white text-center">
+                      <p className="text-sm mb-2">Photo Placeholder</p>
+                      <InlineEdit
+                        value={content.principal.photo || ''}
+                        onChange={(value) => onUpdate('principal.photo', value)}
+                        className="block text-xs text-center"
+                      />
+                    </div>
+                  )}
                 </div>
-              ))}
+              </div>
+              <div>
+                <h2 className="text-4xl font-serif font-bold mb-3 text-black">
+                  <InlineEdit
+                    value={bil(isEnglish, content.principal.name_en, content.principal.name_mn)}
+                    onChange={(value) => onUpdate(isEnglish ? 'principal.name_en' : 'principal.name_mn', value)}
+                  />
+                </h2>
+                <p className="text-lg font-semibold text-cardinal-red mb-6">
+                  <InlineEdit
+                    value={bil(isEnglish, content.principal.title_en, content.principal.title_mn)}
+                    onChange={(value) => onUpdate(isEnglish ? 'principal.title_en' : 'principal.title_mn', value)}
+                  />
+                </p>
+                <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                  <InlineEdit
+                    value={bil(isEnglish, content.principal.message_en, content.principal.message_mn)}
+                    onChange={(value) => onUpdate(isEnglish ? 'principal.message_en' : 'principal.message_mn', value)}
+                    multiline
+                    className="block w-full"
+                  />
+                </p>
+              </div>
             </div>
           </div>
         </section>
       )}
 
-      {/* ── National Program Results ────────────── */}
-      {content?.national_program && (
-        <section className="py-20 bg-black text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl font-serif font-bold mb-12">{tr(ui.nationalProgramResults)}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div>
-                <p className="text-5xl font-bold text-cardinal-red">
-                  <InlineEdit
-                    value={content.national_program.performance_rate}
-                    onChange={(value) => onUpdate('national_program.performance_rate', parseFloat(value as string) || 0)}
-                  />
-                  %
-                </p>
-                <p className="text-gray-400 mt-2">{tr(ui.performanceRate)}</p>
+      {/* ── School Journey Timeline ──────────────– */}
+      {content?.timeline && content.timeline.length > 0 && (
+        <section className="py-20 bg-slate-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-serif font-bold text-black mb-4">{t('Our Journey', 'Манай замнал')}</h2>
+            </div>
+            <div className="relative">
+              <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-0 h-full border-l-2 border-dashed border-cardinal-red/50" />
+              <div className="space-y-10">
+                {content.timeline.map((item, index) => (
+                  <div key={item.id} className="relative">
+                    {/* Mobile Layout */}
+                    <div className="md:hidden pl-12">
+                      <div className="relative bg-white border border-slate-200 shadow-sm p-6">
+                        <span className="inline-flex items-center px-3 py-1 text-xs font-bold tracking-widest text-white bg-cardinal-red mb-3">
+                          <InlineEdit
+                            value={item.year}
+                            onChange={(value) => updateArrayItem('timeline', index, 'year', parseInt(value as string) || 0)}
+                            className="text-white"
+                          />
+                        </span>
+                        <h3 className="text-xl font-serif font-bold text-black mb-2">
+                          <InlineEdit
+                            value={bil(isEnglish, item.title_en, item.title_mn)}
+                            onChange={(value) => updateArrayItem('timeline', index, isEnglish ? 'title_en' : 'title_mn', value)}
+                          />
+                        </h3>
+                        <p className="text-gray-600 leading-relaxed">
+                          <InlineEdit
+                            value={bil(isEnglish, item.description_en, item.description_mn)}
+                            onChange={(value) => updateArrayItem('timeline', index, isEnglish ? 'description_en' : 'description_mn', value)}
+                            multiline
+                            className="block w-full"
+                          />
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden md:grid md:grid-cols-2 md:gap-12 items-center">
+                      <div className={index % 2 === 0 ? '' : 'order-2'}>
+                        <div className="relative bg-white border border-slate-200 shadow-sm p-7">
+                          <span className="inline-flex items-center px-3 py-1 text-xs font-bold tracking-widest text-white bg-cardinal-red mb-3">
+                            <InlineEdit
+                              value={item.year}
+                              onChange={(value) => updateArrayItem('timeline', index, 'year', parseInt(value as string) || 0)}
+                              className="text-white"
+                            />
+                          </span>
+                          <h3 className="text-xl font-serif font-bold text-black mb-2">
+                            <InlineEdit
+                              value={bil(isEnglish, item.title_en, item.title_mn)}
+                              onChange={(value) => updateArrayItem('timeline', index, isEnglish ? 'title_en' : 'title_mn', value)}
+                            />
+                          </h3>
+                          <p className="text-gray-600 leading-relaxed">
+                            <InlineEdit
+                              value={bil(isEnglish, item.description_en, item.description_mn)}
+                              onChange={(value) => updateArrayItem('timeline', index, isEnglish ? 'description_en' : 'description_mn', value)}
+                              multiline
+                              className="block w-full"
+                            />
+                          </p>
+                        </div>
+                      </div>
+                      <div className={index % 2 === 0 ? 'order-2' : ''} />
+                    </div>
+
+                    <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-8 w-4 h-4 bg-cardinal-red rotate-45 border border-white" />
+                  </div>
+                ))}
               </div>
-              <div>
-                <p className="text-5xl font-bold text-digital-blue">
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Key Statistics ──────────────────────── */}
+      {info && (
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-serif font-bold text-center mb-16 text-black">{t('School Statistics', 'Сургуулийн статистик')}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div className="bg-white p-8 border-2 border-cardinal-red rounded-lg">
+                <div className="text-3xl font-serif font-bold text-cardinal-red mb-2">
                   <InlineEdit
-                    value={content.national_program.success_rate}
-                    onChange={(value) => onUpdate('national_program.success_rate', parseFloat(value as string) || 0)}
+                    value={content.international_program?.igcse_en || 'IGCSE'}
+                    onChange={(value) => onUpdate('international_program.igcse_en', value)}
                   />
-                  %
-                </p>
-                <p className="text-gray-400 mt-2">{tr(ui.successRate)}</p>
-              </div>
-              <div>
-                <p className="text-5xl font-bold text-sand">
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
                   <InlineEdit
-                    value={content.national_program.quality_rate}
-                    onChange={(value) => onUpdate('national_program.quality_rate', parseFloat(value as string) || 0)}
+                    value={content.international_program?.igcse_desc_en || 'International General Certificate of Secondary Education'}
+                    onChange={(value) => onUpdate('international_program.igcse_desc_en', value)}
+                    className="text-sm"
                   />
-                  %
                 </p>
-                <p className="text-gray-400 mt-2">{tr(ui.qualityRate)}</p>
+                <div className="text-4xl font-bold text-cardinal-red mb-1">
+                  <InlineEdit
+                    value={content.international_program?.igcse || 17}
+                    onChange={(value) => onUpdate('international_program.igcse', parseInt(value as string) || 17)}
+                  />
+                </div>
+                <p className="text-gray-700 text-sm">{t('subjects', 'хичээл')}</p>
               </div>
+              <div className="bg-white p-8 border-2 border-cardinal-red rounded-lg">
+                <div className="text-3xl font-serif font-bold text-cardinal-red mb-2">
+                  <InlineEdit
+                    value={content.international_program?.as_level_en || 'AS Level'}
+                    onChange={(value) => onUpdate('international_program.as_level_en', value)}
+                  />
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  <InlineEdit
+                    value={content.international_program?.as_level_desc_en || 'Advanced Subsidiary Level'}
+                    onChange={(value) => onUpdate('international_program.as_level_desc_en', value)}
+                    className="text-sm"
+                  />
+                </p>
+                <div className="text-4xl font-bold text-cardinal-red mb-1">
+                  <InlineEdit
+                    value={content.international_program?.as_level || 16}
+                    onChange={(value) => onUpdate('international_program.as_level', parseInt(value as string) || 16)}
+                  />
+                </div>
+                <p className="text-gray-700 text-sm">{t('subjects', 'хичээл')}</p>
+              </div>
+              <div className="bg-white p-8 border-2 border-cardinal-red rounded-lg">
+                <div className="text-3xl font-serif font-bold text-cardinal-red mb-2">
+                  <InlineEdit
+                    value={content.international_program?.a2_level_en || 'A2 Level'}
+                    onChange={(value) => onUpdate('international_program.a2_level_en', value)}
+                  />
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  <InlineEdit
+                    value={content.international_program?.a2_level_desc_en || 'Advanced Level'}
+                    onChange={(value) => onUpdate('international_program.a2_level_desc_en', value)}
+                    className="text-sm"
+                  />
+                </p>
+                <div className="text-4xl font-bold text-cardinal-red mb-1">
+                  <InlineEdit
+                    value={content.international_program?.a2_level || 11}
+                    onChange={(value) => onUpdate('international_program.a2_level', parseInt(value as string) || 11)}
+                  />
+                </div>
+                <p className="text-gray-700 text-sm">{t('subjects', 'хичээл')}</p>
+              </div>
+              <div className="bg-white p-8 border-2 border-cardinal-red rounded-lg">
+                <div className="text-3xl font-serif font-bold text-cardinal-red mb-2">
+                  <InlineEdit
+                    value={content.international_program?.pdq_en || 'PDQ'}
+                    onChange={(value) => onUpdate('international_program.pdq_en', value)}
+                  />
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  <InlineEdit
+                    value={content.international_program?.pdq_desc_en || 'Professional Development Qualification'}
+                    onChange={(value) => onUpdate('international_program.pdq_desc_en', value)}
+                    className="text-sm"
+                  />
+                </p>
+                <div className="text-4xl font-bold text-cardinal-red mb-1">
+                  <InlineEdit
+                    value={content.international_program?.pdq || 2}
+                    onChange={(value) => onUpdate('international_program.pdq', parseInt(value as string) || 2)}
+                  />
+                </div>
+                <p className="text-gray-700 text-sm">{t('program', 'хөтөлбөр')}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Remarkable Achievements ──────────────– */}
+      {content?.achievements && content.achievements.length > 0 && (
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-serif font-bold text-center mb-16 text-black">{t('Remarkable Achievements', 'Гайхамшигт амжилтууд')}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {content.achievements.slice(0, 6).map((achievement, index) => (
+                <div key={achievement.id} className="bg-white border border-gray-200 p-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                  <div className="bg-cardinal-red px-5 py-3 flex items-center justify-between">
+                    <p className="text-xs font-bold tracking-widest text-white uppercase">
+                      <InlineEdit
+                        value={achievement.type}
+                        onChange={(value) => updateArrayItem('achievements', index, 'type', value)}
+                        className="text-white text-xs"
+                      />
+                    </p>
+                    <p className="text-sm font-bold text-white">
+                      <InlineEdit
+                        value={achievement.year > 0 ? achievement.year : '—'}
+                        onChange={(value) => updateArrayItem('achievements', index, 'year', parseInt(value as string) || 0)}
+                        className="text-white text-sm"
+                      />
+                    </p>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-lg font-serif font-bold text-black leading-snug">
+                      <InlineEdit
+                        value={bil(isEnglish, achievement.title_en, achievement.title_mn)}
+                        onChange={(value) => updateArrayItem('achievements', index, isEnglish ? 'title_en' : 'title_mn', value)}
+                      />
+                    </h3>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

@@ -64,68 +64,192 @@ export function AboutPage() {
                 <p className="text-lg text-gray-700 font-sans leading-relaxed">{bil(isEnglish, info.mission_en, info.mission_mn)}</p>
               </motion.div>
             </div>
-            {(info.total_students || info.total_teachers) && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
-                {info.total_students && (
-                  <div className="text-center">
-                    <p className="text-4xl font-bold text-cardinal-red">{formatNumber(info.total_students)}</p>
-                    <p className="text-gray-500 mt-1">{tr(ui.totalStudents)}</p>
-                  </div>
-                )}
-                {info.total_teachers && (
-                  <div className="text-center">
-                    <p className="text-4xl font-bold text-digital-blue">{formatNumber(info.total_teachers)}</p>
-                    <p className="text-gray-500 mt-1">{tr(ui.totalTeachers)}</p>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         </section>
       )}
 
-      {/* ── School Characteristics ──────────────── */}
-      {data && data.characteristics.length > 0 && (
+      {/* ── Principal's Greeting ────────────────── */}
+      {data?.principal && (
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-serif font-bold text-center mb-12 text-black">{tr(ui.schoolCharacteristics)}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {data.characteristics.map((c, i) => (
-                <motion.div
-                  key={c.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow"
-                >
-                  <h3 className="text-xl font-serif font-bold text-black mb-3">{bil(isEnglish, c.title_en, c.title_mn)}</h3>
-                  <p className="text-gray-600 font-sans leading-relaxed">{bil(isEnglish, c.description_en, c.description_mn)}</p>
-                </motion.div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <div className="bg-gradient-to-br from-cardinal-red to-digital-blue rounded-2xl overflow-hidden shadow-lg h-96">
+                  {data.principal.photo && (
+                    <img src={data.principal.photo} alt={data.principal.name_en} className="w-full h-full object-cover" />
+                  )}
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 className="text-4xl font-serif font-bold mb-3 text-black">
+                  {bil(isEnglish, data.principal.name_en, data.principal.name_mn)}
+                </h2>
+                <p className="text-lg font-semibold text-cardinal-red mb-6">
+                  {bil(isEnglish, data.principal.title_en, data.principal.title_mn)}
+                </p>
+                <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                  {bil(isEnglish, data.principal.message_en, data.principal.message_mn)}
+                </p>
+              </motion.div>
             </div>
           </div>
         </section>
       )}
 
-      {/* ── National Program Results ────────────── */}
-      {data?.national_program && (
-        <section className="py-20 bg-black text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl font-serif font-bold mb-12">{tr(ui.nationalProgramResults)}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div>
-                <p className="text-5xl font-bold text-cardinal-red">{data.national_program.performance_rate}%</p>
-                <p className="text-gray-400 mt-2">{tr(ui.performanceRate)}</p>
+      {/* ── School Journey Timeline ──────────────── */}
+      {data?.timeline && data.timeline.length > 0 && (
+        <section className="py-20 bg-slate-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-serif font-bold text-black mb-4">{t('Our Journey', 'Манай замнал')}</h2>
+            </div>
+            <div className="relative">
+              <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-0 h-full border-l-2 border-dashed border-cardinal-red/50" />
+              <div className="space-y-10">
+                {data.timeline.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    className="relative"
+                  >
+                    <div className="md:hidden pl-12">
+                      <div className="relative bg-white border border-slate-200 shadow-sm p-6">
+                        <span className="inline-flex items-center px-3 py-1 text-xs font-bold tracking-widest text-white bg-cardinal-red mb-3">
+                          {item.year}
+                        </span>
+                        <h3 className="text-xl font-serif font-bold text-black mb-2">
+                          {bil(isEnglish, item.title_en, item.title_mn)}
+                        </h3>
+                        <p className="text-gray-600 leading-relaxed">
+                          {bil(isEnglish, item.description_en, item.description_mn)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="hidden md:grid md:grid-cols-2 md:gap-12 items-center">
+                      <div className={index % 2 === 0 ? '' : 'order-2'}>
+                        <div className="relative bg-white border border-slate-200 shadow-sm p-7">
+                          <span className="inline-flex items-center px-3 py-1 text-xs font-bold tracking-widest text-white bg-cardinal-red mb-3">
+                            {item.year}
+                          </span>
+                          <h3 className="text-xl font-serif font-bold text-black mb-2">
+                            {bil(isEnglish, item.title_en, item.title_mn)}
+                          </h3>
+                          <p className="text-gray-600 leading-relaxed">
+                            {bil(isEnglish, item.description_en, item.description_mn)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className={index % 2 === 0 ? 'order-2' : ''} />
+                    </div>
+
+                    <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-8 w-4 h-4 bg-cardinal-red rotate-45 border border-white" />
+                  </motion.div>
+                ))}
               </div>
-              <div>
-                <p className="text-5xl font-bold text-digital-blue">{data.national_program.success_rate}%</p>
-                <p className="text-gray-400 mt-2">{tr(ui.successRate)}</p>
-              </div>
-              <div>
-                <p className="text-5xl font-bold text-sand">{data.national_program.quality_rate}%</p>
-                <p className="text-gray-400 mt-2">{tr(ui.qualityRate)}</p>
-              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Key Statistics ──────────────────────── */}
+      {info && (
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-serif font-bold text-center mb-16 text-black">{t('School Statistics', 'Сургуулийн статистик')}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="bg-white p-8 border-2 border-cardinal-red rounded-lg"
+              >
+                <div className="text-3xl font-serif font-bold text-cardinal-red mb-2">IGCSE</div>
+                <p className="text-sm text-gray-600 mb-4">{t('International General Certificate of Secondary Education', 'Олон улсын ерөнхий дунд боловсролын гэрчилгээ')}</p>
+                <div className="text-4xl font-bold text-cardinal-red mb-1">17</div>
+                <p className="text-gray-700 text-sm">{t('subjects', 'хичээл')}</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="bg-white p-8 border-2 border-cardinal-red rounded-lg"
+              >
+                <div className="text-3xl font-serif font-bold text-cardinal-red mb-2">AS Level</div>
+                <p className="text-sm text-gray-600 mb-4">{t('Advanced Subsidiary Level', 'Дээд түвшний туслах түвшин')}</p>
+                <div className="text-4xl font-bold text-cardinal-red mb-1">16</div>
+                <p className="text-gray-700 text-sm">{t('subjects', 'хичээл')}</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white p-8 border-2 border-cardinal-red rounded-lg"
+              >
+                <div className="text-3xl font-serif font-bold text-cardinal-red mb-2">A2 Level</div>
+                <p className="text-sm text-gray-600 mb-4">{t('Advanced Level', 'Дээд түвшин')}</p>
+                <div className="text-4xl font-bold text-cardinal-red mb-1">11</div>
+                <p className="text-gray-700 text-sm">{t('subjects', 'хичээл')}</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="bg-white p-8 border-2 border-cardinal-red rounded-lg"
+              >
+                <div className="text-3xl font-serif font-bold text-cardinal-red mb-2">PDQ</div>
+                <p className="text-sm text-gray-600 mb-4">{t('Professional Development Qualification', 'Мэргэжлийн хөгжлийн гэрчилгээ')}</p>
+                <div className="text-4xl font-bold text-cardinal-red mb-1">2</div>
+                <p className="text-gray-700 text-sm">{t('program', 'хөтөлбөр')}</p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Alumni Achievements ─────────────────── */}
+      {data?.achievements && data.achievements.length > 0 && (
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-serif font-bold text-center mb-16 text-black">{t('Remarkable Achievements', 'Гайхамшигт амжилтууд')}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {data.achievements.slice(0, 6).map((achievement, index) => (
+                <motion.div
+                  key={achievement.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  className="bg-white border border-gray-200 p-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                >
+                  <div className="bg-cardinal-red px-5 py-3 flex items-center justify-between">
+                    <p className="text-xs font-bold tracking-widest text-white uppercase">{achievement.type.replace('_', ' ')}</p>
+                    <p className="text-sm font-bold text-white">{achievement.year > 0 ? achievement.year : '—'}</p>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-lg font-serif font-bold text-black leading-snug">
+                      {bil(isEnglish, achievement.title_en, achievement.title_mn)}
+                    </h3>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>

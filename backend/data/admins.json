@@ -16,5 +16,14 @@
     "passwordHash": "$2a$10$E8BGbsMvJhHdUrTbBybTieF9Zu1QVI6L9hP/v2HPjHv8/31e.rF0S",
     "createdBy": "7d943249-edbd-4097-aff0-c28e5436f0c4",
     "createdAt": "2026-03-31T10:47:17.261Z"
+  },
+  {
+    "id": "971f088c-cfec-4ad1-942b-febc03209a23",
+    "displayName": "Super Admin Account",
+    "role": "super_admin",
+    "usernameHash": "a2c953ed79e5cc1e9626e7b6052d886442adc82ad5e5e24b191b4741d01592b2",
+    "passwordHash": "$2a$10$85axeEW6hbvHi4tyOUEtPuEyjet0twSQTxHI/KFOP.lyYsMANWf1m",
+    "createdBy": "system-seed",
+    "createdAt": "2026-04-10T10:36:28.005Z"
   }
 ]

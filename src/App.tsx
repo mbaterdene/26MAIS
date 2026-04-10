@@ -14,6 +14,7 @@ import { NewsPage } from './features/news/NewsPage';
 import { NewsDetailPage } from './features/news/NewsDetailPage';
 import { EventsPage } from './features/events/EventsPage';
 import { TeachersPage } from './features/teachers/TeachersPage';
+import { NotFoundPage } from './features/errors/NotFoundPage';
 
 // Admin Imports
 import { AdminLayout } from './features/admin/AdminLayout';
@@ -80,6 +81,9 @@ function App() {
                   <div className="p-8"><h2 className="text-2xl font-bold">Module coming soon</h2></div>
                 } />
               </Route>
+
+              {/* ── 404 Page ── */}
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
         </AuthProvider>
