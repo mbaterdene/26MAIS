@@ -114,18 +114,28 @@ export function StudentLifePage() {
             <h2 className="text-4xl font-serif font-bold mb-12 text-black">{tr(ui.annualEvents)}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {events.map((event) => (
-                <div key={event.id} className="bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow group">
-                  <div className="h-40 bg-gradient-to-br from-cardinal-red/10 to-digital-blue/10 flex items-center justify-center">
-                    <span className="text-4xl">🎉</span>
+                <motion.div 
+                  key={event.id} 
+                  whileHover={{ y: -4 }}
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-cardinal-red/20 group"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    {event.image ? (
+                      <img src={event.image} alt={bil(isEnglish, event.title_en, event.title_mn)} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-cardinal-red/10 to-digital-blue/10 flex items-center justify-center">
+                        <span className="text-4xl">🎉</span>
+                      </div>
+                    )}
                   </div>
                   <div className="p-6">
                     <p className="text-sm text-gray-400 mb-2">{formatDate(event.event_date)}</p>
                     <h3 className="text-lg font-serif font-bold text-black mb-2 group-hover:text-cardinal-red transition-colors">
                       <Link to={`/events/${event.id}`}>{bil(isEnglish, event.title_en, event.title_mn)}</Link>
                     </h3>
-                    <p className="text-gray-600 text-sm">{truncateWords(bil(isEnglish, event.description_en, event.description_mn), 20)}</p>
+                    <p className="text-gray-600 text-sm line-clamp-2">{truncateWords(bil(isEnglish, event.description_en, event.description_mn), 20)}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

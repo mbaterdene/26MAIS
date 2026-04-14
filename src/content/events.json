@@ -1,5 +1,70 @@
 [
   {
+    "id": 401,
+    "title_mn": "Төгсөлтийн ном сольцуулалтын үйл ажиллагаа",
+    "title_en": "Graduation Yearbook Exchange",
+    "description_mn": "12-р ангийн төгсөгчдийн ном сольцуулах ба дурсамжийн зургийг авах үйл ажиллагаа.",
+    "description_en": "12th graders exchange yearbooks and capture memorable moments before graduation.",
+    "event_type": "celebration",
+    "event_type_display": "Celebration",
+    "event_date": "2025-11-15T10:00:00",
+    "event_end": "2025-11-15T15:00:00",
+    "location": "Main Hall",
+    "image": "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&h=600&fit=crop"
+  },
+  {
+    "id": 402,
+    "title_mn": "Намрын уран спорт өдөр",
+    "title_en": "Autumn Arts & Sports Festival",
+    "description_mn": "Сурагч, багшийн уран, спортын ур чадварыг үзүүлэх өдөрлөг.",
+    "description_en": "Showcase of student and teacher talents in arts and sports with performances and competitions.",
+    "event_type": "sport",
+    "event_type_display": "Sport",
+    "event_date": "2025-10-22T09:00:00",
+    "event_end": "2025-10-22T16:00:00",
+    "location": "School Field & Auditorium",
+    "image": "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=600&fit=crop"
+  },
+  {
+    "id": 403,
+    "title_mn": "Есдүгээр ангийн ирээлүүлэлтийн өйцгүүлэлт",
+    "title_en": "9th Grade Orientation Day",
+    "description_mn": "Шинэ 9-р ангийн сурагчдыг сургуулийн орчинтой танилцуулах өйцгүүлэлт.",
+    "description_en": "Introduction and orientation program for new 9th grade students.",
+    "event_type": "academic",
+    "event_type_display": "Academic",
+    "event_date": "2025-08-28T10:00:00",
+    "event_end": "2025-08-28T13:00:00",
+    "location": "Main Auditorium",
+    "image": "https://images.unsplash.com/photo-1427504494957-edbb3f09e44d?w=800&h=600&fit=crop"
+  },
+  {
+    "id": 404,
+    "title_mn": "Há сургаалийн сонгуулийн сонгох өйцгүүлэлт",
+    "title_en": "Course Selection Fair",
+    "description_mn": "Сурагчдад 12 дугаар ангийн сонголтын сургалтын сангийг үзүүлэх үйл ажиллагаа.",
+    "description_en": "Fair showcasing all available courses and programs for 12th grade selection.",
+    "event_type": "academic",
+    "event_type_display": "Academic",
+    "event_date": "2025-07-16T11:00:00",
+    "event_end": "2025-07-16T14:00:00",
+    "location": "Main Building",
+    "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop"
+  },
+  {
+    "id": 405,
+    "title_mn": "Төгсөлтийн үзэсгэлэн",
+    "title_en": "Graduation Ceremony",
+    "description_mn": "12-р ангийн суралцагчдын төгслийн ёслолын малгай өмсүүлэлтийн үйл ажиллагаа.",
+    "description_en": "Official graduation ceremony and celebration for 12th grade class of 2025.",
+    "event_type": "celebration",
+    "event_type_display": "Celebration",
+    "event_date": "2025-06-21T18:00:00",
+    "event_end": "2025-06-21T21:00:00",
+    "location": "Main Hall & Garden",
+    "image": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=600&fit=crop"
+  },
+  {
     "id": 301,
     "title_mn": "Эцэг эх, багшийн зөвлөгөөн",
     "title_en": "Parent-Teacher Conference",
@@ -9,7 +74,8 @@
     "event_type_display": "Academic",
     "event_date": "2026-04-05T09:00:00",
     "event_end": "2026-04-05T16:30:00",
-    "location": "Main Building, Hall A"
+    "location": "Main Building, Hall A",
+    "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop"
   },
   {
     "id": 302,
@@ -20,7 +86,8 @@
     "event_type": "other",
     "event_type_display": "Counseling",
     "event_date": "2026-04-12T13:00:00",
-    "location": "Counseling Center"
+    "location": "Counseling Center",
+    "image": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop"
   },
   {
     "id": 303,
@@ -31,7 +98,8 @@
     "event_type": "sport",
     "event_type_display": "Sport",
     "event_date": "2026-04-20T10:00:00",
-    "location": "School Field"
+    "location": "School Field",
+    "image": "https://images.unsplash.com/photo-1517836357463-d25ddfcbf042?w=800&h=600&fit=crop"
   },
   {
     "id": 304,
@@ -43,6 +111,46 @@
     "event_type_display": "Exam",
     "event_date": "2026-05-01T08:00:00",
     "event_end": "2026-05-07T17:00:00",
-    "location": "All Classrooms"
+    "location": "All Classrooms",
+    "image": "https://images.unsplash.com/photo-1434582881033-282a0be036e1?w=800&h=600&fit=crop"
+  },
+  {
+    "id": 305,
+    "title_mn": "Кембриджийн олон улсын шалгалт",
+    "title_en": "Cambridge International Exams",
+    "description_mn": "IGCSE, AS болон A2 түвшний Кембриджийн олон улсын шалгалтууд.",
+    "description_en": "Cambridge IGCSE, AS and A2 Level international examination session.",
+    "event_type": "exam",
+    "event_type_display": "Exam",
+    "event_date": "2026-05-15T08:00:00",
+    "event_end": "2026-06-15T17:00:00",
+    "location": "All Exam Halls",
+    "image": "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=800&h=600&fit=crop"
+  },
+  {
+    "id": 306,
+    "title_mn": "Гадаадын их сургуулийн төлөөлөгчид сургуулийг үзүүлэх",
+    "title_en": "International University Fair",
+    "description_mn": "Гадаадын их сургуулийн төлөөлөгчид сургуулийг зочилох болон ажилтантай уулзах.",
+    "description_en": "Representatives from international universities visit to meet students and share opportunities.",
+    "event_type": "academic",
+    "event_type_display": "Academic",
+    "event_date": "2026-06-10T10:00:00",
+    "event_end": "2026-06-10T15:00:00",
+    "location": "Main Hall",
+    "image": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=600&fit=crop"
+  },
+  {
+    "id": 307,
+    "title_mn": "Зуны үзэсгэлэн болон сүүлийн өдөр",
+    "title_en": "Summer Exhibition & Last Day",
+    "description_mn": "Сурагчдын арт дизайн болон төслийн үзэсгэлэн болон сургуулийн сүүлийн өдрийн ёслол.",
+    "description_en": "Student art and project exhibition with end-of-year celebration ceremony.",
+    "event_type": "celebration",
+    "event_type_display": "Celebration",
+    "event_date": "2026-06-25T09:00:00",
+    "event_end": "2026-06-25T16:00:00",
+    "location": "Main Gallery & Auditorium",
+    "image": "https://images.unsplash.com/photo-1540575467063-178f50002dc4?w=800&h=600&fit=crop"
   }
 ]
