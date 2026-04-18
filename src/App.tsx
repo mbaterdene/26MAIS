@@ -14,6 +14,8 @@ import { NewsPage } from './features/news/NewsPage';
 import { NewsDetailPage } from './features/news/NewsDetailPage';
 import { EventsPage } from './features/events/EventsPage';
 import { TeachersPage } from './features/teachers/TeachersPage';
+import { FAQPage } from './features/contact/FAQPage';
+import { ContactPage } from './features/contact/ContactPage';
 import { NotFoundPage } from './features/errors/NotFoundPage';
 
 // Admin Imports
@@ -65,6 +67,8 @@ function App() {
                 <Route path="news" element={<NewsPage />} />
                 <Route path="news/:slug" element={<NewsDetailPage />} />
                 <Route path="events" element={<EventsPage />} />
+                <Route path="faq" element={<FAQPage />} />
+                <Route path="contact" element={<ContactPage />} />
               </Route>
 
               {/* ── Admin Routes ── */}
