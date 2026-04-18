@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, ExternalLink, Globe } from 'lucide-react';
+import { Menu, X, ChevronDown, ExternalLink, Globe, Search } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
@@ -7,9 +7,8 @@ import { useLanguage } from '../../context/LanguageContext';
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const utilityLinks = [
-  { label: 'Teachers', href: '/teachers', external: false },
-  { label: 'Events', href: '/events', external: false },
-  { label: 'Contact Us', href: '/about', external: false },
+  { label: 'Questions?', href: '/faq', external: false },
+  { label: 'Contact Us', href: '/contact', external: false },
 ];
 
 interface NavItem {
@@ -258,6 +257,41 @@ function MobileAccordionItem({
   );
 }
 
+// ─── Utility Search ───────────────────────────────────────────────────────
+
+function UtilitySearch() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      console.log('Search query:', searchQuery);
+      setSearchQuery('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSearch} className="flex items-center border border-cardinal-red rounded overflow-hidden">
+      <input
+        ref={searchInputRef}
+        type="text"
+        placeholder="Search..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="bg-transparent text-gray-300 text-xs px-2.5 py-1 focus:outline-none focus:text-white w-[140px] placeholder-gray-500"
+      />
+      <button
+        type="submit"
+        className="bg-cardinal-red text-white flex items-center justify-center hover:bg-digital-red transition-colors border-l border-cardinal-red h-6 w-6"
+        aria-label="Search"
+      >
+        <Search size={14} />
+      </button>
+    </form>
+  );
+}
+
 // ─── Main Navbar ──────────────────────────────────────────────────────────────
 
 function LanguageToggle() {
@@ -309,7 +343,7 @@ export function Navbar() {
       {/* ── Tier 1: Utility Bar ──────────────────────────────────────── */}
       <div className="bg-[#1a1a1a] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-end h-9 gap-1">
+          <div className="flex items-center justify-end h-9 gap-3">
             {utilityLinks.map((link) => (
               <a
                 key={link.label}
@@ -320,6 +354,9 @@ export function Navbar() {
                 {link.external && <ExternalLink size={10} className="opacity-60" />}
               </a>
             ))}
+            
+            {/* Search Bar */}
+            <UtilitySearch />
           </div>
         </div>
       </div>
