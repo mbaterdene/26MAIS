@@ -1,6 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
-import { Navbar } from './components/layout/Navbar';
-import { Footer } from './components/layout/Footer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { MainLayout } from './components/layout/MainLayout';
 import { HomePage } from './features/home/HomePage';
 import { AboutPage } from './features/about/AboutPage';
 import { AcademicsPage } from './features/academics/AcademicsPage';
@@ -32,19 +31,6 @@ import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/shared/ProtectedRoute';
 
-// Layout wrapper for public pages
-function MainLayout() {
-  return (
-    <div className="min-h-screen flex flex-col font-sans">
-      <Navbar />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
-  );
-}
-
 function App() {
   return (
     <QueryProvider>
@@ -53,8 +39,8 @@ function App() {
           <Router>
             <Routes>
               {/* ── Public Site Routes ── */}
-              <Route path="/" element={<MainLayout />}>
-                <Route index element={<HomePage />} />
+              <Route element={<MainLayout />}>
+                <Route index path="/" element={<HomePage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="academics" element={<AcademicsPage />} />
                 <Route path="courses/pdq" element={<PDQPage />} />
