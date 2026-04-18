@@ -18,6 +18,7 @@ import teachersRaw from "../content/teachers.json";
 import studentsRaw from "../content/students.json";
 import alumniRaw from "../content/alumni.json";
 import clubsRaw from "../content/clubs.json";
+import staffRaw from "../data/staffData.json";
 
 interface RawSlide {
   id: number;
@@ -71,7 +72,7 @@ export const jsonSlides = (slidesRaw as RawSlide[]).map((s) => ({
 })) satisfies CarouselSlide[];
 export const jsonCourses = coursesRaw as Course[];
 export const jsonEvents = eventsRaw as Event[];
-export const jsonTeachers = teachersRaw as Teacher[];
+export const jsonTeachers = staffRaw.staff as Teacher[];
 export const jsonStudents = studentsRaw as Student[];
 export const jsonClubs = clubsRaw as Club[];
 export const jsonAlumni = alumniRaw as JsonAlumniStatsData;

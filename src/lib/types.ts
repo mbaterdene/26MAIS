@@ -63,6 +63,8 @@ export interface Teacher {
   email?: string | null;
   photo?: string | null;
   category: string;
+  type?: 'teacher' | 'general_staff';
+  position?: string | null;
 }
 
 export interface Student {

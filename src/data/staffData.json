@@ -1,0 +1,112 @@
+{
+  "staff": [
+    {
+      "id": 1,
+      "full_name": "Dr. Alistair Thorne",
+      "position": "Head of Humanities",
+      "type": "teacher",
+      "category": "national",
+      "subject": "History",
+      "photo": "https://via.placeholder.com/150?text=Alistair+Thorne"
+    },
+    {
+      "id": 2,
+      "full_name": "Prof. Elena Vance",
+      "position": "Senior Researcher",
+      "type": "teacher",
+      "category": "national",
+      "subject": "Chemistry",
+      "photo": "https://via.placeholder.com/150?text=Elena+Vance"
+    },
+    {
+      "id": 3,
+      "full_name": "Marcus Holloway",
+      "position": "Dean of Students",
+      "type": "general_staff",
+      "category": "management",
+      "subject": null,
+      "photo": "https://via.placeholder.com/150?text=Marcus+Holloway"
+    },
+    {
+      "id": 4,
+      "full_name": "Dr. Sarah Kestelman",
+      "position": "Ethics Lead",
+      "type": "teacher",
+      "category": "international",
+      "subject": "Philosophy",
+      "photo": "https://via.placeholder.com/150?text=Sarah+Kestelman"
+    },
+    {
+      "id": 5,
+      "full_name": "Gregory Houseman",
+      "position": "Athletic Director",
+      "type": "general_staff",
+      "category": "management",
+      "subject": null,
+      "photo": "https://via.placeholder.com/150?text=Gregory+Houseman"
+    },
+    {
+      "id": 6,
+      "full_name": "Ms. Jennifer Cole",
+      "position": "Mathematics Teacher",
+      "type": "teacher",
+      "category": "international",
+      "subject": "Mathematics",
+      "photo": "https://via.placeholder.com/150?text=Jennifer+Cole"
+    },
+    {
+      "id": 7,
+      "full_name": "Mr. David Park",
+      "position": "IT Support",
+      "type": "general_staff",
+      "category": "management",
+      "subject": null,
+      "photo": "https://via.placeholder.com/150?text=David+Park"
+    },
+    {
+      "id": 8,
+      "full_name": "Ms. Amara Singh",
+      "position": "English Language Teacher",
+      "type": "teacher",
+      "category": "international",
+      "subject": "English",
+      "photo": "https://via.placeholder.com/150?text=Amara+Singh"
+    },
+    {
+      "id": 9,
+      "full_name": "Mr. Robert Chen",
+      "position": "Head Librarian",
+      "type": "general_staff",
+      "category": "management",
+      "subject": null,
+      "photo": "https://via.placeholder.com/150?text=Robert+Chen"
+    },
+    {
+      "id": 10,
+      "full_name": "Ms. Victoria Okonkwo",
+      "position": "Biology Teacher",
+      "type": "teacher",
+      "category": "national",
+      "subject": "Biology",
+      "photo": "https://via.placeholder.com/150?text=Victoria+Okonkwo"
+    },
+    {
+      "id": 11,
+      "full_name": "Mr. James Murphy",
+      "position": "Head Chef",
+      "type": "general_staff",
+      "category": "management",
+      "subject": null,
+      "photo": "https://via.placeholder.com/150?text=James+Murphy"
+    },
+    {
+      "id": 12,
+      "full_name": "Dr. Mohammad Hassan",
+      "position": "Physics Teacher",
+      "type": "teacher",
+      "category": "international",
+      "subject": "Physics",
+      "photo": "https://via.placeholder.com/150?text=Mohammad+Hassan"
+    }
+  ]
+}
