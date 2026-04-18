@@ -20,7 +20,8 @@ export function EventsPage() {
   const futureEvents = allEvents.filter(event => new Date(event.event_date) >= now);
   const pastEvents = allEvents.filter(event => new Date(event.event_date) < now);
   
-  const displayEvents = showPastEvents ? pastEvents : futureEvents;
+  // In calendar view: show all events. In cards view: filter by past/upcoming
+  const displayEvents = viewMode === 'calendar' ? allEvents : (showPastEvents ? pastEvents : futureEvents);
 
   // Get unique event types for filters
   const eventTypes = useMemo(() => {
@@ -128,8 +129,8 @@ export function EventsPage() {
                 </motion.button>
               ))}
               
-              {/* Past/Upcoming toggle */}
-              {futureEvents.length > 0 && pastEvents.length > 0 && (
+              {/* Past/Upcoming toggle - only show in cards view */}
+              {viewMode === 'cards' && futureEvents.length > 0 && pastEvents.length > 0 && (
                 <div className="flex gap-2 items-center border-l-2 border-black pl-4">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
