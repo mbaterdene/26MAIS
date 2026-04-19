@@ -39,6 +39,7 @@ export function AcademicsPage() {
   const { isEnglish } = useLanguage();
   const location = useLocation();
   
+  
   const [searchText, setSearchText] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
 
@@ -90,11 +91,6 @@ export function AcademicsPage() {
   const handleLevelSelect = (level: string) => {
     setSelectedLevel(selectedLevel === level ? '' : level);
   };
-
-  const title = isEnglish ? 'Academics' : 'Боловсрол';
-  const subtitle = isEnglish
-    ? 'National and international programs with Cambridge IGCSE, AS & A Level curriculum'
-    : 'Кэмбрижийн IGCSE, AS & A Level хөтөлбөртэй үндэсний болон олон улсын сургалт';
 
   // Group subjects by program
   const internationalSubjects = filtered.filter(s => s.program === 'international');

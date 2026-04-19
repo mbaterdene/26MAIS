@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { bil, formatDate } from '../../lib/utils';
-import { pageText } from '../../data/pageText';
 import clubsData from '../../content/clubs.json';
 import eventsData from '../../content/events.json';
 import newsData from '../../content/studentNews.json';
@@ -44,8 +42,7 @@ interface News {
 }
 
 export function StudentLifePage() {
-  const { isEnglish, t } = useLanguage();
-  const ui = pageText.studentLife;
+  const { isEnglish } = useLanguage();
   
   const [activeFilter, setActiveFilter] = useState<FilterType>('overview');
   

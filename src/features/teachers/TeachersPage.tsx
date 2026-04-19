@@ -9,7 +9,7 @@ type TeacherCategory = 'all' | 'national' | 'international' | 'other_staff';
 const ITEMS_PER_PAGE = 10;
 
 export function TeachersPage() {
-  const { t, isEnglish } = useLanguage();
+  const { isEnglish } = useLanguage();
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<TeacherCategory>('all');

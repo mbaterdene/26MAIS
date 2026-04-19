@@ -14,7 +14,6 @@ import schoolRaw from "../content/school.json";
 import slidesRaw from "../content/slides.json";
 import coursesRaw from "../content/courses.json";
 import eventsRaw from "../content/events.json";
-import teachersRaw from "../content/teachers.json";
 import studentsRaw from "../content/students.json";
 import alumniRaw from "../content/alumni.json";
 import clubsRaw from "../content/clubs.json";
