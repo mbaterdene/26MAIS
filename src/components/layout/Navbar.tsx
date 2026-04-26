@@ -1,15 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, ExternalLink, Globe, Search } from 'lucide-react';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
-
-const utilityLinks = [
-  { label: 'Questions?', href: '/faq', external: false },
-  { label: 'Contact Us', href: '/contact', external: false },
-];
 
 interface NavItem {
   label: string;
@@ -17,46 +12,11 @@ interface NavItem {
   children?: { label: string; href: string; desc?: string }[];
 }
 
-const navItems: NavItem[] = [
-  {
-    label: 'About',
-    children: [
-      { label: 'About Us', href: '/about', desc: 'Our mission, history, and leadership.' },
-      { label: 'Community News', href: '/news', desc: 'Latest stories from our global community.' },
-      { label: 'Admission', href: '/admissions', desc: 'Everything you need to know about applying.' },
-    ],
-  },
-  {
-    label: 'Academics',
-    children: [
-      { label: 'All Courses', href: '/academics', desc: 'Browse all available courses.' },
-      { label: 'International Program', href: '/academics?program=international', desc: 'Cambridge IGCSE and A-Level.' },
-      { label: 'National Program', href: '/academics?program=national', desc: 'Mongolian national curriculum.' },
-      { label: 'PDQ', href: '/courses/pdq', desc: 'Program Development and Quality.' },
-    ],
-  },
-  {
-    label: 'Staff',
-    children: [
-      { label: 'Staff Directory', href: '/teachers', desc: 'Meet our faculty and staff.' },
-    ],
-  },
-  {
-    label: 'Student Life',
-    children: [
-      { label: 'Student Life', href: '/student-life', desc: 'Overview and activities.' },
-      { label: 'Student Clubs', href: '/clubs', desc: 'All student clubs and societies.' },
-      { label: 'DOFE', href: '/dofe', desc: 'Duke of Edinburgh\'s Award.' },
-      { label: 'Events', href: '/events', desc: 'School events and activities.' },
-    ],
-  },
-  {
-    label: 'Student Support',
-    children: [
-      { label: 'School Therapist', href: '/student-support', desc: 'Mental health and wellness support.' },
-    ],
-  },
-];
+interface UtilityLink {
+  label: string;
+  href: string;
+  external: boolean;
+}
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
 
@@ -309,10 +269,56 @@ function LanguageToggle() {
 }
 
 export function Navbar() {
-  const { lang } = useLanguage();
+  const { lang, isEnglish } = useLanguage();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+
+  // Create bilingual nav items
+  const navItems = useMemo<NavItem[]>(() => [
+    {
+      label: isEnglish ? 'About' : 'Тухай',
+      children: [
+        { label: isEnglish ? 'About Us' : 'Бидний тухай', href: '/about', desc: isEnglish ? 'Our mission, history, and leadership.' : 'Бидний үндсэн зорилго, түүх, удирдлага.' },
+        { label: isEnglish ? 'Community News' : 'Сообщество Мэдээ', href: '/news', desc: isEnglish ? 'Latest stories from our global community.' : 'Манай дэлхийн сообщество-с шинэ нэвтрүүлэг.' },
+        { label: isEnglish ? 'Admission' : 'Элсэлт', href: '/admissions', desc: isEnglish ? 'Everything you need to know about applying.' : 'Элсэх үйл явцын тухай бүх мэдлэг.' },
+      ],
+    },
+    {
+      label: isEnglish ? 'Academics' : 'Боловсрол',
+      children: [
+        { label: isEnglish ? 'All Courses' : 'Бүх курс', href: '/academics', desc: isEnglish ? 'Browse all available courses.' : 'Бүх боломжит сургалтыг үзэх.' },
+        { label: isEnglish ? 'PDQ' : 'PDQ', href: '/courses/pdq', desc: isEnglish ? 'Program Development and Quality.' : 'Хөтөлбөрийн хөгжил ба чанар.' },
+      ],
+    },
+    {
+      label: isEnglish ? 'Staff' : 'Баг',
+      children: [
+        { label: isEnglish ? 'Staff Directory' : 'Баг-ын жагсаалт', href: '/teachers', desc: isEnglish ? 'Meet our faculty and staff.' : 'Манай факультет, багштай танилцаарай.' },
+      ],
+    },
+    {
+      label: isEnglish ? 'Student Life' : 'Сурагчийн амьдрал',
+      children: [
+        { label: isEnglish ? 'Student Life' : 'Сурагчийн амьдрал', href: '/student-life', desc: isEnglish ? 'Overview and activities.' : 'Нийтлэл ба үйл ажиллагаа.' },
+        { label: isEnglish ? 'Student Clubs' : 'Сурагчдын клубүүд', href: '/clubs', desc: isEnglish ? 'All student clubs and societies.' : 'Бүх сурагчдын клуб, нийгэм.' },
+        { label: isEnglish ? 'DOFE' : 'DOFE', href: '/dofe', desc: isEnglish ? 'Duke of Edinburgh\'s Award.' : 'Эдинбургийн герцгийн шагнал.' },
+        { label: isEnglish ? 'Events' : 'Үйл явдал', href: '/events', desc: isEnglish ? 'School events and activities.' : 'Сургуулийн үйл явдал, үйл ажиллагаа.' },
+      ],
+    },
+    {
+      label: isEnglish ? 'Student Support' : 'Сурагчдад туслах',
+      children: [
+        { label: isEnglish ? 'School Therapist' : 'Сургуулийн психолог', href: '/student-support', desc: isEnglish ? 'Mental health and wellness support.' : 'Сэтгэцийн эрүүл мэнд, сайн сайхны туслалцаа.' },
+      ],
+    },
+  ], [isEnglish]);
+
+  // Create bilingual utility links
+  const utilityLinks = useMemo<UtilityLink[]>(() => [
+    { label: isEnglish ? 'Questions?' : 'Асуулт?', href: '/faq', external: false },
+    { label: isEnglish ? 'Contact Us' : 'Холбоо барих', href: '/contact', external: false },
+  ], [isEnglish]);
 
   // Shadow on scroll
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Github, Key, AlertCircle, CheckCircle } from 'lucide-react';
 import { contentEditorService } from '../../services/contentEditorService';
 import { githubAPIService } from '../../services/githubAPIService';
@@ -17,6 +17,18 @@ export function GitHubSettings({ onSettingsSaved }: GitHubSettingsProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [submitError, setSubmitError] = useState('');
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const pendingChanges = contentEditorService.getPendingChanges();
   const changedFiles = Object.keys(pendingChanges);
@@ -61,12 +73,15 @@ export function GitHubSettings({ onSettingsSaved }: GitHubSettingsProps) {
         // Create commit message
         const commitMsg = `${message}\n\nFile: ${file}\nChanges: ${changes.length}\nTimestamp: ${timestamp}`;
 
+        // Determine the correct file path
+        const filePath = file === 'staff' ? 'src/data/staffData.json' : `src/content/${file}.json`;
+
         // Get current file content from GitHub
         try {
           const { content, sha } = await githubAPIService.getFileContent(
             owner,
             repo,
-            `src/content/${file}.json`,
+            filePath,
             branch
           );
 
@@ -87,7 +102,7 @@ export function GitHubSettings({ onSettingsSaved }: GitHubSettingsProps) {
           await githubAPIService.commitFile(
             owner,
             repo,
-            `src/content/${file}.json`,
+            filePath,
             JSON.stringify(fileData, null, 2),
             commitMsg,
             sha,
@@ -129,8 +144,8 @@ export function GitHubSettings({ onSettingsSaved }: GitHubSettingsProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4" style={{ zIndex: 99999 }}>
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative" style={{ zIndex: 100000 }}>
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">

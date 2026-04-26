@@ -10,7 +10,7 @@ import coursesData from '../content/courses.json';
 import eventsData from '../content/events.json';
 import slidesData from '../content/slides.json';
 import studentsData from '../content/students.json';
-import teachersData from '../content/teachers.json';
+import staffData from '../data/staffData.json';
 
 export interface ContentPageConfig {
   key: string;
@@ -79,12 +79,12 @@ export const CONTENT_PAGES: ContentPageConfig[] = [
     path: 'src/content/students.json',
   },
   {
-    key: 'teachers',
-    label: 'Teachers',
+    key: 'staff',
+    label: 'Staff',
     label_mn: 'Багш нар',
-    description: 'Teacher profiles and information',
-    data: teachersData,
-    path: 'src/content/teachers.json',
+    description: 'Staff profiles and information',
+    data: staffData.staff,
+    path: 'src/data/staffData.json',
   },
 ];
 

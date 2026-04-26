@@ -12,10 +12,24 @@ export interface GitHubCommitPayload {
 
 export const githubAPIService = {
   /**
-   * Get the GitHub token from local storage
+   * Get the GitHub token from env or local storage
    */
   getToken(): string | null {
-    return localStorage.getItem('github_token');
+    return import.meta.env.VITE_GITHUB_TOKEN || localStorage.getItem('github_token') || null;
+  },
+
+  /**
+   * Get GitHub owner from env
+   */
+  getOwner(): string | null {
+    return import.meta.env.VITE_GITHUB_OWNER || null;
+  },
+
+  /**
+   * Get GitHub repo from env
+   */
+  getRepo(): string | null {
+    return import.meta.env.VITE_GITHUB_REPO || null;
   },
 
   /**

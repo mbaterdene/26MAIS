@@ -13,21 +13,21 @@ export interface EditableField {
   originalValue: any;
 }
 
-export function useEditableContent(file: string, initialContent: Record<string, any>) {
+export function useEditableContent(file: string, initialContent: Record<string, any> | any[]) {
   const [content, setContent] = useState(initialContent);
   const [pendingChanges, setPendingChanges] = useState<PendingChanges>({});
 
   // Load pending changes on mount and when file changes
   useEffect(() => {
-    // Always reset to initial content for this file
-    setContent({ ...initialContent });
+    // Always reset to initial content for this file, preserving array type
+    setContent(Array.isArray(initialContent) ? [...initialContent] : { ...initialContent });
     
     const pending = contentEditorService.getPendingChanges();
     setPendingChanges(pending);
 
     // Apply pending changes to display
     if (pending[file]) {
-      const updated = { ...initialContent };
+      const updated = Array.isArray(initialContent) ? [...initialContent] : { ...initialContent };
       pending[file].forEach(change => {
         // Set to new value if it exists in pending
         updateNestedValue(updated, change.path.split('.'), change.newValue);
@@ -42,7 +42,7 @@ export function useEditableContent(file: string, initialContent: Record<string, 
     
     // Update display content
     setContent(prev => {
-      const updated = { ...prev };
+      const updated = Array.isArray(prev) ? [...prev] : { ...prev };
       updateNestedValue(updated, parts, value);
       return updated;
     });
@@ -64,7 +64,7 @@ export function useEditableContent(file: string, initialContent: Record<string, 
     const originalValue = getNestedValue(initialContent, parts);
     
     setContent(prev => {
-      const updated = { ...prev };
+      const updated = Array.isArray(prev) ? [...prev] : { ...prev };
       updateNestedValue(updated, parts, originalValue);
       return updated;
     });
@@ -87,7 +87,7 @@ export function useEditableContent(file: string, initialContent: Record<string, 
 
   // Clear all changes for this file
   const clearChanges = useCallback(() => {
-    setContent(initialContent);
+    setContent(Array.isArray(initialContent) ? [...initialContent] : { ...initialContent });
     contentEditorService.clearFileChanges(file);
     const pending = contentEditorService.getPendingChanges();
     setPendingChanges(pending);

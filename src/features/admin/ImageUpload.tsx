@@ -4,9 +4,12 @@ import { useState } from 'react';
 interface ImageUploadProps {
   value: string;
   onChange: (url: string) => void;
+  folder?: string;
+  label?: string;
+  isOptional?: boolean;
 }
 
-export function ImageUpload({ value, onChange }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, folder = 'news', label = 'Cover Image', isOptional = true }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
 
@@ -35,7 +38,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
       const token = localStorage.getItem('auth_token');
       
       // Generate unique public ID
-      const publicId = `news-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const publicId = `${folder}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
       const signingResponse = await fetch(`${BACKEND_URL}/api/cloudinary/sign-upload`, {
         method: 'POST',
@@ -44,7 +47,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          folder: 'news',
+          folder: folder,
           publicId: publicId,
         }),
       });
@@ -86,7 +89,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
   return (
     <div className="space-y-4">
       <label className="block text-sm font-semibold text-gray-700">
-        Cover Image <span className="text-gray-500 font-normal">(Optional)</span>
+        {label} {isOptional && <span className="text-gray-500 font-normal">(Optional)</span>}
       </label>
 
       {value ? (
