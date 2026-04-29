@@ -1,17 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { MainLayout } from './components/layout/MainLayout';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { Navbar } from './components/layout/Navbar';
+import { Footer } from './components/layout/Footer';
 import { HomePage } from './features/home/HomePage';
 import { AboutPage } from './features/about/AboutPage';
 import { AcademicsPage } from './features/academics/AcademicsPage';
 import { PDQPage } from './features/academics/PDQPage';
 import { AdmissionsPage } from './features/admissions/AdmissionsPage';
 import { StudentLifePage } from './features/student-life/StudentLifePage';
-import { ClubsPage } from './features/student-life/ClubsPage';
-import { DOFEPage } from './features/student-life/DOFEPage';
 import { StudentSupportPage } from './features/student-support/StudentSupportPage';
 import { NewsPage } from './features/news/NewsPage';
 import { NewsDetailPage } from './features/news/NewsDetailPage';
-import { EventsPage } from './features/events/EventsPage';
 import { TeachersPage } from './features/teachers/TeachersPage';
 import { FAQPage } from './features/contact/FAQPage';
 import { ContactPage } from './features/contact/ContactPage';
@@ -31,6 +29,19 @@ import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/shared/ProtectedRoute';
 
+// Layout wrapper for public pages
+function MainLayout() {
+  return (
+    <div className="min-h-screen flex flex-col font-sans">
+      <Navbar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
 function App() {
   return (
     <QueryProvider>
@@ -46,13 +57,10 @@ function App() {
                 <Route path="courses/pdq" element={<PDQPage />} />
                 <Route path="admissions" element={<AdmissionsPage />} />
                 <Route path="teachers" element={<TeachersPage />} />
-                <Route path="student-life" element={<StudentLifePage />} />
-                <Route path="clubs" element={<ClubsPage />} />
-                <Route path="dofe" element={<DOFEPage />} />
+                <Route path="student-life/*" element={<StudentLifePage />} />
                 <Route path="student-support" element={<StudentSupportPage />} />
                 <Route path="news" element={<NewsPage />} />
                 <Route path="news/:slug" element={<NewsDetailPage />} />
-                <Route path="events" element={<EventsPage />} />
                 <Route path="faq" element={<FAQPage />} />
                 <Route path="contact" element={<ContactPage />} />
               </Route>

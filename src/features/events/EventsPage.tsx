@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { useEffect, useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
@@ -14,14 +14,12 @@ export function EventsPage() {
   const [selectedFilter, setSelectedFilter] = useState<string>('ALL');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState<'calendar' | 'cards'>('calendar');
 
   const now = new Date();
   const futureEvents = allEvents.filter(event => new Date(event.event_date) >= now);
   const pastEvents = allEvents.filter(event => new Date(event.event_date) < now);
   
-  // In calendar view: show all events. In cards view: filter by past/upcoming
-  const displayEvents = viewMode === 'calendar' ? allEvents : (showPastEvents ? pastEvents : futureEvents);
+  const displayEvents = showPastEvents ? pastEvents : futureEvents;
 
   // Get unique event types for filters
   const eventTypes = useMemo(() => {
@@ -110,10 +108,9 @@ export function EventsPage() {
               </div>
             </div>
 
-            {/* Filter buttons and view mode */}
-            <div className="flex gap-2 mb-8 flex-wrap border-b-2 border-black pb-4 items-center justify-between">
-              <div className="flex gap-2 flex-wrap">
-                {eventTypes.map((type) => (
+            {/* Filter buttons */}
+            <div className="flex gap-2 mb-8 flex-wrap border-b-2 border-black pb-4">
+              {eventTypes.map((type) => (
                 <motion.button
                   key={type}
                   whileHover={{ scale: 1.05 }}
@@ -129,9 +126,9 @@ export function EventsPage() {
                 </motion.button>
               ))}
               
-              {/* Past/Upcoming toggle - only show in cards view */}
-              {viewMode === 'cards' && futureEvents.length > 0 && pastEvents.length > 0 && (
-                <div className="flex gap-2 items-center border-l-2 border-black pl-4">
+              {/* Past/Upcoming toggle */}
+              {futureEvents.length > 0 && pastEvents.length > 0 && (
+                <div className="flex gap-2 ml-auto items-center border-l-2 border-black pl-4">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -158,39 +155,9 @@ export function EventsPage() {
                   </motion.button>
                 </div>
               )}
-              </div>
-              
-              {/* View mode toggle */}
-              <div className="flex gap-2">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setViewMode('calendar')}
-                  className={`px-4 py-2 uppercase text-xs font-bold tracking-widest transition-all border-2 ${
-                    viewMode === 'calendar'
-                      ? 'bg-black text-white border-black'
-                      : 'bg-white text-black border-black hover:bg-black hover:text-white'
-                  }`}
-                >
-                  Calendar
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setViewMode('cards')}
-                  className={`px-4 py-2 uppercase text-xs font-bold tracking-widest transition-all border-2 ${
-                    viewMode === 'cards'
-                      ? 'bg-black text-white border-black'
-                      : 'bg-white text-black border-black hover:bg-black hover:text-white'
-                  }`}
-                >
-                  Cards
-                </motion.button>
-              </div>
             </div>
 
-            {/* Calendar Grid / Cards View */}
-            {viewMode === 'calendar' ? (
+            {/* Calendar Grid */}
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
@@ -220,7 +187,7 @@ export function EventsPage() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: idx * 0.01 }}
-                      whileHover={eventCount > 0 ? { scale: 1.02, zIndex: 10 } : {}}
+                      whileHover={{ scale: 1.02, zIndex: 10 }}
                       className={`relative min-h-40 border-r border-b border-black ${
                         !isCurrentMonth ? 'bg-gray-50' : 'bg-white'
                       } ${idx % 7 === 6 ? 'border-r-0' : ''} ${idx >= grid.length - 7 ? 'border-b-0' : ''}`}
@@ -251,52 +218,6 @@ export function EventsPage() {
                 })}
               </div>
             </motion.div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredEvents.length > 0 ? (
-                  filteredEvents.map((event) => (
-                    <motion.div
-                      key={event.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      whileHover={{ y: -4 }}
-                      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-cardinal-red/20 group"
-                    >
-                      <div className="relative h-48 overflow-hidden">
-                        {event.image ? (
-                          <img src={event.image} alt={bil(isEnglish, event.title_en, event.title_mn)} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-digital-blue/10 to-cardinal-red/10 flex items-center justify-center">
-                            <span className="text-4xl">📅</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-6">
-                        <div className="text-sm text-gray-400 mb-3">{new Date(event.event_date).toLocaleDateString(isEnglish ? 'en-US' : 'mn-MN')}</div>
-                        <h3 className="text-xl font-serif font-bold text-black mb-3 group-hover:text-cardinal-red transition-colors">
-                          {bil(isEnglish, event.title_en, event.title_mn)}
-                        </h3>
-                        <p className="text-gray-600 text-sm line-clamp-2 mb-4">{bil(isEnglish, event.description_en, event.description_mn)}</p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold uppercase tracking-wide bg-black text-white px-2 py-1">{event.event_type_display}</span>
-                          <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            onClick={() => setSelectedEvent(event)}
-                            className="text-digital-blue font-bold hover:text-cardinal-red text-sm"
-                          >
-                            Details →
-                          </motion.button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-12">
-                    <p className="text-gray-500 text-lg">No events found</p>
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Legend */}
             <div className="mt-8 flex gap-6 text-xs font-bold">
@@ -341,7 +262,7 @@ export function EventsPage() {
                   onClick={() => setSelectedEvent(null)} 
                   className="text-2xl font-bold text-gray-500 hover:text-black"
                 >
-                  ×
+                  ├ù
                 </button>
               </div>
 
