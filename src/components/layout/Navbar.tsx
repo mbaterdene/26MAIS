@@ -80,9 +80,8 @@ function DesktopNavItem({ item }: { item: NavItem }) {
     return (
       <Link
         to={item.href ?? '#'}
-        className={`text-sm font-semibold transition-colors duration-200 hover:text-cardinal-red ${
-          isActive ? 'text-cardinal-red' : 'text-black'
-        }`}
+        className={`text-sm font-semibold transition-colors duration-200 hover:text-cardinal-red ${isActive ? 'text-cardinal-red' : 'text-black'
+          }`}
       >
         {item.label}
       </Link>
@@ -100,9 +99,8 @@ function DesktopNavItem({ item }: { item: NavItem }) {
         onClick={() => setOpen(!open)}
         aria-haspopup="true"
         aria-expanded={open}
-        className={`flex items-center gap-1 text-sm font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cardinal-red focus-visible:ring-offset-2 rounded ${
-          isActive || open ? 'text-cardinal-red' : 'text-black hover:text-cardinal-red'
-        }`}
+        className={`flex items-center gap-1 text-sm font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cardinal-red focus-visible:ring-offset-2 rounded ${isActive || open ? 'text-cardinal-red' : 'text-black hover:text-cardinal-red'
+          }`}
       >
         {item.label}
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
@@ -121,22 +119,22 @@ function DesktopNavItem({ item }: { item: NavItem }) {
             role="menu"
           >
             {item.children.map((child) => (
-                <Link
-                  key={child.label}
-                  to={child.href}
-                  role="menuitem"
-                  onClick={() => setOpen(false)}
-                  className="group flex flex-col px-4 py-3 hover:bg-digital-red transition-colors duration-150 focus:outline-none focus:bg-digital-red"
-                >
-                  <span className="text-sm font-semibold text-white group-hover:text-white transition-colors">
-                    {child.label}
-                  </span>
-                  {child.desc && (
-                    <span className="text-xs text-gray-100 mt-0.5 leading-snug">{child.desc}</span>
-                  )}
-                </Link>
-              ))}
-            </motion.div>
+              <Link
+                key={child.label}
+                to={child.href}
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                className="group flex flex-col px-4 py-3 hover:bg-digital-red transition-colors duration-150 focus:outline-none focus:bg-digital-red"
+              >
+                <span className="text-sm font-semibold text-white group-hover:text-white transition-colors">
+                  {child.label}
+                </span>
+                {child.desc && (
+                  <span className="text-xs text-gray-100 mt-0.5 leading-snug">{child.desc}</span>
+                )}
+              </Link>
+            ))}
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
@@ -161,9 +159,8 @@ function MobileAccordionItem({
       <Link
         to={item.href ?? '#'}
         onClick={onClose}
-        className={`block px-4 py-3.5 text-base font-semibold border-b border-gray-100 transition-colors ${
-          isActive ? 'text-cardinal-red' : 'text-black hover:text-cardinal-red'
-        }`}
+        className={`block px-4 py-3.5 text-base font-semibold border-b border-gray-100 transition-colors ${isActive ? 'text-cardinal-red' : 'text-black hover:text-cardinal-red'
+          }`}
       >
         {item.label}
       </Link>
@@ -292,7 +289,7 @@ export function Navbar() {
       ],
     },
     {
-      label: isEnglish ? 'Staff' : 'Баг',
+      label: isEnglish ? 'Staff' : 'Ажилчид',
       children: [
         { label: isEnglish ? 'Staff Directory' : 'Баг-ын жагсаалт', href: '/teachers', desc: isEnglish ? 'Meet our faculty and staff.' : 'Манай факультет, багштай танилцаарай.' },
       ],
@@ -343,9 +340,8 @@ export function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-white transition-shadow duration-300 ${
-        scrolled ? 'shadow-lg' : 'shadow-sm'
-      }`}
+      className={`sticky top-0 z-50 bg-white transition-shadow duration-300 ${scrolled ? 'shadow-lg' : 'shadow-sm'
+        }`}
     >
       {/* ── Tier 1: Utility Bar ──────────────────────────────────────── */}
       <div className="bg-[#1a1a1a] text-white">
@@ -361,7 +357,7 @@ export function Navbar() {
                 {link.external && <ExternalLink size={10} className="opacity-60" />}
               </a>
             ))}
-            
+
             {/* Search Bar */}
             <UtilitySearch />
           </div>
