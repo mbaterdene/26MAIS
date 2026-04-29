@@ -8,6 +8,7 @@ import { CONTENT_PAGES, getContentPageByKey } from '../../data/contentRegistry';
 import { AboutPageEditor } from './previews/AboutPageEditor';
 import { AlumniContentPreview } from './previews/AlumniContentPreview';
 import { EventsContentPreview } from './previews/EventsContentPreview';
+import { AcademicsContentEditor } from './previews/AcademicsContentEditor';
 import { StaffContentEditor } from './previews/StaffContentEditor';
 import { GitHubSettingsPage } from './previews/GitHubSettingsPage';
 import { GenericContentPreview } from './previews/GenericContentPreview';
@@ -28,6 +29,8 @@ function renderPreview(
       return <AlumniContentPreview content={content} onUpdate={onUpdate} />;
     case 'events':
       return <EventsContentPreview content={content} onUpdate={onUpdate} isEnglish={isEnglish} />;
+    case 'subjects':
+      return <AcademicsContentEditor content={content} onUpdate={onUpdate} />;
     case 'staff':
       return <StaffContentEditor content={content} onUpdate={onUpdate} />;
     case 'github-settings':

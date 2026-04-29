@@ -3,34 +3,12 @@ import { useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import subjectsData from '../../content/subjects.json';
 
-// Sample subject data
+// Flatten subjects data from JSON
 const SAMPLE_SUBJECTS = [
-  // International - AS/A
-  { id: 1, name_en: 'Biology', name_mn: 'Биология', code: '9700', level: 'AS/A', program: 'international' },
-  { id: 2, name_en: 'Chemistry', name_mn: 'Хими', code: '9701', level: 'AS/A', program: 'international' },
-  { id: 3, name_en: 'Physics', name_mn: 'Физик', code: '9702', level: 'AS/A', program: 'international' },
-  { id: 4, name_en: 'Mathematics', name_mn: 'Математик', code: '9709', level: 'AS/A', program: 'international' },
-  { id: 5, name_en: 'Further Mathematics', name_mn: 'Нэмэлт Математик', code: '9231', level: 'AS/A', program: 'international' },
-  { id: 6, name_en: 'English Language', name_mn: 'Англи хэл', code: '9093', level: 'AS/A', program: 'international' },
-  { id: 7, name_en: 'History', name_mn: 'Түүх', code: '9389', level: 'AS/A', program: 'international' },
-  { id: 8, name_en: 'Geography', name_mn: 'Газарзүйн мэдлэг', code: '9395', level: 'AS/A', program: 'international' },
-  
-  // International - IGCSE
-  { id: 9, name_en: 'English Language', name_mn: 'Англи хэл', code: '0500', level: 'IGCSE', program: 'international' },
-  { id: 10, name_en: 'Mathematics', name_mn: 'Математик', code: '0580', level: 'IGCSE', program: 'international' },
-  { id: 11, name_en: 'Biology', name_mn: 'Биология', code: '0610', level: 'IGCSE', program: 'international' },
-  { id: 12, name_en: 'Chemistry', name_mn: 'Хими', code: '0620', level: 'IGCSE', program: 'international' },
-  
-  // National Programme (Mongolian)
-  { id: 13, name_en: 'Mongolian Language', name_mn: 'Монгол хэл', level: 'National', program: 'national' },
-  { id: 14, name_en: 'Mongolian History', name_mn: 'Монгол түүх', level: 'National', program: 'national' },
-  { id: 15, name_en: 'Mathematics', name_mn: 'Математик', level: 'National', program: 'national' },
-  { id: 16, name_en: 'Physics', name_mn: 'Физик', level: 'National', program: 'national' },
-  { id: 17, name_en: 'Chemistry', name_mn: 'Хими', level: 'National', program: 'national' },
-  { id: 18, name_en: 'English Language', name_mn: 'Англи хэл', level: 'National', program: 'national' },
-  { id: 19, name_en: 'Social Studies', name_mn: 'Нийгмийн ухаан', level: 'National', program: 'national' },
-  { id: 20, name_en: 'Science Foundations', name_mn: 'Шинжлэх ухааны суурь', level: 'National', program: 'national' },
+  ...subjectsData.international,
+  ...subjectsData.national,
 ];
 
 const LEVELS = ['IGCSE', 'AS/A', 'National'];
@@ -199,10 +177,16 @@ export function AcademicsPage() {
                       viewport={{ once: true }}
                     >
                       {internationalSubjects.map((subject) => (
-                        <motion.div
+                        <motion.a
                           key={subject.id}
+                          href={subject.url || '#'}
+                          target={subject.url ? '_blank' : undefined}
+                          rel={subject.url ? 'noopener noreferrer' : undefined}
                           variants={itemVariants}
-                          className="bg-white border-2 border-black hover:shadow-lg transition-all p-5 group"
+                          className="block bg-white border-2 border-black hover:shadow-lg transition-all p-5 group cursor-pointer hover:bg-gray-50"
+                          onClick={(e) => {
+                            if (!subject.url) e.preventDefault();
+                          }}
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
@@ -219,7 +203,7 @@ export function AcademicsPage() {
                               {subject.level}
                             </span>
                           </div>
-                        </motion.div>
+                        </motion.a>
                       ))}
                     </motion.div>
                   </div>

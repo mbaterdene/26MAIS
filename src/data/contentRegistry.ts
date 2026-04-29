@@ -6,7 +6,7 @@
 import aboutData from '../content/about.json';
 import alumniData from '../content/alumni.json';
 import clubsData from '../content/clubs.json';
-import coursesData from '../content/courses.json';
+import subjectsData from '../content/subjects.json';
 import eventsData from '../content/events.json';
 import slidesData from '../content/slides.json';
 import studentsData from '../content/students.json';
@@ -47,12 +47,12 @@ export const CONTENT_PAGES: ContentPageConfig[] = [
     path: 'src/content/clubs.json',
   },
   {
-    key: 'courses',
-    label: 'Courses',
-    label_mn: 'Хичээлүүд',
-    description: 'Course listings and descriptions',
-    data: coursesData,
-    path: 'src/content/courses.json',
+    key: 'subjects',
+    label: 'Academics - Subjects',
+    label_mn: 'Боловсрол - Хичээлүүд',
+    description: 'International and national programme subjects',
+    data: subjectsData,
+    path: 'src/content/subjects.json',
   },
   {
     key: 'events',
