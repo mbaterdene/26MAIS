@@ -5,10 +5,21 @@ import { Search } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import subjectsData from '../../content/subjects.json';
 
+// Subject interface
+interface Subject {
+  id: number;
+  name_en: string;
+  name_mn: string;
+  code?: string;
+  level: string;
+  program: 'international' | 'national';
+  url?: string;
+}
+
 // Flatten subjects data from JSON
-const SAMPLE_SUBJECTS = [
-  ...subjectsData.international,
-  ...subjectsData.national,
+const SAMPLE_SUBJECTS: Subject[] = [
+  ...(subjectsData.international as Subject[]),
+  ...(subjectsData.national as Subject[]),
 ];
 
 const LEVELS = ['IGCSE', 'AS/A', 'National'];
