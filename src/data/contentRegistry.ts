@@ -12,6 +12,7 @@ import faqData from '../content/faq.json';
 import slidesData from '../content/slides.json';
 import studentsData from '../content/students.json';
 import staffData from '../data/staffData.json';
+import contactData from '../content/contact.json';
 
 export interface ContentPageConfig {
   key: string;
@@ -94,6 +95,14 @@ export const CONTENT_PAGES: ContentPageConfig[] = [
     description: 'Staff profiles and information',
     data: staffData.staff,
     path: 'src/data/staffData.json',
+  },
+  {
+    key: 'contact',
+    label: 'Contact Us',
+    label_mn: 'Холбоо барих',
+    description: 'Contact page information and inquiry types',
+    data: contactData,
+    path: 'src/content/contact.json',
   },
 ];
 

@@ -20,7 +20,8 @@ interface StaffContentEditorProps {
 }
 
 export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProps) {
-  const { isEnglish } = useLanguage();
+  const { isEnglish: contextIsEnglish, t } = useLanguage();
+  const [isEnglish, setIsEnglish] = useState(true);
   const [localStaffList, setLocalStaffList] = useState<StaffMember[]>([]);
 
   // Sync with parent content
@@ -96,6 +97,30 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
 
   return (
     <div className="w-full space-y-6">
+      {/* ── Language Toggle ────────────────────── */}
+      <div className="sticky top-24 z-40 bg-white border-b-2 border-black px-4 sm:px-6 lg:px-8 py-3 flex justify-end gap-2">
+        <button
+          onClick={() => setIsEnglish(true)}
+          className={`px-4 py-2 font-bold uppercase text-sm ${
+            isEnglish
+              ? 'bg-cardinal-red text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          } transition-colors`}
+        >
+          {t('English', 'Англи')}
+        </button>
+        <button
+          onClick={() => setIsEnglish(false)}
+          className={`px-4 py-2 font-bold uppercase text-sm ${
+            !isEnglish
+              ? 'bg-cardinal-red text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          } transition-colors`}
+        >
+          {t('Mongolian', 'Монгол')}
+        </button>
+      </div>
+
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-8">
         <h1 className="text-4xl font-serif font-bold text-black mb-2">

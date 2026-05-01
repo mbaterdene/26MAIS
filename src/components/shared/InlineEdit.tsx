@@ -24,7 +24,7 @@ export function InlineEdit({ value, onChange, multiline = false, className = '' 
 
   if (isEditing) {
     return (
-      <div className="inline-block relative group">
+      <div className="w-full block relative">
         {multiline ? (
           <textarea
             value={editValue}
@@ -39,7 +39,7 @@ export function InlineEdit({ value, onChange, multiline = false, className = '' 
             type="text"
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
-            className="px-2 py-1 border-2 border-blue-500 rounded font-inherit bg-white"
+            className="w-full px-2 py-1 border-2 border-blue-500 rounded font-inherit bg-white"
             autoFocus
             onFocus={(e) => e.target.select()}
           />

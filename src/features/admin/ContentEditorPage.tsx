@@ -11,6 +11,7 @@ import { EventsContentPreview } from './previews/EventsContentPreview';
 import { AcademicsContentEditor } from './previews/AcademicsContentEditor';
 import { StaffContentEditor } from './previews/StaffContentEditor';
 import { FAQContentEditor } from './previews/FAQContentEditor';
+import { ContactPageEditor } from './previews/ContactPageEditor';
 import { GitHubSettingsPage } from './previews/GitHubSettingsPage';
 import { GenericContentPreview } from './previews/GenericContentPreview';
 
@@ -36,6 +37,8 @@ function renderPreview(
       return <StaffContentEditor content={content} onUpdate={onUpdate} />;
     case 'faq':
       return <FAQContentEditor content={content} onUpdate={onUpdate} />;
+    case 'contact':
+      return <ContactPageEditor content={content} onUpdate={onUpdate} />;
     case 'github-settings':
       return <GitHubSettingsPage />;
     default:

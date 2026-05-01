@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
+import contactData from '../../content/contact.json';
 
 interface FormData {
   name: string;
@@ -9,15 +10,6 @@ interface FormData {
   subject: string;
   message: string;
 }
-
-const inquiryTypes = [
-  { value: 'admissions', label_en: 'Admissions', label_mn: 'Элсэлт' },
-  { value: 'academics', label_en: 'Academics', label_mn: 'Академик' },
-  { value: 'student-life', label_en: 'Student Life', label_mn: 'Сурагчийн амьдрал' },
-  { value: 'support', label_en: 'Student Support', label_mn: 'Сурагчийн дэмжлэг' },
-  { value: 'general', label_en: 'General Inquiry', label_mn: 'Ерөнхий асуулт' },
-  { value: 'other', label_en: 'Other', label_mn: 'Бусад' },
-];
 
 export function ContactPage() {
   const { isEnglish } = useLanguage();
@@ -64,8 +56,12 @@ export function ContactPage() {
     }, 1000);
   };
 
-  const getLabel = (item: typeof inquiryTypes[0]) => {
+  const getLabel = (item: typeof contactData.inquiry_types[0]) => {
     return isEnglish ? item.label_en : item.label_mn;
+  };
+
+  const getPlaceholder = (field: keyof typeof contactData.form_placeholders) => {
+    return isEnglish ? contactData.form_placeholders[field + '_en' as any] : contactData.form_placeholders[field + '_mn' as any];
   };
 
   return (
@@ -74,12 +70,10 @@ export function ContactPage() {
         {/* Header */}
         <div className="mb-16">
           <h1 className="text-5xl md:text-6xl font-bold text-black mb-4">
-            {isEnglish ? 'Contact Us' : 'Бидэнтэй холбоо барих'}
+            {isEnglish ? contactData.header.title_en : contactData.header.title_mn}
           </h1>
           <p className="text-xl text-gray-600">
-            {isEnglish
-              ? 'Have questions or need assistance? Get in touch with us and our team will be happy to help.'
-              : 'Асуулга эсвэл туслалцаа хэрэгтэй бол бидэнтэй холбоо барина уу.'}
+            {isEnglish ? contactData.header.subtitle_en : contactData.header.subtitle_mn}
           </p>
         </div>
 
@@ -96,9 +90,9 @@ export function ContactPage() {
                   {isEnglish ? 'Address' : 'Хаяг'}
                 </h3>
                 <p className="text-gray-600">
-                  26 MAIS<br />
-                  Ulaanbaatar, Mongolia<br />
-                  PO Box 1234
+                  {contactData.contact_info.address_line1}<br />
+                  {contactData.contact_info.address_line2}<br />
+                  {contactData.contact_info.address_line3}
                 </p>
               </motion.div>
 
@@ -111,8 +105,8 @@ export function ContactPage() {
                   {isEnglish ? 'Phone' : 'Утас'}
                 </h3>
                 <p className="text-gray-600">
-                  <a href="tel:+97611111111" className="hover:text-cardinal-red transition-colors">
-                    +976 11 111 1111
+                  <a href={`tel:${contactData.contact_info.phone_link}`} className="hover:text-cardinal-red transition-colors">
+                    {contactData.contact_info.phone}
                   </a>
                 </p>
               </motion.div>
@@ -126,8 +120,8 @@ export function ContactPage() {
                   {isEnglish ? 'Email' : 'Имэйл'}
                 </h3>
                 <p className="text-gray-600">
-                  <a href="mailto:info@26mais.edu.mn" className="hover:text-cardinal-red transition-colors">
-                    info@26mais.edu.mn
+                  <a href={`mailto:${contactData.contact_info.email}`} className="hover:text-cardinal-red transition-colors">
+                    {contactData.contact_info.email}
                   </a>
                 </p>
               </motion.div>
@@ -141,9 +135,9 @@ export function ContactPage() {
                   {isEnglish ? 'Office Hours' : 'Оффисын цаг'}
                 </h3>
                 <p className="text-gray-600">
-                  {isEnglish ? 'Monday - Friday: 8:00 AM - 5:00 PM' : 'Даваа - Баасан: 8:00 AM - 5:00 PM'}
+                  {isEnglish ? contactData.contact_info.office_hours_en : contactData.contact_info.office_hours_mn}
                   <br />
-                  {isEnglish ? 'Saturday - Sunday: Closed' : 'Сургуулийн сүүлийн өдөр: Хаалттай'}
+                  {isEnglish ? contactData.contact_info.weekend_hours_en : contactData.contact_info.weekend_hours_mn}
                 </p>
               </motion.div>
             </div>
@@ -169,7 +163,7 @@ export function ContactPage() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-2 focus:ring-cardinal-red/50"
-                  placeholder={isEnglish ? 'Your full name' : 'Таны нэр'}
+                  placeholder={isEnglish ? contactData.form_placeholders.name_en : contactData.form_placeholders.name_mn}
                 />
               </div>
 
@@ -185,7 +179,7 @@ export function ContactPage() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-2 focus:ring-cardinal-red/50"
-                  placeholder="your.email@example.com"
+                  placeholder={isEnglish ? contactData.form_placeholders.email_en : contactData.form_placeholders.email_mn}
                 />
               </div>
 
@@ -200,7 +194,7 @@ export function ContactPage() {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-2 focus:ring-cardinal-red/50 bg-white"
                 >
-                  {inquiryTypes.map(type => (
+                  {contactData.inquiry_types.map(type => (
                     <option key={type.value} value={type.value}>
                       {getLabel(type)}
                     </option>
@@ -220,7 +214,7 @@ export function ContactPage() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-2 focus:ring-cardinal-red/50"
-                  placeholder={isEnglish ? 'Subject of your inquiry' : 'Таны асуултын сэдэв'}
+                  placeholder={isEnglish ? contactData.form_placeholders.subject_en : contactData.form_placeholders.subject_mn}
                 />
               </div>
 
@@ -236,7 +230,7 @@ export function ContactPage() {
                   required
                   rows={6}
                   className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-2 focus:ring-cardinal-red/50"
-                  placeholder={isEnglish ? 'Tell us more about your inquiry...' : 'Таны асуултын талаар дэлгэрэнгүй бичнэ үү...'}
+                  placeholder={isEnglish ? contactData.form_placeholders.message_en : contactData.form_placeholders.message_mn}
                 />
               </div>
 

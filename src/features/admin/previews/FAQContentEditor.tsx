@@ -186,12 +186,13 @@ export function FAQContentEditor({ content, onUpdate }: FAQContentEditorProps) {
                             <p className="text-xs font-bold uppercase text-gray-500 mb-1">
                               {isEnglish ? 'Answer (English)' : 'Хариулт (Англи)'}
                             </p>
-                            <textarea
+                            <InlineEdit
                               value={faq.answer_en}
-                              onChange={(e) =>
-                                handleUpdateFAQField(faq.id, 'answer_en', e.target.value)
+                              onChange={(value) =>
+                                handleUpdateFAQField(faq.id, 'answer_en', value)
                               }
-                              className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-24"
+                              multiline={true}
+                              className="w-full"
                             />
                           </div>
 
@@ -200,12 +201,13 @@ export function FAQContentEditor({ content, onUpdate }: FAQContentEditorProps) {
                             <p className="text-xs font-bold uppercase text-gray-500 mb-1">
                               {isEnglish ? 'Answer (Mongolian)' : 'Хариулт (Монгол)'}
                             </p>
-                            <textarea
+                            <InlineEdit
                               value={faq.answer_mn}
-                              onChange={(e) =>
-                                handleUpdateFAQField(faq.id, 'answer_mn', e.target.value)
+                              onChange={(value) =>
+                                handleUpdateFAQField(faq.id, 'answer_mn', value)
                               }
-                              className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-24"
+                              multiline={true}
+                              className="w-full"
                             />
                           </div>
 
@@ -221,11 +223,15 @@ export function FAQContentEditor({ content, onUpdate }: FAQContentEditorProps) {
                               }
                               className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
-                              {categories.map((cat) => (
-                                <option key={cat} value={cat}>
-                                  {cat}
-                                </option>
-                              ))}
+                              {/* Always include the current category, then other categories */}
+                              <option value={faq.category}>{faq.category}</option>
+                              {categories
+                                .filter(cat => cat !== faq.category)
+                                .map((cat) => (
+                                  <option key={cat} value={cat}>
+                                    {cat}
+                                  </option>
+                                ))}
                             </select>
                           </div>
                         </div>

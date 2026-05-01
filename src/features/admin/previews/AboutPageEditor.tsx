@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { bil, formatNumber } from '../../../lib/utils';
 import { pageText } from '../../../data/pageText';
@@ -10,7 +11,8 @@ interface AboutPageEditorProps {
 }
 
 export function AboutPageEditor({ content, onUpdate }: AboutPageEditorProps) {
-  const { isEnglish, t } = useLanguage();
+  const { isEnglish: contextIsEnglish, t } = useLanguage();
+  const [isEnglish, setIsEnglish] = useState(true);
   const ui = pageText.about;
   const tr = (label: { en: string; mn: string }) => t(label.en, label.mn);
   const info = content?.school_info;
@@ -22,6 +24,29 @@ export function AboutPageEditor({ content, onUpdate }: AboutPageEditorProps) {
 
   return (
     <div className="w-full">
+      {/* ── Language Toggle ────────────────────── */}
+      <div className="sticky top-24 z-40 bg-white border-b-2 border-black px-4 sm:px-6 lg:px-8 py-3 flex justify-end gap-2">
+        <button
+          onClick={() => setIsEnglish(true)}
+          className={`px-4 py-2 font-bold uppercase text-sm ${
+            isEnglish
+              ? 'bg-cardinal-red text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          } transition-colors`}
+        >
+          {t('English', 'Англи')}
+        </button>
+        <button
+          onClick={() => setIsEnglish(false)}
+          className={`px-4 py-2 font-bold uppercase text-sm ${
+            !isEnglish
+              ? 'bg-cardinal-red text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          } transition-colors`}
+        >
+          {t('Mongolian', 'Монгол')}
+        </button>
+      </div>
       {/* ── Hero ───────────────────────────────── */}
       <section className="relative bg-black text-white py-32 md:py-44 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-30 bg-gradient-to-br from-cardinal-red to-digital-blue" />
@@ -337,7 +362,7 @@ export function AboutPageEditor({ content, onUpdate }: AboutPageEditorProps) {
       )}
 
       {/* ── Graduate Information ────────────────── */}
-      {content && content.graduate_stats.length > 0 && (
+      {content && content.graduate_stats && content.graduate_stats.length > 0 && (
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-4xl font-serif font-bold text-center mb-4 text-black">{tr(ui.graduateInformation)}</h2>

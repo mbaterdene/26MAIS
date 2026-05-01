@@ -258,7 +258,7 @@ export function HomePage() {
                 <h2 className="text-4xl font-serif font-bold text-black mb-2">{tr(ui.upcomingEvents)}</h2>
                 <p className="text-gray-600">{tr(ui.upcomingEventsSub)}</p>
               </div>
-              <Link to="/events" className="text-digital-blue font-bold hover:text-cardinal-red transition-colors">{tr(ui.viewCalendar)}</Link>
+              <Link to="/student-life/events" className="text-digital-blue font-bold hover:text-cardinal-red transition-colors">{tr(ui.viewCalendar)}</Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {upcomingEvents.map((event) => (

@@ -1,0 +1,62 @@
+{
+  "inquiry_types": [
+    {
+      "value": "admissions",
+      "label_en": "Admissions",
+      "label_mn": "Элсэлт"
+    },
+    {
+      "value": "academics",
+      "label_en": "Academics",
+      "label_mn": "Академик"
+    },
+    {
+      "value": "student-life",
+      "label_en": "Student Life",
+      "label_mn": "Сурагчийн амьдрал"
+    },
+    {
+      "value": "support",
+      "label_en": "Student Support",
+      "label_mn": "Сурагчийн дэмжлэг"
+    },
+    {
+      "value": "general",
+      "label_en": "General Inquiry",
+      "label_mn": "Ерөнхий асуулт"
+    },
+    {
+      "value": "other",
+      "label_en": "Other",
+      "label_mn": "Бусад"
+    }
+  ],
+  "form_placeholders": {
+    "name_en": "Your full name",
+    "name_mn": "Таны нэр",
+    "email_en": "your.email@example.com",
+    "email_mn": "your.email@example.com",
+    "subject_en": "Subject of your inquiry",
+    "subject_mn": "Таны асуултын сэдэв",
+    "message_en": "Tell us more about your inquiry...",
+    "message_mn": "Таны асуултын талаар дэлгэрэнгүй бичнэ үү..."
+  },
+  "contact_info": {
+    "address_line1": "26 MAIS",
+    "address_line2": "Ulaanbaatar, Mongolia",
+    "address_line3": "PO Box 1234",
+    "phone": "+976 11 111 1111",
+    "phone_link": "+97611111111",
+    "email": "info@26mais.edu.mn",
+    "office_hours_en": "Monday - Friday: 8:00 AM - 5:00 PM",
+    "office_hours_mn": "Даваа - Баасан: 8:00 AM - 5:00 PM",
+    "weekend_hours_en": "Saturday - Sunday: Closed",
+    "weekend_hours_mn": "Сургуулийн сүүлийн өдөр: Хаалттай"
+  },
+  "header": {
+    "title_en": "Contact Us",
+    "title_mn": "Бидэнтэй холбоо барих",
+    "subtitle_en": "Have questions or need assistance? Get in touch with us and our team will be happy to help.",
+    "subtitle_mn": "Асуулга эсвэл туслалцаа хэрэгтэй бол бидэнтэй холбоо барина уу."
+  }
+}
