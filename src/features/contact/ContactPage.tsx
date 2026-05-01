@@ -60,10 +60,6 @@ export function ContactPage() {
     return isEnglish ? item.label_en : item.label_mn;
   };
 
-  const getPlaceholder = (field: keyof typeof contactData.form_placeholders) => {
-    return isEnglish ? contactData.form_placeholders[field + '_en' as any] : contactData.form_placeholders[field + '_mn' as any];
-  };
-
   return (
     <div className="min-h-screen bg-white pt-24 pb-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -11,7 +11,7 @@ interface AboutPageEditorProps {
 }
 
 export function AboutPageEditor({ content, onUpdate }: AboutPageEditorProps) {
-  const { isEnglish: contextIsEnglish, t } = useLanguage();
+  const { t } = useLanguage();
   const [isEnglish, setIsEnglish] = useState(true);
   const ui = pageText.about;
   const tr = (label: { en: string; mn: string }) => t(label.en, label.mn);

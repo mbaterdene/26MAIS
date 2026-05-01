@@ -301,7 +301,6 @@ export function Navbar() {
         { label: isEnglish ? 'All Clubs' : 'Бүх клубууд', href: '/student-life/clubs', desc: isEnglish ? 'Explore all student clubs.' : 'Бүх сурагчдын клубыг судла.' },
         { label: isEnglish ? 'DOFE' : 'DOFE', href: '/student-life/dofe', desc: isEnglish ? 'Duke of Edinburgh\'s Award.' : 'Эдинбургийн герцгийн шагнал.' },
         { label: isEnglish ? 'Events' : 'Үйл явдал', href: '/student-life/events', desc: isEnglish ? 'Student events and announcements.' : 'Сурагчдын үйл явдал.' },
-        { label: isEnglish ? 'News Archive' : 'Мэдээний архив', href: '/student-life/news-archive', desc: isEnglish ? 'Archive of student news.' : 'Сурагчдын мэдээний архив.' },
       ],
     },
     {

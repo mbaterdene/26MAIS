@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
-import { bil } from '../../../lib/utils';
+
 import { InlineEdit } from '../../../components/shared/InlineEdit';
 import { Trash2, Plus } from 'lucide-react';
 
@@ -46,7 +46,7 @@ interface ContactPageEditorProps {
 }
 
 export function ContactPageEditor({ content, onUpdate }: ContactPageEditorProps) {
-  const { isEnglish: contextIsEnglish, t } = useLanguage();
+  const { t } = useLanguage();
   const [isEnglish, setIsEnglish] = useState(true);
   const [newInquiryType, setNewInquiryType] = useState('');
   const [showNewTypeInput, setShowNewTypeInput] = useState(false);

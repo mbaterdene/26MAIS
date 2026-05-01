@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, Search } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { InlineEdit } from '../../../components/shared/InlineEdit';
 
@@ -21,6 +21,7 @@ interface AcademicsContentEditorProps {
 export function AcademicsContentEditor({ content, onUpdate }: AcademicsContentEditorProps) {
   const { isEnglish } = useLanguage();
   const [localSubjects, setLocalSubjects] = useState<Subject[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Sync with parent content
   useEffect(() => {
@@ -39,8 +40,21 @@ export function AcademicsContentEditor({ content, onUpdate }: AcademicsContentEd
     return Array.isArray(localSubjects) ? localSubjects.filter(s => s && s.program) : [];
   }, [localSubjects]);
 
-  const internationalSubjects = subjectsList.filter(s => s && s.program === 'international');
-  const nationalSubjects = subjectsList.filter(s => s && s.program === 'national');
+  // Filter subjects based on search
+  const filteredSubjects = useMemo(() => {
+    if (!searchTerm.trim()) return subjectsList;
+    
+    const searchText = searchTerm.toLowerCase();
+    return subjectsList.filter(subject =>
+      subject.name_en.toLowerCase().includes(searchText) ||
+      subject.name_mn.toLowerCase().includes(searchText) ||
+      (subject.code && subject.code.toLowerCase().includes(searchText)) ||
+      (subject.level && subject.level.toLowerCase().includes(searchText))
+    );
+  }, [subjectsList, searchTerm]);
+
+  const internationalSubjects = filteredSubjects.filter(s => s && s.program === 'international');
+  const nationalSubjects = filteredSubjects.filter(s => s && s.program === 'national');
 
   const handleAddSubject = (program: 'international' | 'national') => {
     const validSubjects = subjectsList.filter(s => s && s.id);
@@ -220,6 +234,18 @@ export function AcademicsContentEditor({ content, onUpdate }: AcademicsContentEd
             ? 'Manage subjects for international and national programmes. Edit names, codes, URLs, and levels.'
             : 'Олон улсын болон үндэсний хөтөлбөрийн хичээлүүдийг удирдах. Нэр, код, URL, түвшиний сүүдэр өөрчилнө үү.'}
         </p>
+      </div>
+
+      {/* Search Bar */}
+      <div className="relative">
+        <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+        <input
+          type="text"
+          placeholder={isEnglish ? 'Search subjects...' : 'Хичээлүүдийг хайх...'}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full pl-10 pr-4 py-2 border-2 border-black rounded focus:outline-none focus:ring-2 focus:ring-cardinal-red/50"
+        />
       </div>
 
       {/* International Programme */}

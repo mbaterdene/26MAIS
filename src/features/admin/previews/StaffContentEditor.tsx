@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, Search } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { InlineEdit } from '../../../components/shared/InlineEdit';
 import { ImageUpload } from '../ImageUpload';
@@ -20,9 +20,10 @@ interface StaffContentEditorProps {
 }
 
 export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProps) {
-  const { isEnglish: contextIsEnglish, t } = useLanguage();
+  const { t } = useLanguage();
   const [isEnglish, setIsEnglish] = useState(true);
   const [localStaffList, setLocalStaffList] = useState<StaffMember[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Sync with parent content
   useEffect(() => {
@@ -36,6 +37,19 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
     return Array.isArray(localStaffList) ? localStaffList : [];
   }, [localStaffList]);
 
+  // Filter staff based on search
+  const filteredStaffList = useMemo(() => {
+    if (!searchTerm.trim()) return staffList;
+    
+    const searchText = searchTerm.toLowerCase();
+    return staffList.filter(staff =>
+      staff.full_name.toLowerCase().includes(searchText) ||
+      staff.position.toLowerCase().includes(searchText) ||
+      staff.category.toLowerCase().includes(searchText) ||
+      (staff.subject && staff.subject.toLowerCase().includes(searchText))
+    );
+  }, [staffList, searchTerm]);
+
   const handleAddStaff = () => {
     const newStaff: StaffMember = {
       id: Math.max(...staffList.map(s => s.id), 0) + 1,
@@ -46,12 +60,11 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
       subject: 'Subject',
       photo: 'https://via.placeholder.com/150?text=Staff',
     };
-    const newList = [...staffList, newStaff];
+    const newList = [newStaff, ...staffList];  // Prepend instead of append
     setLocalStaffList(newList);
     
     // Track change for the new item with all its fields
-    const newIndex = newList.length - 1;
-    onUpdate(`[${newIndex}].full_name`, newStaff.full_name);
+    onUpdate(`[0].full_name`, newStaff.full_name);
   };
 
   const handleDeleteStaff = (id: number) => {
@@ -133,24 +146,50 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
         </p>
       </div>
 
+      {/* Search & Controls */}
+      <div className="bg-white p-6 border-2 border-black rounded-lg space-y-4">
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+          <input
+            type="text"
+            placeholder={isEnglish ? 'Search staff...' : 'Багш нарыг хайх...'}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border-2 border-black rounded focus:outline-none focus:ring-2 focus:ring-cardinal-red/50"
+          />
+        </div>
+
+        {/* Add Button */}
+        <button
+          onClick={handleAddStaff}
+          className="w-full py-2 border-2 border-cardinal-red text-cardinal-red font-bold flex items-center justify-center gap-2 hover:bg-red-50 transition-colors rounded"
+        >
+          <Plus size={18} />
+          {isEnglish ? 'Add New Staff Member' : 'Шинэ ажилтан нэмэх'}
+        </button>
+      </div>
+
       {/* Staff List */}
       <div className="space-y-4">
-        {staffList.length === 0 ? (
+        {filteredStaffList.length === 0 ? (
           <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
             <p className="text-gray-500 mb-4">
-              {isEnglish ? 'No staff members yet' : 'Багш нар байхгүй байна'}
+              {searchTerm ? (isEnglish ? 'No matching staff members' : 'Ямар ч багш олдсонгүй') : (isEnglish ? 'No staff members yet' : 'Багш нар байхгүй байна')}
             </p>
-            <button
-              onClick={handleAddStaff}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Plus size={18} />
-              {isEnglish ? 'Add First Staff Member' : 'Эхний багшийг нэмэх'}
-            </button>
+            {!searchTerm && (
+              <button
+                onClick={handleAddStaff}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Plus size={18} />
+                {isEnglish ? 'Add First Staff Member' : 'Эхний багшийг нэмэх'}
+              </button>
+            )}
           </div>
         ) : (
           <>
-            {staffList.map((staff) => (
+            {filteredStaffList.map((staff) => (
               <div
                 key={staff.id}
                 className="bg-white border border-gray-200 rounded-lg p-6 hover:border-blue-300 transition-colors shadow-sm"
@@ -255,19 +294,6 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
           </>
         )}
       </div>
-
-      {/* Add Staff Button */}
-      {staffList.length > 0 && (
-        <button
-          onClick={handleAddStaff}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
-        >
-          <Plus size={20} className="text-gray-600 hover:text-blue-600" />
-          <span className="font-medium text-gray-600 hover:text-blue-600">
-            {isEnglish ? 'Add Another Staff Member' : 'Өөр багш нэмэх'}
-          </span>
-        </button>
-      )}
     </div>
   );
 }

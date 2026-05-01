@@ -18,7 +18,6 @@ const sidebarLinks: SidebarLink[] = [
   { label: { en: 'Service Clubs', mn: '╥«╨╣╨╗╤ç╨╕╨╗╨│╤ì╤ì╨╜╨╕╨╣ ╨║╨╗╤â╨▒╤â╤â╨┤' }, href: '/student-life/service-clubs', id: 'service-clubs' },
   { label: { en: 'DOFE', mn: 'DOFE' }, href: '/student-life/dofe', id: 'dofe' },
   { label: { en: 'Events', mn: '╥«╨╣╨╗ ╤Å╨▓╨┤╨░╨╗' }, href: '/student-life/events', id: 'events' },
-  { label: { en: 'News Archive', mn: '╨£╤ì╨┤╤ì╤ì╨╜╨╕╨╣ ╨░╤Ç╤à╨╕╨▓' }, href: '/student-life/news-archive', id: 'news-archive' },
 ];
 
 interface StudentLifeLayoutProps {

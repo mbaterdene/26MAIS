@@ -8,7 +8,6 @@ import { ServiceClubsSection } from './ServiceClubsSection';
 import { AllClubsSection } from './AllClubsSection';
 import { DOFEPage } from './DOFEPage';
 import { EventsPage } from '../events/EventsPage';
-import { NewsArchiveSection } from './NewsArchiveSection';
 
 export function StudentLifePage() {
   return (
@@ -22,7 +21,6 @@ export function StudentLifePage() {
         <Route path="service-clubs" element={<ServiceClubsSection />} />
         <Route path="dofe" element={<DOFEPage />} />
         <Route path="events" element={<EventsPage />} />
-        <Route path="news-archive" element={<NewsArchiveSection />} />
       </Routes>
     </StudentLifeLayout>
   );

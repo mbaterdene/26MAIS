@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Trash2, Plus, X } from 'lucide-react';
+import { Trash2, Plus, X, Search } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { InlineEdit } from '../../../components/shared/InlineEdit';
 
@@ -22,6 +22,7 @@ export function FAQContentEditor({ content, onUpdate }: FAQContentEditorProps) {
   const [localFaqList, setLocalFaqList] = useState<FAQItem[]>([]);
   const [newCategoryInput, setNewCategoryInput] = useState('');
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Sync with parent content
   useEffect(() => {
@@ -35,6 +36,22 @@ export function FAQContentEditor({ content, onUpdate }: FAQContentEditorProps) {
     const cats = Array.from(new Set(localFaqList.map(f => f?.category).filter(Boolean)));
     return cats.sort();
   }, [localFaqList]);
+
+  // Filter FAQs based on search
+  const filteredFaqList = useMemo(() => {
+    if (!searchTerm.trim()) return localFaqList;
+    
+    const searchText = searchTerm.toLowerCase();
+    return localFaqList.filter(faq => 
+      faq && (
+        faq.question_en.toLowerCase().includes(searchText) ||
+        faq.question_mn.toLowerCase().includes(searchText) ||
+        faq.answer_en.toLowerCase().includes(searchText) ||
+        faq.answer_mn.toLowerCase().includes(searchText) ||
+        faq.category.toLowerCase().includes(searchText)
+      )
+    );
+  }, [localFaqList, searchTerm]);
 
   const handleAddFAQ = () => {
     const timestamp = Date.now();
@@ -111,33 +128,61 @@ export function FAQContentEditor({ content, onUpdate }: FAQContentEditorProps) {
         </p>
       </div>
 
+      {/* Search & Controls */}
+      <div className="bg-white p-6 border-2 border-black rounded-lg space-y-4">
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+          <input
+            type="text"
+            placeholder={isEnglish ? 'Search FAQs...' : 'ЧХА хайх...'}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border-2 border-black rounded focus:outline-none focus:ring-2 focus:ring-cardinal-red/50"
+          />
+        </div>
+
+        {/* Add Button */}
+        <button
+          onClick={handleAddFAQ}
+          className="w-full py-2 border-2 border-cardinal-red text-cardinal-red font-bold flex items-center justify-center gap-2 hover:bg-red-50 transition-colors rounded"
+        >
+          <Plus size={18} />
+          {isEnglish ? 'Add New FAQ' : 'Шинэ ЧХА нэмэх'}
+        </button>
+      </div>
+
       {/* FAQ List */}
       <div className="space-y-4">
-        {localFaqList.length === 0 ? (
+        {filteredFaqList.length === 0 ? (
           <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
             <p className="text-gray-500 mb-4">
-              {isEnglish ? 'No FAQ items yet' : 'ЧХА зүйлс байхгүй байна'}
+              {searchTerm ? (isEnglish ? 'No matching FAQs' : 'Ямар ч ЧХА олдсонгүй') : (isEnglish ? 'No FAQ items yet' : 'ЧХА зүйлс байхгүй байна')}
             </p>
-            <button
-              onClick={handleAddFAQ}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Plus size={18} />
-              {isEnglish ? 'Add First FAQ' : 'Эхний ЧХА-г нэмэх'}
-            </button>
+            {!searchTerm && (
+              <button
+                onClick={handleAddFAQ}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Plus size={18} />
+                {isEnglish ? 'Add First FAQ' : 'Эхний ЧХА-г нэмэх'}
+              </button>
+            )}
           </div>
         ) : (
           <>
             {/* Group by category */}
-            {categories.map((category) => (
-              <div key={category} className="space-y-4">
-                <h3 className="text-lg font-bold text-black border-b-2 border-cardinal-red pb-2">
-                  {category}
-                </h3>
-                <div className="space-y-4 ml-4">
-                  {localFaqList
-                    .filter(faq => faq && faq.category === category)
-                    .map((faq) =>
+            {categories.map((category) => {
+              const categoryFaqs = filteredFaqList.filter(faq => faq && faq.category === category);
+              if (categoryFaqs.length === 0) return null;
+              
+              return (
+                <div key={category} className="space-y-4">
+                  <h3 className="text-lg font-bold text-black border-b-2 border-cardinal-red pb-2">
+                    {category}
+                  </h3>
+                  <div className="space-y-4 ml-4">
+                    {categoryFaqs.map((faq) =>
                       faq && (
                         <div
                           key={faq.id}
@@ -237,18 +282,10 @@ export function FAQContentEditor({ content, onUpdate }: FAQContentEditorProps) {
                         </div>
                       )
                     )}
+                  </div>
                 </div>
-              </div>
-            ))}
-
-            {/* Add FAQ Button */}
-            <button
-              onClick={handleAddFAQ}
-              className="w-full py-3 border-2 border-dashed border-blue-300 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors font-semibold"
-            >
-              <Plus size={18} className="inline mr-2" />
-              {isEnglish ? 'Add Another FAQ' : 'Өөр ЧХА нэмэх'}
-            </button>
+              );
+            })}
 
             {/* Add Category Section */}
             <div className="mt-6 pt-4 border-t-2 border-gray-200">

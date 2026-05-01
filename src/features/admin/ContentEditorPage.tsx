@@ -7,7 +7,7 @@ import { contentEditorService } from '../../services/contentEditorService';
 import { CONTENT_PAGES, getContentPageByKey } from '../../data/contentRegistry';
 import { AboutPageEditor } from './previews/AboutPageEditor';
 import { AlumniContentPreview } from './previews/AlumniContentPreview';
-import { EventsContentPreview } from './previews/EventsContentPreview';
+import { EventsContentEditor } from './previews/EventsContentEditor';
 import { AcademicsContentEditor } from './previews/AcademicsContentEditor';
 import { StaffContentEditor } from './previews/StaffContentEditor';
 import { FAQContentEditor } from './previews/FAQContentEditor';
@@ -21,8 +21,7 @@ import { GenericContentPreview } from './previews/GenericContentPreview';
 function renderPreview(
   pageKey: string,
   content: any,
-  onUpdate: (path: string, value: any) => void,
-  isEnglish: boolean
+  onUpdate: (path: string, value: any) => void
 ) {
   switch (pageKey) {
     case 'about':
@@ -30,7 +29,7 @@ function renderPreview(
     case 'alumni':
       return <AlumniContentPreview content={content} onUpdate={onUpdate} />;
     case 'events':
-      return <EventsContentPreview content={content} onUpdate={onUpdate} isEnglish={isEnglish} />;
+      return <EventsContentEditor content={content} onUpdate={onUpdate} />;
     case 'subjects':
       return <AcademicsContentEditor content={content} onUpdate={onUpdate} />;
     case 'staff':
@@ -259,7 +258,7 @@ export function ContentEditorPage() {
               </div>
 
               {/* Content Preview */}
-              {renderPreview(selectedPageKey, content, updateField, isEnglish)}
+              {renderPreview(selectedPageKey, content, updateField)}
 
               {/* Status */}
               {!isGitHubSettings && hasChanges && (
