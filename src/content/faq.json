@@ -1,0 +1,68 @@
+{
+  "faq": [
+    {
+      "id": "admissions-1",
+      "question_en": "What is the admission process?",
+      "question_mn": "Элсэлтийн үйл явц юу вэ?",
+      "answer_en": "The admission process involves submitting an application, attending an entrance examination, and participating in an interview. Our admissions team will guide you through each step.",
+      "answer_mn": "Элсэлтийн үйл явц нь өргөдөл гаргах, орох шалгалтанд хүрэлцэх, сэтгүүлэгтэй уулзах зэргээс бүрдэнэ. Бидний элсэлтийн баг танд алхам бүрт туслах болно.",
+      "category": "Admissions"
+    },
+    {
+      "id": "admissions-2",
+      "question_en": "What are the tuition fees?",
+      "question_mn": "Сургуулийн төлбөр хэд вэ?",
+      "answer_en": "Tuition fees vary depending on the grade level and program. Please contact our admissions office for detailed pricing information.",
+      "answer_mn": "Сургуулийн төлбөр анги болон хөтөлбөргүүдээс хамаарч ялгаатай байдаг. Дэлгэрэнгүй үнийн мэдээлэлийг авахын тулд элсэлтийн ажилтантай холбоо барина уу.",
+      "category": "Admissions"
+    },
+    {
+      "id": "academics-1",
+      "question_en": "What programs does the school offer?",
+      "question_mn": "Сургууль ямар хөтөлбөр санал болгож байна вэ?",
+      "answer_en": "We offer Cambridge IGCSE, Cambridge A-Level, and Mongolian national curriculum programs. Each program is designed to meet international and national standards.",
+      "answer_mn": "Бид Cambridge IGCSE, Cambridge A-Level болон Монголын үндэсний боловсролын хөтөлбөрүүдийг санал болгож байна. Тус бүр нь олон улсын болон үндэсний стандартыг хангахаар зохиосон байдаг.",
+      "category": "Academics"
+    },
+    {
+      "id": "academics-2",
+      "question_en": "What is the class size?",
+      "question_mn": "Ангийн хэмжээ хэд байна?",
+      "answer_en": "Our average class size is 15-20 students, allowing for personalized attention and meaningful interactions between students and teachers.",
+      "answer_mn": "Бидний дундаж ангийн хэмжээ 15-20 сурагч бөгөөд энэ нь ачаалагдсан анхаарал өгөх боломж олгодог.",
+      "category": "Academics"
+    },
+    {
+      "id": "student-life-1",
+      "question_en": "What extracurricular activities are available?",
+      "question_mn": "Ямар сурах бичгийн гадуур үйл ажиллагаа байдаг вэ?",
+      "answer_en": "We offer over 30 clubs and activities including sports, arts, community service, and leadership programs. Students can explore their interests and develop new skills.",
+      "answer_mn": "Бид спорт, урлаг, нийгмийн үйлчилгээ, удирдлагын хөтөлбөрүүдийг оруулаад 30 гаруй клуб болон үйл ажиллагаа санал болгож байна.",
+      "category": "Student Life"
+    },
+    {
+      "id": "student-life-2",
+      "question_en": "Do you offer boarding facilities?",
+      "question_mn": "Та орон сууцны байр хөлслүүлдэг үү?",
+      "answer_en": "No, we are a day school. However, we provide transportation services for students throughout Ulaanbaatar.",
+      "answer_mn": "Үгүй, бид өдрийн сургууль юм. Гэхдээ бид Улаанбаатар даяар оюутнуудад тээвэрлэлтийн үйлчилгээ үзүүлдэг.",
+      "category": "Student Life"
+    },
+    {
+      "id": "support-1",
+      "question_en": "What student support services are available?",
+      "question_mn": "Ямар сурагчдын дэмжлэгийн үйлчилгээ байдаг вэ?",
+      "answer_en": "We provide counseling services, academic support, college preparation, and mental health resources to ensure student well-being.",
+      "answer_mn": "Бид сурагчдын сайн сайхныг хангахын тулд зөвлөгөө, академик дэмжлэг, их сургуулийн бэлтгэл, сэтгэцийн эрүүл мэндийн нөөцийг үзүүлдэг.",
+      "category": "Support"
+    },
+    {
+      "id": "support-2",
+      "question_en": "How do you support international students?",
+      "question_mn": "Та олон улсын оюутнуудыг хэрхэн дэмжих вэ?",
+      "answer_en": "We provide language support, cultural integration programs, and specialized guidance for international students transitioning to life at our school.",
+      "answer_mn": "Бид хэл хөгжүүлэх дэмжлэг, соёлын нэгтгэлийн хөтөлбөрүүд, олон улсын оюутнуудыг сургуулийн амьдралд шилжүүлэх тусгайлсан зөвлөмж өгдөг.",
+      "category": "Support"
+    }
+  ]
+}

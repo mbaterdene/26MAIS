@@ -8,6 +8,7 @@ import alumniData from '../content/alumni.json';
 import clubsData from '../content/clubs.json';
 import subjectsData from '../content/subjects.json';
 import eventsData from '../content/events.json';
+import faqData from '../content/faq.json';
 import slidesData from '../content/slides.json';
 import studentsData from '../content/students.json';
 import staffData from '../data/staffData.json';
@@ -61,6 +62,14 @@ export const CONTENT_PAGES: ContentPageConfig[] = [
     description: 'School events and announcements',
     data: eventsData,
     path: 'src/content/events.json',
+  },
+  {
+    key: 'faq',
+    label: 'FAQ',
+    label_mn: 'ЧХА',
+    description: 'Frequently asked questions and answers',
+    data: faqData.faq,
+    path: 'src/content/faq.json',
   },
   {
     key: 'slides',

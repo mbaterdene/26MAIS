@@ -269,15 +269,6 @@ export function ContactPage() {
             </form>
           </motion.div>
         </div>
-
-        {/* Note */}
-        <div className="mt-16 p-6 bg-gray-50 border-l-4 border-cardinal-red rounded">
-          <p className="text-sm text-gray-600">
-            {isEnglish
-              ? '* Please note that form submissions are not yet connected to our backend. This is a UI demonstration. For immediate assistance, please use the contact information provided above.'
-              : '* Цэтгэл дахин, маягт илгээлтүүд бидний нэвтэрхий сервертэй холбогдоогүй байна. Энэ бол UI үзүүлэлт юм. Даруу туслалцаа авахын тулд дээр өгөгдсөн холбоо барих мэдээллийг ашиглана уу.'}
-          </p>
-        </div>
       </div>
     </div>
   );

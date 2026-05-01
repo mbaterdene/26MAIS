@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
