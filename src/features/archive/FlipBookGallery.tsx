@@ -12,6 +12,10 @@ import {
   Loader,
   AlertCircle,
   BookOpen,
+  Maximize,
+  Minimize,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PageMapping } from '../../lib/archive-types';
@@ -66,11 +70,10 @@ const BookPage = React.memo(
       }, [shouldLoad, fileId, isBlank]);
 
       const commonStyle: React.CSSProperties = {
-        display: 'block',
+        display: isVisible ? 'block' : 'none',
         width: '100%',
         height: '100%',
         opacity: isVisible ? 1 : 0,
-        visibility: isVisible ? 'visible' : 'hidden',
         pointerEvents: isVisible ? 'auto' : 'none',
         transition: 'opacity 0.3s ease-in-out',
       };
@@ -80,7 +83,7 @@ const BookPage = React.memo(
           <div
             ref={ref}
             className="w-full h-full overflow-hidden select-none"
-            style={{ ...commonStyle, backgroundColor: '#ffffff', position: 'relative', border: '1px solid rgba(0,0,0,0.05)' }}
+            style={{ ...commonStyle, backgroundColor: '#ffffff', position: 'relative' }}
           >
             <span className="absolute bottom-2 inset-x-0 text-center text-[9px] text-stone-300 font-mono pointer-events-none select-none">
               {label}
@@ -93,7 +96,7 @@ const BookPage = React.memo(
         <div
           ref={ref}
           className="relative w-full h-full overflow-hidden select-none"
-          style={{ ...commonStyle, backgroundColor: '#f3f0eb', border: '1px solid rgba(0,0,0,0.05)' }}
+          style={{ ...commonStyle, backgroundColor: '#f3f0eb' }}
         >
           {/* Placeholder — shown before lazy-load triggers */}
           {!src && (
@@ -177,6 +180,8 @@ export function FlipBookGallery({
   const [pageW, setPageW] = useState(360);
   const [pageH, setPageH] = useState(508);
   const [isMobileView, setIsMobileView] = useState(false);
+  const [zoom, setZoom] = useState(1);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const [jumpValue, setJumpValue] = useState('');
 
@@ -213,7 +218,7 @@ export function FlipBookGallery({
       ro.disconnect();
       window.removeEventListener('resize', measure);
     };
-  }, []);
+  }, [zoom]); // Added zoom to dependencies
 
   // ── Navigation callbacks ─────────────────────────────────────────────────
   const handleFlip = useCallback((e: { data: number }) => {
@@ -238,6 +243,26 @@ export function FlipBookGallery({
     }
     setJumpValue('');
   }, [jumpValue, totalBookPages]);
+
+  const toggleFullScreen = () => {
+    if (!containerRef.current) return;
+
+    if (!document.fullscreenElement) {
+      containerRef.current.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+  useEffect(() => {
+    const handler = () => {
+      setIsFullScreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handler);
+    return () => document.removeEventListener('fullscreenchange', handler);
+  }, []);
 
   // Keyboard navigation (← →)
   useEffect(() => {
@@ -264,15 +289,15 @@ export function FlipBookGallery({
               i === 0
                 ? isEnglish ? 'Cover' : 'Хавтас'
                 : i === totalBookPages - 1
-                ? isEnglish ? 'Back cover' : 'Арын хавтас'
-                : String(i),
+                  ? isEnglish ? 'Back cover' : 'Арын хавтас'
+                  : String(i),
           };
         }
 
         const isBack = i === totalBookPages - 1;
         const isBlank = i === 1 || i === totalBookPages - 2;
         const contentIdx = i === 0 ? 0 : isBack ? totalPages - 1 : i - 1;
-        
+
         return {
           index: i,
           isBlank,
@@ -281,10 +306,10 @@ export function FlipBookGallery({
             i === 0
               ? isEnglish ? 'Cover' : 'Хавтас'
               : isBack
-              ? isEnglish ? 'Back' : 'Арын хавтас'
-              : isBlank
-              ? ''
-              : String(contentIdx),
+                ? isEnglish ? 'Back' : 'Арын хавтас'
+                : isBlank
+                  ? ''
+                  : String(contentIdx),
         };
       }),
     [totalPages, totalBookPages, pageMapping, isEnglish, hasSpacers]
@@ -293,7 +318,7 @@ export function FlipBookGallery({
   const progress = Math.round((currentPage / Math.max(totalBookPages - 1, 1)) * 100);
 
   return (
-    <div className="flex flex-col items-center gap-1 sm:gap-2">
+    <div ref={containerRef} className="flex flex-col items-center gap-1 sm:gap-2 bg-white">
       {/* ── Title / Download bar ──────────────────────────────────────────── */}
       {title && (
         <div className="w-full flex items-center justify-between px-4 sm:px-6">
@@ -312,17 +337,18 @@ export function FlipBookGallery({
         usePortrait={true} → on narrow viewports it collapses to 1-page portrait mode.
       */}
       <div
-        ref={containerRef}
-        className="w-full flex justify-center items-center overflow-hidden"
+        className={`w-full flex justify-center ${zoom > 1 ? 'items-start overflow-auto' : 'items-center overflow-hidden'}`}
         style={{
-          height: pageH,
-          minHeight: pageH,
+          height: isFullScreen ? 'calc(100vh - 120px)' : pageH,
+          minHeight: isFullScreen ? 'calc(100vh - 120px)' : pageH,
+          maxHeight: isFullScreen ? 'calc(100vh - 120px)' : '70vh',
         }}
       >
         <HTMLFlipBook
+          key={`${zoom}-${pageW}-${isMobileView}`}
           ref={bookRef}
-          width={pageW}
-          height={pageH}
+          width={Math.floor(pageW * zoom)}
+          height={Math.floor(pageH * zoom)}
           /* Cover pages shown as single pages */
           showCover={true}
           /* 1-page on mobile, 2-page spread on desktop */
@@ -347,11 +373,11 @@ export function FlipBookGallery({
           maxHeight={pageH}
           autoSize={false}
           /* Misc */
-          startPage={0}
+          startPage={currentPage}
           startZIndex={0}
           renderOnlyPageLengthChange={false}
           onFlip={handleFlip}
-          style={{ boxShadow: '0 20px 50px rgba(0,0,0,0.12)' }}
+          style={{ boxShadow: '0 20px 50px rgba(0,0,0,0.12)', backgroundColor: '#ffffff' }}
           className=""
         >
           {pages.map(({ index, fileId, label, isBlank }) => (
@@ -369,7 +395,7 @@ export function FlipBookGallery({
       </div>
 
       {/* ── Controls ──────────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center px-4">
+      <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center px-4 w-full">
         {/* Prev */}
         <button
           onClick={flipPrev}
@@ -378,6 +404,16 @@ export function FlipBookGallery({
           className="p-3.5 rounded-xl bg-white border border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-600 hover:bg-red-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <ChevronLeft size={22} />
+        </button>
+
+        {/* Zoom Out */}
+        <button
+          onClick={() => setZoom(prev => Math.max(1, prev - 0.25))}
+          disabled={zoom <= 1}
+          className="p-3.5 rounded-xl bg-white border border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-600 hover:bg-red-50 disabled:opacity-30 transition-all"
+          title={isEnglish ? 'Zoom Out' : 'Жижигсгэх'}
+        >
+          <ZoomOut size={22} />
         </button>
 
         {/* Page counter + jump-to input */}
@@ -410,6 +446,25 @@ export function FlipBookGallery({
             </button>
           </form>
         </div>
+
+        {/* Zoom In */}
+        <button
+          onClick={() => setZoom(prev => Math.min(2.5, prev + 0.25))}
+          disabled={zoom >= 2.5}
+          className="p-3.5 rounded-xl bg-white border border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-600 hover:bg-red-50 disabled:opacity-30 transition-all"
+          title={isEnglish ? 'Zoom In' : 'Томсгох'}
+        >
+          <ZoomIn size={22} />
+        </button>
+
+        {/* Fullscreen */}
+        <button
+          onClick={toggleFullScreen}
+          className="p-3.5 rounded-xl bg-white border border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-600 hover:bg-red-50 transition-all"
+          title={isEnglish ? 'Fullscreen' : 'Бүтэн дэлгэц'}
+        >
+          {isFullScreen ? <Minimize size={22} /> : <Maximize size={22} />}
+        </button>
 
         {/* Next */}
         <button
