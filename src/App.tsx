@@ -13,6 +13,8 @@ import { NewsDetailPage } from './features/news/NewsDetailPage';
 import { TeachersPage } from './features/teachers/TeachersPage';
 import { FAQPage } from './features/contact/FAQPage';
 import { ContactPage } from './features/contact/ContactPage';
+import { ArchiveIndexPage } from './features/archive/ArchiveIndexPage';
+import { ArchiveReaderPage } from './features/archive/ArchiveReaderPage';
 import { NotFoundPage } from './features/errors/NotFoundPage';
 
 // Admin Imports
@@ -63,6 +65,8 @@ function App() {
                 <Route path="news/:slug" element={<NewsDetailPage />} />
                 <Route path="faq" element={<FAQPage />} />
                 <Route path="contact" element={<ContactPage />} />
+                <Route path="archive" element={<ArchiveIndexPage />} />
+                <Route path="archive/:bookId" element={<ArchiveReaderPage />} />
               </Route>
 
               {/* ── Admin Routes ── */}

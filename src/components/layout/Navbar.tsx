@@ -289,6 +289,12 @@ export function Navbar() {
       ],
     },
     {
+      label: isEnglish ? 'Archive' : 'Архив',
+      children: [
+        { label: isEnglish ? 'Browse Archive' : 'Архивыг үзэх', href: '/archive', desc: isEnglish ? 'Explore yearbooks, publications, and collections.' : 'Жилийн ном, нийтлэл, цуглуулгыг судла.' },
+      ],
+    },
+    {
       label: isEnglish ? 'Staff' : 'Ажилчид',
       children: [
         { label: isEnglish ? 'Staff Directory' : 'Баг-ын жагсаалт', href: '/teachers', desc: isEnglish ? 'Meet our faculty and staff.' : 'Манай факультет, багштай танилцаарай.' },
