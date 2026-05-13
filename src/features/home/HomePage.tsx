@@ -173,7 +173,7 @@ export function HomePage() {
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {latestNews.slice(0, 4).map((news, i) => (
+              {latestNews.slice(0, 4).map((news) => (
                 <motion.article
                   key={news.id}
                   className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:border-cardinal-red/30 group"

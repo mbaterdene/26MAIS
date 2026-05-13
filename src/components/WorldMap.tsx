@@ -12,19 +12,18 @@ interface CountryData {
   color?: string;
 }
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/natural-earth-110m@2.0.0/countries.json';
+const geoUrl = 'https://unpkg.com/world-atlas@2/countries-50m.json';
 
-// Map country names to ISO_A2 codes for Natural Earth data
+// Map country names to ISO_A2 codes (fallback if world-atlas provides names)
 const countryNameToCode: { [key: string]: string } = {
-  'United States of America': 'US', 'United States': 'US',
+  'United States': 'US', 'United States of America': 'US',
   'Canada': 'CA', 'Mexico': 'MX',
-  'United Kingdom': 'GB', 'Great Britain': 'GB',
-  'France': 'FR', 'Germany': 'DE', 'Italy': 'IT', 'Spain': 'ES', 'Portugal': 'PT',
-  'Poland': 'PL', 'Ukraine': 'UA', 'Russia': 'RU', 'Russian Federation': 'RU',
-  'Turkey': 'TR', 'China': 'CN', 'Japan': 'JP', 'South Korea': 'KR', 'Korea': 'KR',
-  'Taiwan': 'TW', 'Hong Kong': 'HK', 'Australia': 'AU', 'Austria': 'AT', 'Belgium': 'BE',
-  'Czech Republic': 'CZ', 'Czechia': 'CZ', 'Hungary': 'HU', 'Romania': 'RO', 'Kyrgyzstan': 'KG',
-  'India': 'IN', 'Brazil': 'BR', 'Argentina': 'AR', 'Chile': 'CL', 'Peru': 'PE', 'Colombia': 'CO',
+  'United Kingdom': 'GB', 'France': 'FR', 'Germany': 'DE',
+  'Italy': 'IT', 'Spain': 'ES', 'Poland': 'PL', 'Russia': 'RU',
+  'China': 'CN', 'Japan': 'JP', 'South Korea': 'KR', 'India': 'IN',
+  'Brazil': 'BR', 'Australia': 'AU', 'Austria': 'AT', 'Hungary': 'HU',
+  'Ukraine': 'UA', 'Czech Republic': 'CZ', 'Czechia': 'CZ', 'Turkey': 'TR',
+  'Romania': 'RO', 'Kyrgyzstan': 'KG', 'Taiwan': 'TW', 'Hong Kong': 'HK',
 };
 
 // Premium color palette with sophisticated contrast and regional awareness
@@ -279,10 +278,15 @@ export default function WorldMap() {
                   >
                     <Geographies geography={geoUrl}>
                       {({ geographies }: { geographies: any[] }) =>
-                        geographies.map((geo: any) => {
-                          // Extract country code from name using Natural Earth property
+                        geographies.map((geo: any, idx: number) => {
+                          // world-atlas has country names in properties.name
                           const countryName = geo.properties?.name || '';
-                          const countryCode = countryNameToCode[countryName] || '';
+                          let countryCode = countryNameToCode[countryName] || '';
+                          
+                          // Debug: log first 5 to see actual structure
+                          if (idx < 5) {
+                            console.log(`Country ${idx}: "${countryName}" -> code="${countryCode}"`, geo.properties);
+                          }
                           
                           // Skip if no country code found
                           if (!countryCode) return null;
