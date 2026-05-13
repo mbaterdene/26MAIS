@@ -1,0 +1,126 @@
+{
+  "type": "Topology",
+  "objects": {
+    "countries": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "United States", "ISO_A2": "US" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Canada", "ISO_A2": "CA" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Australia", "ISO_A2": "AU" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Austria", "ISO_A2": "AT" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "China", "ISO_A2": "CN" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Czech Republic", "ISO_A2": "CZ" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "France", "ISO_A2": "FR" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Germany", "ISO_A2": "DE" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Hong Kong", "ISO_A2": "HK" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Hungary", "ISO_A2": "HU" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Italy", "ISO_A2": "IT" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Japan", "ISO_A2": "JP" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Kyrgyzstan", "ISO_A2": "KG" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "South Korea", "ISO_A2": "KR" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Poland", "ISO_A2": "PL" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Romania", "ISO_A2": "RO" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Russia", "ISO_A2": "RU" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Spain", "ISO_A2": "ES" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Taiwan", "ISO_A2": "TW" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Turkey", "ISO_A2": "TR" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Ukraine", "ISO_A2": "UA" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "United Kingdom", "ISO_A2": "GB" },
+          "arcs": []
+        },
+        {
+          "type": "MultiPolygon",
+          "properties": { "name": "Mongolia", "ISO_A2": "MN" },
+          "arcs": []
+        }
+      ]
+    }
+  },
+  "arcs": []
+}

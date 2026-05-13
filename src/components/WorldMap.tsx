@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
-import WorldMapComponent from 'react-svg-worldmap';
-import type { CountryContext } from 'react-svg-worldmap';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getCountryAlumniData, getUniversitiesByCountry } from '../data/alumniData';
 import AlumniPopup from './ui/AlumniPopup';
@@ -12,6 +11,21 @@ interface CountryData {
   value: number;
   color?: string;
 }
+
+const geoUrl = 'https://cdn.jsdelivr.net/npm/natural-earth-110m@2.0.0/countries.json';
+
+// Map country names to ISO_A2 codes for Natural Earth data
+const countryNameToCode: { [key: string]: string } = {
+  'United States of America': 'US', 'United States': 'US',
+  'Canada': 'CA', 'Mexico': 'MX',
+  'United Kingdom': 'GB', 'Great Britain': 'GB',
+  'France': 'FR', 'Germany': 'DE', 'Italy': 'IT', 'Spain': 'ES', 'Portugal': 'PT',
+  'Poland': 'PL', 'Ukraine': 'UA', 'Russia': 'RU', 'Russian Federation': 'RU',
+  'Turkey': 'TR', 'China': 'CN', 'Japan': 'JP', 'South Korea': 'KR', 'Korea': 'KR',
+  'Taiwan': 'TW', 'Hong Kong': 'HK', 'Australia': 'AU', 'Austria': 'AT', 'Belgium': 'BE',
+  'Czech Republic': 'CZ', 'Czechia': 'CZ', 'Hungary': 'HU', 'Romania': 'RO', 'Kyrgyzstan': 'KG',
+  'India': 'IN', 'Brazil': 'BR', 'Argentina': 'AR', 'Chile': 'CL', 'Peru': 'PE', 'Colombia': 'CO',
+};
 
 // Premium color palette with sophisticated contrast and regional awareness
 const generateCountryData = (): CountryData[] => {
@@ -81,41 +95,31 @@ const generateCountryData = (): CountryData[] => {
 
 const countryData: CountryData[] = generateCountryData();
 
+// Create a map of country codes to alumni data for quick lookup
+const createCountryDataMap = (): { [key: string]: CountryData } => {
+  return countryData.reduce((map, data) => {
+    map[data.country] = data;
+    return map;
+  }, {} as { [key: string]: CountryData });
+};
+
 export default function WorldMap() {
   const { isEnglish, t } = useLanguage();
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const countryDataMap = useMemo(() => createCountryDataMap(), []);
 
-  // World map styling with premium appearance
-  const worldMapStyles = `
-    .world-map-container {
-      position: relative !important;
-      width: 100% !important;
-      height: 100% !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      overflow: hidden !important;
-      background: #ffffff !important;
-    }
-    
-    .world-map-container > figure {
-      width: 100% !important;
-      height: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-    }
-    
-    .world-map-container svg {
-      max-width: 100% !important;
-      max-height: 100% !important;
-      width: auto !important;
-      height: 100% !important;
-      object-fit: contain !important;
+  // World map responsive container styles
+  const mapContainerStyles = `
+    .map-svg {
+      width: 100%;
+      height: 100%;
       filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.08));
+      display: block;
+    }
+    .map-svg svg {
+      width: 100%;
+      height: 100%;
     }
   `;
 
@@ -163,20 +167,10 @@ export default function WorldMap() {
     });
   }, [searchTerm]);
 
-  const getTooltipContent = (ctx: CountryContext) => {
-    const data = filteredCountryData.find(item => item.country === ctx.countryCode);
-    if (data) {
-      const countryName = getCountryNameTranslated(ctx.countryCode);
-      const label = isEnglish ? 'alumni' : 'төгсөгчид';
-      return `${countryName}: ${data.value} ${label}`;
-    }
-    return "";
-  };
-
-  const handleCountryClick = (ctx: CountryContext) => {
-    const data = filteredCountryData.find(item => item.country === ctx.countryCode);
+  const handleCountryClick = (countryCode: string) => {
+    const data = countryDataMap[countryCode];
     if (data && data.value > 0) {
-      setSelectedCountry(ctx.countryCode);
+      setSelectedCountry(countryCode);
     }
   };
 
@@ -219,7 +213,7 @@ export default function WorldMap() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: worldMapStyles }} />
+      <style dangerouslySetInnerHTML={{ __html: mapContainerStyles }} />
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -272,34 +266,76 @@ export default function WorldMap() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Map Section - Takes 3 columns */}
             <div className="lg:col-span-3 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="aspect-video md:aspect-auto h-[500px]">
+              <div className="w-full" style={{ height: '500px', padding: 0, margin: 0 }}>
                 {filteredCountryData.length > 0 ? (
-                  <div className="w-full h-full world-map-container">
-                    <WorldMapComponent
-                      color="red"
-                      title=""
-                      valueSuffix="alumni"
-                      size="responsive"
-                      data={filteredCountryData as any}
-                      tooltipTextFunction={getTooltipContent}
-                      onClickFunction={handleCountryClick}
-                      styleFunction={(ctx: CountryContext) => {
-                        const countryInfo = filteredCountryData.find(item => item.country === ctx.countryCode);
-                        return {
-                          fill: countryInfo?.color || "#F3F4F6",
-                          stroke: "#E5E7EB",
-                          strokeWidth: 0.5,
-                          cursor: countryInfo ? 'pointer' : 'default',
-                          hover: {
-                            fill: countryInfo?.color ? `${countryInfo.color}cc` : "#E5E7EB",
-                            outline: "none",
-                            strokeWidth: 1,
-                            stroke: "#1F2937"
-                          }
-                        };
-                      }}
-                    />
-                  </div>
+                  <ComposableMap
+                    width={1200}
+                    height={500}
+                    projection="geoEqualEarth"
+                    projectionConfig={{
+                      scale: 160,
+                    }}
+                    className="map-svg"
+                  >
+                    <Geographies geography={geoUrl}>
+                      {({ geographies }: { geographies: any[] }) =>
+                        geographies.map((geo: any) => {
+                          // Extract country code from name using Natural Earth property
+                          const countryName = geo.properties?.name || '';
+                          const countryCode = countryNameToCode[countryName] || '';
+                          
+                          // Skip if no country code found
+                          if (!countryCode) return null;
+                          
+                          const countryInfo = countryDataMap[countryCode];
+                          const isFiltered = filteredCountryData.some(c => c.country === countryCode);
+                          const hasAlumni = countryInfo && countryInfo.value > 0;
+                          
+                          return (
+                            <Geography
+                              key={geo.rsmKey}
+                              geography={geo}
+                              onClick={() => {
+                                if (isFiltered && hasAlumni) {
+                                  handleCountryClick(countryCode);
+                                }
+                              }}
+                              style={{
+                                default: {
+                                  fill: isFiltered && countryInfo ? countryInfo.color : '#F3F4F6',
+                                  stroke: '#E5E7EB',
+                                  strokeWidth: 0.5,
+                                  cursor: isFiltered && hasAlumni ? 'pointer' : 'default',
+                                  transition: 'all 0.2s ease-in-out',
+                                  outline: 'none',
+                                },
+                                hover: {
+                                  fill:
+                                    isFiltered && countryInfo
+                                      ? `${countryInfo.color}dd`
+                                      : '#E5E7EB',
+                                  stroke: '#1F2937',
+                                  strokeWidth: 1,
+                                  cursor: isFiltered && hasAlumni ? 'pointer' : 'default',
+                                  transition: 'all 0.2s ease-in-out',
+                                  outline: 'none',
+                                },
+                                pressed: {
+                                  fill:
+                                    isFiltered && countryInfo
+                                      ? `${countryInfo.color}ff`
+                                      : '#E5E7EB',
+                                  stroke: '#000000',
+                                  strokeWidth: 1.5,
+                                  outline: 'none',
+                                },
+                              }}
+                            />
+                          );
+                        })
+                      }
+                    </Geographies>
+                  </ComposableMap>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-slate-50 to-slate-100">
                     <svg className="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
