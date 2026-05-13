@@ -98,9 +98,6 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-start">
           <motion.h1
             className="text-5xl md:text-7xl font-serif font-bold mb-10 leading-tight"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
           >
             {t('World-class', 'Дэлхийн түвшний')} <br />
             <span className="text-cardinal-red">
@@ -110,9 +107,6 @@ export function HomePage() {
 
           <motion.p
             className="text-xl md:text-2xl text-gray-200 mb-10 max-w-2xl font-sans leading-relaxed"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.8 }}
           >
             {t(
               'Mongol Aspiration School develops quality education, knowledge, and skills for globally competitive citizens.',
@@ -122,9 +116,6 @@ export function HomePage() {
 
           <motion.div
             className="flex flex-col sm:flex-row gap-4"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
           >
             <Link
               to="/admissions"
@@ -148,10 +139,6 @@ export function HomePage() {
           {/* Thin border line */}
           <div className="border-b border-white/20 pb-12">
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
               className="text-center text-white"
             >
               <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4 leading-tight">
@@ -189,10 +176,6 @@ export function HomePage() {
               {latestNews.slice(0, 4).map((news, i) => (
                 <motion.article
                   key={news.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
                   className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:border-cardinal-red/30 group"
                 >
                   {news.image ? (
@@ -224,10 +207,6 @@ export function HomePage() {
       {/* ── Philosophy Banner ─────────────────────────────────────────── */}
       <motion.section
         className="bg-black py-20 border-b-8 border-cardinal-red"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.8 }}
       >
         <div className="max-w-4xl mx-auto text-center px-4">
           <motion.div
@@ -301,10 +280,6 @@ export function HomePage() {
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
                 className={`rounded-xl p-6 border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] hover:from-white/10 hover:to-white/[0.05] transition-all duration-300 flex flex-col items-center text-center backdrop-blur-sm ${stat.colors.border}`}
               >
                 <div className={`mb-3 p-3 ${stat.colors.bg} rounded-lg hover:opacity-80 transition-opacity`}>
@@ -326,23 +301,11 @@ export function HomePage() {
       {/* Location Map Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
+          <div className="text-center mb-12">
             <h2 className="text-4xl font-serif font-bold text-black mb-4">{isEnglish ? 'Our Location' : 'Бидний Байршил'}</h2>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="rounded-2xl overflow-hidden shadow-lg"
-          >
+          <div className="rounded-2xl overflow-hidden shadow-lg">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3172.650542986599!2d106.97919947671312!3d47.90468146734578!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5d96919a07dfcf83%3A0xc37dcc5f0d801dee!2sMongol%20Aspiration%20International%20School!5e1!3m2!1sen!2smn!4v1775751886153!5m2!1sen!2smn"
               width="100%"
@@ -353,7 +316,7 @@ export function HomePage() {
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full"
             />
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>
