@@ -14,16 +14,57 @@ interface CountryData {
 
 const geoUrl = 'https://unpkg.com/world-atlas@2/countries-50m.json';
 
-// Map country names to ISO_A2 codes (fallback if world-atlas provides names)
+// Map ALL country names from world-atlas to ISO_A2 codes (241 countries, excluding Antarctica)
 const countryNameToCode: { [key: string]: string } = {
-  'United States': 'US', 'United States of America': 'US',
-  'Canada': 'CA', 'Mexico': 'MX',
-  'United Kingdom': 'GB', 'France': 'FR', 'Germany': 'DE',
-  'Italy': 'IT', 'Spain': 'ES', 'Poland': 'PL', 'Russia': 'RU',
-  'China': 'CN', 'Japan': 'JP', 'South Korea': 'KR', 'India': 'IN',
-  'Brazil': 'BR', 'Australia': 'AU', 'Austria': 'AT', 'Hungary': 'HU',
-  'Ukraine': 'UA', 'Czech Republic': 'CZ', 'Czechia': 'CZ', 'Turkey': 'TR',
-  'Romania': 'RO', 'Kyrgyzstan': 'KG', 'Taiwan': 'TW', 'Hong Kong': 'HK',
+  'Afghanistan': 'AF', 'Albania': 'AL', 'Algeria': 'DZ', 'American Samoa': 'AS', 'Andorra': 'AD',
+  'Angola': 'AO', 'Anguilla': 'AI', 'Antigua and Barb.': 'AG', 'Argentina': 'AR',
+  'Armenia': 'AM', 'Aruba': 'AW', 'Ashmore and Cartier Is.': 'AS', 'Australia': 'AU', 'Austria': 'AT',
+  'Azerbaijan': 'AZ', 'Bahamas': 'BS', 'Bahrain': 'BH', 'Bangladesh': 'BD', 'Barbados': 'BB',
+  'Belarus': 'BY', 'Belgium': 'BE', 'Belize': 'BZ', 'Benin': 'BJ', 'Bermuda': 'BM',
+  'Bhutan': 'BT', 'Bolivia': 'BO', 'Bosnia and Herz.': 'BA', 'Botswana': 'BW', 'Br. Indian Ocean Ter.': 'IO',
+  'Brazil': 'BR', 'British Virgin Is.': 'VG', 'Brunei': 'BN', 'Bulgaria': 'BG', 'Burkina Faso': 'BF',
+  'Burundi': 'BI', 'Cabo Verde': 'CV', 'Cambodia': 'KH', 'Cameroon': 'CM', 'Canada': 'CA',
+  'Cayman Is.': 'KY', 'Central African Rep.': 'CF', 'Chad': 'TD', 'Chile': 'CL', 'China': 'CN',
+  'Colombia': 'CO', 'Comoros': 'KM', 'Congo': 'CG', 'Cook Is.': 'CK', 'Costa Rica': 'CR',
+  'Croatia': 'HR', 'Cuba': 'CU', 'Curaçao': 'CW', 'Cyprus': 'CY', 'Czechia': 'CZ',
+  'Côte d\'Ivoire': 'CI', 'Dem. Rep. Congo': 'CD', 'Denmark': 'DK', 'Djibouti': 'DJ', 'Dominica': 'DM',
+  'Dominican Rep.': 'DO', 'Ecuador': 'EC', 'Egypt': 'EG', 'El Salvador': 'SV', 'Eq. Guinea': 'GQ',
+  'Eritrea': 'ER', 'Estonia': 'EE', 'Ethiopia': 'ET', 'Faeroe Is.': 'FO', 'Falkland Is.': 'FK',
+  'Fiji': 'FJ', 'Finland': 'FI', 'Fr. Polynesia': 'PF', 'Fr. S. Antarctic Lands': 'TF', 'France': 'FR',
+  'Gabon': 'GA', 'Gambia': 'GM', 'Georgia': 'GE', 'Germany': 'DE', 'Ghana': 'GH',
+  'Greece': 'GR', 'Greenland': 'GL', 'Grenada': 'GD', 'Guam': 'GU', 'Guatemala': 'GT',
+  'Guernsey': 'GG', 'Guinea': 'GN', 'Guinea-Bissau': 'GW', 'Guyana': 'GY', 'Haiti': 'HT',
+  'Heard I. and McDonald Is.': 'HM', 'Honduras': 'HN', 'Hong Kong': 'HK', 'Hungary': 'HU', 'Iceland': 'IS',
+  'India': 'IN', 'Indian Ocean Ter.': 'IO', 'Indonesia': 'ID', 'Iran': 'IR', 'Iraq': 'IQ',
+  'Ireland': 'IE', 'Isle of Man': 'IM', 'Israel': 'IL', 'Italy': 'IT', 'Jamaica': 'JM',
+  'Japan': 'JP', 'Jersey': 'JE', 'Jordan': 'JO', 'Kazakhstan': 'KZ', 'Kenya': 'KE',
+  'Kiribati': 'KI', 'Kosovo': 'XK', 'Kuwait': 'KW', 'Kyrgyzstan': 'KG', 'Laos': 'LA',
+  'Latvia': 'LV', 'Lebanon': 'LB', 'Lesotho': 'LS', 'Liberia': 'LR', 'Libya': 'LY',
+  'Liechtenstein': 'LI', 'Lithuania': 'LT', 'Luxembourg': 'LU', 'Macao': 'MO', 'Macedonia': 'MK',
+  'Madagascar': 'MG', 'Malawi': 'MW', 'Malaysia': 'MY', 'Maldives': 'MV', 'Mali': 'ML',
+  'Malta': 'MT', 'Marshall Is.': 'MH', 'Mauritania': 'MR', 'Mauritius': 'MU', 'Mexico': 'MX',
+  'Micronesia': 'FM', 'Moldova': 'MD', 'Monaco': 'MC', 'Mongolia': 'MN', 'Montenegro': 'ME',
+  'Montserrat': 'MS', 'Morocco': 'MA', 'Mozambique': 'MZ', 'Myanmar': 'MM', 'N. Cyprus': 'CY',
+  'N. Mariana Is.': 'MP', 'Namibia': 'NA', 'Nauru': 'NR', 'Nepal': 'NP', 'Netherlands': 'NL',
+  'New Caledonia': 'NC', 'New Zealand': 'NZ', 'Nicaragua': 'NI', 'Niger': 'NE', 'Nigeria': 'NG',
+  'Niue': 'NU', 'Norfolk Island': 'NF', 'North Korea': 'KP', 'Norway': 'NO', 'Oman': 'OM',
+  'Pakistan': 'PK', 'Palau': 'PW', 'Palestine': 'PS', 'Panama': 'PA', 'Papua New Guinea': 'PG',
+  'Paraguay': 'PY', 'Peru': 'PE', 'Philippines': 'PH', 'Pitcairn Is.': 'PN', 'Poland': 'PL',
+  'Portugal': 'PT', 'Puerto Rico': 'PR', 'Qatar': 'QA', 'Romania': 'RO', 'Russia': 'RU',
+  'Rwanda': 'RW', 'S. Geo. and the Is.': 'GS', 'S. Sudan': 'SS', 'Saint Helena': 'SH', 'Saint Lucia': 'LC',
+  'Samoa': 'WS', 'San Marino': 'SM', 'Saudi Arabia': 'SA', 'Senegal': 'SN', 'Serbia': 'RS',
+  'Seychelles': 'SC', 'Siachen Glacier': 'GB', 'Sierra Leone': 'SL', 'Singapore': 'SG', 'Sint Maarten': 'SX',
+  'Slovakia': 'SK', 'Slovenia': 'SI', 'Solomon Is.': 'SB', 'Somalia': 'SO', 'Somaliland': 'SO',
+  'South Africa': 'ZA', 'South Korea': 'KR', 'Spain': 'ES', 'Sri Lanka': 'LK', 'St-Barthélemy': 'BL',
+  'St-Martin': 'MF', 'St. Kitts and Nevis': 'KN', 'St. Pierre and Miquelon': 'PM', 'St. Vin. and Gren.': 'VC',
+  'Sudan': 'SD', 'Suriname': 'SR', 'Sweden': 'SE', 'Switzerland': 'CH', 'Syria': 'SY',
+  'São Tomé and Príncipe': 'ST', 'Taiwan': 'TW', 'Tajikistan': 'TJ', 'Tanzania': 'TZ', 'Thailand': 'TH',
+  'Timor-Leste': 'TL', 'Togo': 'TG', 'Tonga': 'TO', 'Trinidad and Tobago': 'TT', 'Tunisia': 'TN',
+  'Turkey': 'TR', 'Turkmenistan': 'TM', 'Turks and Caicos Is.': 'TC', 'U.S. Virgin Is.': 'VI', 'Uganda': 'UG',
+  'Ukraine': 'UA', 'United Arab Emirates': 'AE', 'United Kingdom': 'GB', 'United States of America': 'US',
+  'Uruguay': 'UY', 'Uzbekistan': 'UZ', 'Vanuatu': 'VU', 'Vatican': 'VA', 'Venezuela': 'VE',
+  'Vietnam': 'VN', 'W. Sahara': 'EH', 'Wallis and Futuna Is.': 'WF', 'Yemen': 'YE', 'Zambia': 'ZM',
+  'Zimbabwe': 'ZW', 'eSwatini': 'SZ', 'Åland': 'AX',
 };
 
 // Premium color palette with sophisticated contrast and regional awareness
@@ -265,28 +306,24 @@ export default function WorldMap() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Map Section - Takes 3 columns */}
             <div className="lg:col-span-3 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="w-full" style={{ height: '500px', padding: 0, margin: 0 }}>
+              <div className="w-full" style={{ aspectRatio: '2 / 1', padding: 0, margin: 0 }}>
                 {filteredCountryData.length > 0 ? (
                   <ComposableMap
-                    width={1200}
-                    height={500}
-                    projection="geoEqualEarth"
+                    width={1600}
+                    height={800}
+                    projection="geoEquirectangular"
                     projectionConfig={{
-                      scale: 160,
+                      scale: 255,
+                      center: [10, 0],
                     }}
                     className="map-svg"
                   >
                     <Geographies geography={geoUrl}>
                       {({ geographies }: { geographies: any[] }) =>
-                        geographies.map((geo: any, idx: number) => {
+                        geographies.map((geo: any) => {
                           // world-atlas has country names in properties.name
                           const countryName = geo.properties?.name || '';
-                          let countryCode = countryNameToCode[countryName] || '';
-                          
-                          // Debug: log first 5 to see actual structure
-                          if (idx < 5) {
-                            console.log(`Country ${idx}: "${countryName}" -> code="${countryCode}"`, geo.properties);
-                          }
+                          const countryCode = countryNameToCode[countryName] || '';
                           
                           // Skip if no country code found
                           if (!countryCode) return null;
@@ -306,7 +343,7 @@ export default function WorldMap() {
                               }}
                               style={{
                                 default: {
-                                  fill: isFiltered && countryInfo ? countryInfo.color : '#F3F4F6',
+                                  fill: isFiltered && countryInfo ? countryInfo.color : '#1E293B',
                                   stroke: '#E5E7EB',
                                   strokeWidth: 0.5,
                                   cursor: isFiltered && hasAlumni ? 'pointer' : 'default',
@@ -317,7 +354,7 @@ export default function WorldMap() {
                                   fill:
                                     isFiltered && countryInfo
                                       ? `${countryInfo.color}dd`
-                                      : '#E5E7EB',
+                                      : '#334155',
                                   stroke: '#1F2937',
                                   strokeWidth: 1,
                                   cursor: isFiltered && hasAlumni ? 'pointer' : 'default',
@@ -328,7 +365,7 @@ export default function WorldMap() {
                                   fill:
                                     isFiltered && countryInfo
                                       ? `${countryInfo.color}ff`
-                                      : '#E5E7EB',
+                                      : '#334155',
                                   stroke: '#000000',
                                   strokeWidth: 1.5,
                                   outline: 'none',
