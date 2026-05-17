@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useRef,
   useMemo,
+  TouchEvent,
 } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import {
@@ -170,6 +171,7 @@ export function FlipBookGallery({
   const { isEnglish } = useLanguage();
   const bookRef = useRef<unknown>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const bookCanvasRef = useRef<HTMLDivElement>(null);
 
   // currentPage tracks the left-page index of the current spread as reported
   // by react-pageflip's onFlip event.
@@ -275,6 +277,66 @@ export function FlipBookGallery({
     return () => window.removeEventListener('keydown', onKey);
   }, [flipPrev, flipNext]);
 
+  // ── Mouse-wheel zoom (desktop) ───────────────────────────────────────────
+  // Zoom when the pointer is hovering over the book canvas — no Ctrl needed.
+  // Outside the canvas the page scrolls normally.
+  const isHoveringBookRef = useRef(false);
+
+  useEffect(() => {
+    const el = bookCanvasRef.current;
+    if (!el) return;
+
+    const onEnter = () => { isHoveringBookRef.current = true; };
+    const onLeave = () => { isHoveringBookRef.current = false; };
+
+    const onWheel = (e: WheelEvent) => {
+      if (!isHoveringBookRef.current) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const delta = e.deltaY < 0 ? 0.1 : -0.1;
+      setZoom(prev => Math.min(2.5, Math.max(1, parseFloat((prev + delta).toFixed(2)))));
+    };
+
+    el.addEventListener('mouseenter', onEnter);
+    el.addEventListener('mouseleave', onLeave);
+    // Must be non-passive to call preventDefault()
+    el.addEventListener('wheel', onWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener('mouseenter', onEnter);
+      el.removeEventListener('mouseleave', onLeave);
+      el.removeEventListener('wheel', onWheel);
+    };
+  }, []);
+
+  // ── Pinch-to-zoom (mobile / touch) ──────────────────────────────────────
+  const pinchStartDistRef = useRef<number | null>(null);
+  const pinchStartZoomRef = useRef<number>(1);
+
+  const onTouchStart = useCallback((e: TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      pinchStartDistRef.current = Math.hypot(dx, dy);
+      pinchStartZoomRef.current = zoom;
+    }
+  }, [zoom]);
+
+  const onTouchMove = useCallback((e: TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length !== 2 || pinchStartDistRef.current === null) return;
+    e.preventDefault();
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const dist = Math.hypot(dx, dy);
+    const scale = dist / pinchStartDistRef.current;
+    const next = parseFloat((pinchStartZoomRef.current * scale).toFixed(2));
+    setZoom(Math.min(2.5, Math.max(1, next)));
+  }, []);
+
+  const onTouchEnd = useCallback(() => {
+    pinchStartDistRef.current = null;
+  }, []);
+
   // ── Page list ────────────────────────────────────────────────────────────
   // We insert two white pages if hasSpacers is true: index 1 (after cover) and totalBookPages - 2 (before back).
   const pages = useMemo(
@@ -337,12 +399,16 @@ export function FlipBookGallery({
         usePortrait={true} → on narrow viewports it collapses to 1-page portrait mode.
       */}
       <div
+        ref={bookCanvasRef}
         className={`w-full flex justify-center ${zoom > 1 ? 'items-start overflow-auto' : 'items-center overflow-hidden'}`}
         style={{
           height: isFullScreen ? 'calc(100vh - 120px)' : pageH,
           minHeight: isFullScreen ? 'calc(100vh - 120px)' : pageH,
           maxHeight: isFullScreen ? 'calc(100vh - 120px)' : '70vh',
         }}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         <HTMLFlipBook
           key={`${zoom}-${pageW}-${isMobileView}`}
@@ -408,13 +474,24 @@ export function FlipBookGallery({
 
         {/* Zoom Out */}
         <button
-          onClick={() => setZoom(prev => Math.max(1, prev - 0.25))}
+          onClick={() => setZoom(prev => Math.max(1, parseFloat((prev - 0.1).toFixed(2))))}
           disabled={zoom <= 1}
           className="p-3.5 rounded-xl bg-white border border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-600 hover:bg-red-50 disabled:opacity-30 transition-all"
-          title={isEnglish ? 'Zoom Out' : 'Жижигсгэх'}
+          title={isEnglish ? 'Zoom Out (scroll inside book)' : 'Жижигсгэх'}
         >
           <ZoomOut size={22} />
         </button>
+
+        {/* Zoom % badge — click to reset */}
+        {zoom > 1 && (
+          <button
+            onClick={() => setZoom(1)}
+            className="px-2.5 py-1.5 rounded-lg bg-red-50 border border-red-200 text-red-600 text-[11px] font-black tabular-nums hover:bg-red-600 hover:text-white transition-all"
+            title={isEnglish ? 'Reset zoom' : 'Томруулалт арилгах'}
+          >
+            {Math.round(zoom * 100)}%
+          </button>
+        )}
 
         {/* Page counter + jump-to input */}
         <div className="flex items-center gap-3 bg-white border border-stone-200 rounded-xl px-5 py-2.5 text-sm font-bold text-stone-800">
@@ -449,10 +526,10 @@ export function FlipBookGallery({
 
         {/* Zoom In */}
         <button
-          onClick={() => setZoom(prev => Math.min(2.5, prev + 0.25))}
+          onClick={() => setZoom(prev => Math.min(2.5, parseFloat((prev + 0.1).toFixed(2))))}
           disabled={zoom >= 2.5}
           className="p-3.5 rounded-xl bg-white border border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-600 hover:bg-red-50 disabled:opacity-30 transition-all"
-          title={isEnglish ? 'Zoom In' : 'Томсгох'}
+          title={isEnglish ? 'Zoom In (scroll inside book)' : 'Томсгох'}
         >
           <ZoomIn size={22} />
         </button>
