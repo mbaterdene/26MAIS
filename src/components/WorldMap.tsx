@@ -17,7 +17,7 @@ const geoUrl = 'https://unpkg.com/world-atlas@2/countries-50m.json';
 // Map ALL country names from world-atlas to ISO_A2 codes (241 countries, excluding Antarctica)
 const countryNameToCode: { [key: string]: string } = {
   'Afghanistan': 'AF', 'Albania': 'AL', 'Algeria': 'DZ', 'American Samoa': 'AS', 'Andorra': 'AD',
-  'Angola': 'AO', 'Anguilla': 'AI', 'Antigua and Barb.': 'AG', 'Argentina': 'AR',
+  'Angola': 'AO', 'Anguilla': 'AI', 'Antarctica': 'AQ', 'Antigua and Barb.': 'AG', 'Argentina': 'AR',
   'Armenia': 'AM', 'Aruba': 'AW', 'Ashmore and Cartier Is.': 'AS', 'Australia': 'AU', 'Austria': 'AT',
   'Azerbaijan': 'AZ', 'Bahamas': 'BS', 'Bahrain': 'BH', 'Bangladesh': 'BD', 'Barbados': 'BB',
   'Belarus': 'BY', 'Belgium': 'BE', 'Belize': 'BZ', 'Benin': 'BJ', 'Bermuda': 'BM',
