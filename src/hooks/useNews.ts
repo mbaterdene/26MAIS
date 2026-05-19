@@ -236,19 +236,3 @@ export function useRejectNews() {
     },
   });
 }
-
-// ─── Public news hook (no auth required) ─────────────────────────────────────
-export function usePublicNews() {
-  const { data, isLoading, error } = useQuery<News[]>({
-    queryKey: ["publicNews"],
-    queryFn: async () => {
-      const response = await fetch(`${BACKEND_URL}/api/news`);
-      if (!response.ok) throw new Error("Failed to fetch news");
-      const result = await response.json();
-      return result.data || [];
-    },
-    staleTime: 60 * 1000,
-  });
-
-  return { data: data || [], isLoading, error };
-}

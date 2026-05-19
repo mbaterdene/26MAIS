@@ -11,7 +11,7 @@ import eventsData from '../content/events.json';
 import faqData from '../content/faq.json';
 import slidesData from '../content/slides.json';
 import studentsData from '../content/students.json';
-import staffData from '../data/staffData.json';
+import staffData from '../content/staffData.json';
 import contactData from '../content/contact.json';
 
 export interface ContentPageConfig {
@@ -93,8 +93,8 @@ export const CONTENT_PAGES: ContentPageConfig[] = [
     label: 'Staff',
     label_mn: 'Багш нар',
     description: 'Staff profiles and information',
-    data: staffData.staff,
-    path: 'src/data/staffData.json',
+    data: (staffData as any).staff,
+    path: 'src/content/staffData.json',
   },
   {
     key: 'contact',

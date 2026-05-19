@@ -2,8 +2,8 @@ import { useState, useMemo } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getCountryAlumniData, getUniversitiesByCountry } from '../data/alumniData';
-import AlumniPopup from './ui/AlumniPopup';
-import AlumniPostersSlider from './ui/AlumniPostersSlider';
+import AlumniPopup from './alumni/AlumniPopup';
+import AlumniPostersSlider from './alumni/AlumniPostersSlider';
 import { useLanguage } from '../context/LanguageContext';
 
 interface CountryData {

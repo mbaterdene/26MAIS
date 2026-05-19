@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Download, X, Loader, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PageMapping } from '../../lib/archive-types';
+import { getDriveUrl, getPageFilename, getFileId, calculatePreloadRange, setupKeyboardNavigation } from '../../lib/galleryUtils';
 
 interface ImageGalleryProps {
   pageMapping: PageMapping;
@@ -9,29 +10,6 @@ interface ImageGalleryProps {
   title: string;
   onClose?: () => void;
   downloadUrl?: string;
-}
-
-/**
- * Generates a Google Drive thumbnail URL from a file ID.
- * Uses the /thumbnail endpoint which serves images publicly without
- * authentication or cookies, unlike the deprecated /uc?export=view URL.
- * sz=w1600 requests a 1600px-wide version (sufficient for page viewing).
- */
-function generateGoogleDriveImageUrl(fileId: string): string {
-  if (!fileId) return '';
-  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
-}
-
-/**
- * Gets the filename for a given page index
- * Handles custom naming: front.jpg, startPage-endPage numbered, back.jpg
- */
-function getPageFilename(pageIndex: number, pageMapping: PageMapping): string {
-  if (pageIndex === 0) return pageMapping.front;
-  if (pageIndex === pageMapping.endPage - pageMapping.startPage + 2) return pageMapping.back;
-  
-  const pageNumber = pageMapping.startPage + (pageIndex - 1);
-  return `${pageNumber}.jpg`;
 }
 
 export function ImageGallery({
@@ -53,33 +31,25 @@ export function ImageGallery({
 
   // Get file ID for current page
   const getFileIdForPage = useCallback((pageIndex: number): string | null => {
-    const filename = getPageFilename(pageIndex, pageMapping);
-    if (pageMapping.fileIdMap?.[filename]) return pageMapping.fileIdMap[filename];
-    if (filename === pageMapping.front && pageMapping.frontFileId) return pageMapping.frontFileId;
-    if (filename === pageMapping.back && pageMapping.backFileId) return pageMapping.backFileId;
-    return null;
+    return getFileId(pageIndex, pageMapping);
   }, [pageMapping]);
 
   // Preload nearby pages using real Image objects
   useEffect(() => {
-    const indicesToReveal = new Set<number>();
-    indicesToReveal.add(currentIndex);
-    for (let i = 1; i <= PRELOAD_RANGE; i++) {
-      if (currentIndex + i < totalPages) indicesToReveal.add(currentIndex + i);
-    }
-    if (currentIndex > 0) indicesToReveal.add(currentIndex - 1);
+    const indicesToReveal = calculatePreloadRange(currentIndex, totalPages, PRELOAD_RANGE);
+    const indicesToSet = new Set<number>(indicesToReveal);
 
     // Reveal pages (render their img tags)
-    setRevealedPages(prev => new Set([...prev, ...indicesToReveal]));
+    setRevealedPages(prev => new Set([...prev, ...indicesToSet]));
 
     // Preload images in background using Image objects
-    indicesToReveal.forEach(idx => {
+    indicesToSet.forEach(idx => {
       if (preloadedRef.current.has(idx)) return;
       const fileId = getFileIdForPage(idx);
       if (!fileId) return;
       preloadedRef.current.add(idx);
       const img = new Image();
-      img.src = generateGoogleDriveImageUrl(fileId);
+      img.src = getDriveUrl(fileId, 'w1600');
     });
   }, [currentIndex, totalPages, getFileIdForPage]);
 
@@ -97,12 +67,7 @@ export function ImageGallery({
 
   // Keyboard navigation
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') goToPrevious();
-      if (e.key === 'ArrowRight') goToNext();
-    };
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    return setupKeyboardNavigation(goToPrevious, goToNext, 'input, textarea');
   }, [goToPrevious, goToNext]);
 
   const currentFileId = getFileIdForPage(currentIndex);
@@ -196,7 +161,7 @@ export function ImageGallery({
             {Array.from(revealedPages).map(idx => {
               const fId = getFileIdForPage(idx);
               if (!fId) return null;
-              const url = generateGoogleDriveImageUrl(fId);
+              const url = getDriveUrl(fId, 'w1600');
               return (
                 <img
                   key={idx}

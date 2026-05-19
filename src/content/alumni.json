@@ -1,8 +1,8 @@
 {
   "statistics": {
-    "total_alumni": 269,
-    "total_countries": 12,
-    "total_universities": 94,
+    "total_alumni": 206,
+    "total_countries": 23,
+    "total_universities": 149,
     "total_scholarship": 1799000000
   },
   "countries_data": [
@@ -10,7 +10,7 @@
       "code": "KR",
       "name": "БНСУ",
       "name_en": "South Korea",
-      "alumni_count": 62,
+      "alumni_count": 10,
       "latitude": 36.5,
       "longitude": 127.8,
       "color": "#2563eb"
@@ -19,7 +19,7 @@
       "code": "JP",
       "name": "Япон",
       "name_en": "Japan",
-      "alumni_count": 41,
+      "alumni_count": 6,
       "latitude": 36.2,
       "longitude": 138.3,
       "color": "#ef4444"
@@ -37,19 +37,82 @@
       "code": "CN",
       "name": "БНХАУ",
       "name_en": "China",
-      "alumni_count": 34,
+      "alumni_count": 24,
       "latitude": 35.9,
       "longitude": 104.2,
       "color": "#f59e0b"
     },
     {
-      "code": "SG",
-      "name": "Сингапур",
-      "name_en": "Singapore",
-      "alumni_count": 21,
-      "latitude": 1.35,
-      "longitude": 103.82,
+      "code": "AU",
+      "name": "Австрали",
+      "name_en": "Australia",
+      "alumni_count": 7,
+      "latitude": -25.2744,
+      "longitude": 133.7751,
       "color": "#8b5cf6"
+    },
+    {
+      "code": "MN",
+      "name": "Монгол",
+      "name_en": "Mongolia",
+      "alumni_count": 55,
+      "latitude": 46.8625,
+      "longitude": 103.8467,
+      "color": "#ec4899"
+    },
+    {
+      "code": "RU",
+      "name": "Орос",
+      "name_en": "Russia",
+      "alumni_count": 4,
+      "latitude": 61.524,
+      "longitude": 105.3188,
+      "color": "#06b6d4"
+    },
+    {
+      "code": "GB",
+      "name": "Их Британи",
+      "name_en": "United Kingdom",
+      "alumni_count": 10,
+      "latitude": 55.3781,
+      "longitude": -3.436,
+      "color": "#f97316"
+    },
+    {
+      "code": "DE",
+      "name": "Герман",
+      "name_en": "Germany",
+      "alumni_count": 5,
+      "latitude": 51.1657,
+      "longitude": 10.4515,
+      "color": "#06b6d4"
+    },
+    {
+      "code": "FR",
+      "name": "Франц",
+      "name_en": "France",
+      "alumni_count": 4,
+      "latitude": 46.2276,
+      "longitude": 2.2137,
+      "color": "#f59e0b"
+    },
+    {
+      "code": "CA",
+      "name": "Канад",
+      "name_en": "Canada",
+      "alumni_count": 7,
+      "latitude": 56.1304,
+      "longitude": -106.3468,
+      "color": "#ef4444"
+    },
+    {
+      "code": "TW",
+      "name": "Тайван",
+      "name_en": "Taiwan",
+      "alumni_count": 8,
+      "latitude": 23.6978,
+      "longitude": 120.9605,
+      "color": "#a855f7"
     }
   ]
 }

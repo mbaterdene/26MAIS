@@ -20,27 +20,15 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PageMapping } from '../../lib/archive-types';
+import { getDriveUrl, getPageFilename, getFileId, calculatePreloadRange } from '../../lib/galleryUtils';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function getDriveUrl(fileId: string) {
-  // w1200 gives a good resolution for page viewing without being too heavy
-  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
-}
-
-function getPageFilename(index: number, pm: PageMapping): string {
+function getPageDisplayLabel(index: number, pm: PageMapping): string {
   if (index === 0) return pm.front;
   const lastIndex = pm.endPage - pm.startPage + 2;
   if (index === lastIndex) return pm.back;
   return `${pm.startPage + (index - 1)}.jpg`;
-}
-
-function getFileId(index: number, pm: PageMapping): string | null {
-  const name = getPageFilename(index, pm);
-  if (pm.fileIdMap?.[name]) return pm.fileIdMap[name];
-  if (name === pm.front && pm.frontFileId) return pm.frontFileId;
-  if (name === pm.back && pm.backFileId) return pm.backFileId;
-  return null;
 }
 
 // ─── BookPage ─────────────────────────────────────────────────────────────────
@@ -64,7 +52,7 @@ const BookPage = React.memo(
       // Set src exactly once — never clear it
       useEffect(() => {
         if (!isBlank && shouldLoad && fileId && src === null) {
-          setSrc(getDriveUrl(fileId));
+          setSrc(getDriveUrl(fileId, 'w1200'));
           setStatus('loading');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -268,13 +256,7 @@ export function FlipBookGallery({
 
   // Keyboard navigation (← →)
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement).tagName === 'INPUT') return;
-      if (e.key === 'ArrowLeft') flipPrev();
-      if (e.key === 'ArrowRight') flipNext();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return setupKeyboardNavigation(flipPrev, flipNext, 'input');
   }, [flipPrev, flipNext]);
 
   // ── Mouse-wheel zoom (desktop) ───────────────────────────────────────────

@@ -89,6 +89,18 @@ export interface NewsFilters {
   offset?: number;
 }
 
+// ==================== Article Types ====================
+
+export interface Article {
+  id: string;
+  title: string;
+  category: string;
+  status: 'Published' | 'Draft';
+  date: string;
+  description: string;
+  content: string;
+}
+
 // ==================== API Response Types ====================
 
 export interface ApiResponse<T> {

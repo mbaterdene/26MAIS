@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useLazyImage } from '../hooks/useLazyImage';
+import { useLazyImage } from '../../hooks/useLazyImage';
 import type { AlumniPosterData } from '../../utils/alumniPosters';
 import AlumniPosterModal from './AlumniPosterModal';
 

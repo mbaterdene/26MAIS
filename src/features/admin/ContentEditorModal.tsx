@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, FileText, Image as ImageIcon, AlertCircle } from 'lucide-react';
-import { Article } from '../../hooks/useArticles';
+import { Article } from '../../lib/admin-types';
 import { TiptapEditor } from '../../components/admin/TiptapEditor';
 
 interface ContentEditorModalProps {

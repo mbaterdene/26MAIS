@@ -1,125 +1,44 @@
 ﻿import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { getClubs } from '../../lib/api';
+import type { Club } from '../../lib/types';
+import { bil } from '../../lib/utils';
 
-interface Club {
-  id: string;
-  name: string;
-  description: string;
-}
+// IDs of clubs classified as "academic"
+const ACADEMIC_CLUB_IDS = [1, 2, 3, 6, 7, 8, 11];
 
 export function AcademicClubsSection() {
   const { isEnglish } = useLanguage();
+  const [academicClubs, setAcademicClubs] = useState<Club[]>([]);
   const [searchText, setSearchText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  const clubs: Club[] = [
-    {
-      id: 'mogul-robotic',
-      name: isEnglish ? 'Mogul Robotics' : 'Mogul Robotics',
-      description: isEnglish
-        ? 'Build and program robots through hands-on engineering projects'
-        : 'Robot learning through projects',
-    },
-    {
-      id: 'chemhack',
-      name: isEnglish ? 'ChemHack' : 'ChemHack',
-      description: isEnglish
-        ? 'Explore chemistry through interactive experiments and challenges'
-        : 'Interactive chemistry learning',
-    },
-    {
-      id: 'momentum-physics',
-      name: isEnglish ? 'Momentum Physics' : 'Momentum Physics',
-      description: isEnglish
-        ? 'Discover physics through dynamic experiments and real-world applications'
-        : 'Physics through experiments',
-    },
-    {
-      id: 'german-club',
-      name: isEnglish ? 'German Language Club' : 'German Club',
-      description: isEnglish
-        ? 'Master German language and culture'
-        : 'German language learning',
-    },
-    {
-      id: 'chinese-club',
-      name: isEnglish ? 'Chinese Language Club' : 'Chinese Club',
-      description: isEnglish
-        ? 'Develop Chinese language skills and understand Chinese culture'
-        : 'Chinese language learning',
-    },
-    {
-      id: 'ecobusiness',
-      name: isEnglish ? 'EcoBusiness' : 'EcoBusiness',
-      description: isEnglish
-        ? 'Learn sustainable business practices and environmental entrepreneurship'
-        : 'Sustainable business learning',
-    },
-    {
-      id: 'money-mind',
-      name: isEnglish ? 'Money Mind' : 'Money Mind',
-      description: isEnglish
-        ? 'Master financial literacy and investment strategies'
-        : 'Financial literacy training',
-    },
-    {
-      id: 'book-club',
-      name: isEnglish ? 'Book Club' : 'Book Club',
-      description: isEnglish
-        ? 'Discuss literature and expand your reading horizons'
-        : 'Literature discussion club',
-    },
-    {
-      id: 'ibo-club',
-      name: isEnglish ? 'IBO Club' : 'IBO Club',
-      description: isEnglish
-        ? 'Prepare for and engage with International Baccalaureate principles'
-        : 'IBO preparation club',
-    },
-    {
-      id: 'astronomy',
-      name: isEnglish ? 'Astronomy Club' : 'Astronomy Club',
-      description: isEnglish
-        ? 'Explore the cosmos and discover the wonders of space'
-        : 'Space and astronomy exploration',
-    },
-    {
-      id: 'young-engineer',
-      name: isEnglish ? 'Young Engineers' : 'Young Engineers',
-      description: isEnglish
-        ? 'Apply engineering principles to real-world problem solving'
-        : 'Engineering problem solving',
-    },
-    {
-      id: 'writing-debating-speech',
-      name: isEnglish ? 'Writing, Debating & Speech' : 'Debate Club',
-      description: isEnglish
-        ? 'Develop communication skills through writing, debate, and public speaking'
-        : 'Communication and debate',
-    },
-    {
-      id: 'chess-club',
-      name: isEnglish ? 'Chess Club' : 'Chess Club',
-      description: isEnglish
-        ? 'Master strategic thinking and competitive chess play'
-        : 'Strategic chess learning',
-    },
-    {
-      id: 'go-aspiration',
-      name: isEnglish ? 'Go Aspiration' : 'Go Aspiration',
-      description: isEnglish
-        ? 'Learn the ancient game of Go and develop strategic thinking'
-        : 'Ancient Go game learning',
-    },
-  ];
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const allClubs = await getClubs('student');
+        // Filter to only academic clubs
+        const filtered = allClubs.filter(club => ACADEMIC_CLUB_IDS.includes(club.id));
+        setAcademicClubs(filtered);
+      } catch (error) {
+        console.error('Failed to fetch academic clubs:', error);
+        setAcademicClubs([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchClubs();
+  }, []);
 
   const filteredClubs = searchText
-    ? clubs.filter(club =>
-        club.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        club.description.toLowerCase().includes(searchText.toLowerCase())
+    ? academicClubs.filter(club =>
+        bil(isEnglish, club.name_en, club.name_mn).toLowerCase().includes(searchText.toLowerCase()) ||
+        bil(isEnglish, club.description_en, club.description_mn).toLowerCase().includes(searchText.toLowerCase())
       )
-    : clubs;
+    : academicClubs;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -177,7 +96,13 @@ export function AcademicClubsSection() {
           initial="hidden"
           animate="visible"
         >
-          {filteredClubs.length > 0 ? (
+          {isLoading ? (
+            <motion.div variants={itemVariants} className="text-center py-12 bg-white border-2 border-black">
+              <p className="text-sm font-bold uppercase text-gray-500">
+                {isEnglish ? 'Loading academic clubs...' : 'Academic clubs loading...'}
+              </p>
+            </motion.div>
+          ) : filteredClubs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredClubs.map((club) => (
                 <motion.div
@@ -185,11 +110,20 @@ export function AcademicClubsSection() {
                   variants={itemVariants}
                   className="bg-white border-2 border-black p-5 hover:shadow-lg transition-all group"
                 >
-                  <h3 className="text-sm font-black uppercase tracking-wide text-black group-hover:text-cardinal-red transition-colors mb-3">
-                    {club.name}
-                  </h3>
+                  <div className="flex items-start gap-3 mb-3">
+                    {club.image_url && (
+                      <img 
+                        src={club.image_url} 
+                        alt={bil(isEnglish, club.name_en, club.name_mn)} 
+                        className="w-12 h-12 object-cover flex-shrink-0 border border-black" 
+                      />
+                    )}
+                    <h3 className="text-sm font-black uppercase tracking-wide text-black group-hover:text-cardinal-red transition-colors">
+                      {bil(isEnglish, club.name_en, club.name_mn)}
+                    </h3>
+                  </div>
                   <p className="text-xs text-gray-700 leading-relaxed">
-                    {club.description}
+                    {bil(isEnglish, club.description_en, club.description_mn)}
                   </p>
                 </motion.div>
               ))}
@@ -197,7 +131,7 @@ export function AcademicClubsSection() {
           ) : (
             <motion.div variants={itemVariants} className="text-center py-12 bg-white border-2 border-black">
               <p className="text-sm font-bold uppercase text-gray-500">
-                {isEnglish ? 'No clubs found' : 'No clubs found'}
+                {isEnglish ? 'No academic clubs found' : 'Academic clubs not found'}
               </p>
             </motion.div>
           )}
