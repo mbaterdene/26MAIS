@@ -20,16 +20,9 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PageMapping } from '../../lib/archive-types';
-import { getDriveUrl, getPageFilename, getFileId, calculatePreloadRange } from '../../lib/galleryUtils';
+import { getDriveUrl, getFileId, setupKeyboardNavigation } from '../../lib/galleryUtils';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function getPageDisplayLabel(index: number, pm: PageMapping): string {
-  if (index === 0) return pm.front;
-  const lastIndex = pm.endPage - pm.startPage + 2;
-  if (index === lastIndex) return pm.back;
-  return `${pm.startPage + (index - 1)}.jpg`;
-}
 
 // ─── BookPage ─────────────────────────────────────────────────────────────────
 // react-pageflip requires children to be React.forwardRef components.

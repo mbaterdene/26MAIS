@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useLanguage } from '../../context/LanguageContext';
+import { useLanguage } from '../../../context/LanguageContext';
 
-import { InlineEdit } from '../../components/shared/InlineEdit';
+import { InlineEdit } from '../../../components/shared/InlineEdit';
 import { Trash2, Plus } from 'lucide-react';
 
 interface ContactData {

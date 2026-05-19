@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Trash2, Plus, Search } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext';
-import { InlineEdit } from '../../components/shared/InlineEdit';
+import { useLanguage } from '../../../context/LanguageContext';
+import { InlineEdit } from '../../../components/shared/InlineEdit';
 
 interface Event {
   id: number;

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Download, X, Loader, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PageMapping } from '../../lib/archive-types';
-import { getDriveUrl, getPageFilename, getFileId, calculatePreloadRange, setupKeyboardNavigation } from '../../lib/galleryUtils';
+import { getDriveUrl, getFileId, calculatePreloadRange, setupKeyboardNavigation } from '../../lib/galleryUtils';
 
 interface ImageGalleryProps {
   pageMapping: PageMapping;

@@ -1,4 +1,4 @@
-import { InlineEdit } from '../../components/shared/InlineEdit';
+import { InlineEdit } from '../../../components/shared/InlineEdit';
 
 interface AlumniContentPreviewProps {
   content: {

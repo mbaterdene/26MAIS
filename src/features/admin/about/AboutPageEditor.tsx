@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useLanguage } from '../../context/LanguageContext';
-import { bil, formatNumber } from '../../lib/utils';
-import { pageText } from '../../data/pageText';
-import { InlineEdit } from '../../components/shared/InlineEdit';
-import type { AboutData } from '../../lib/api';
+import { useLanguage } from '../../../context/LanguageContext';
+import { bil, formatNumber } from '../../../lib/utils';
+import { pageText } from '../../../data/pageText';
+import { InlineEdit } from '../../../components/shared/InlineEdit';
+import type { AboutData } from '../../../lib/api';
 
 interface AboutPageEditorProps {
   content: AboutData;
