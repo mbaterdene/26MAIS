@@ -2,6 +2,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ReactNode, useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import navigationData from '../../content/student-life/studentLifeNavigation.json';
 
 interface SidebarLink {
   label: { en: string; mn: string };
@@ -9,16 +11,24 @@ interface SidebarLink {
   id: string;
 }
 
-const sidebarLinks: SidebarLink[] = [
-  { label: { en: 'Overview', mn: '╨ò╤Ç╙⌐╨╜╤à╨╕╨╣ ╨╝╤ì╨┤╤ì╤ì╨╗╤ì╨╗' }, href: '/student-life', id: 'overview' },
-  { label: { en: 'All Clubs', mn: '╨Ñ╤â╨▒ ╨║╨╗╤â╨▒╤â╤â╨┤' }, href: '/student-life/clubs', id: 'clubs' },
-  { label: { en: 'Academic Clubs', mn: '╨É╨║╨░╨┤╨╡╨╝╨╕╨║ ╨║╨╗╤â╨▒╤â╤â╨┤' }, href: '/student-life/academic-clubs', id: 'academic-clubs' },
-  { label: { en: 'Athletics', mn: '╨í╨┐╨╛╤Ç╤é' }, href: '/student-life/athletics', id: 'athletics' },
-  { label: { en: 'Arts & Music', mn: '╨ú╤Ç╨╗╨░╨│ & ╨Ñ╙⌐╨│╨╢╨╕╨╝' }, href: '/student-life/arts-music', id: 'arts-music' },
-  { label: { en: 'Service Clubs', mn: '╥«╨╣╨╗╤ç╨╕╨╗╨│╤ì╤ì╨╜╨╕╨╣ ╨║╨╗╤â╨▒╤â╤â╨┤' }, href: '/student-life/service-clubs', id: 'service-clubs' },
-  { label: { en: 'DOFE', mn: 'DOFE' }, href: '/student-life/dofe', id: 'dofe' },
-  { label: { en: 'Events', mn: '╥«╨╣╨╗ ╤Å╨▓╨┤╨░╨╗' }, href: '/student-life/events', id: 'events' },
+const links = [
+  { id: 'overview', href: '/student-life' },
+  { id: 'clubs', href: '/student-life/clubs' },
+  { id: 'academic-clubs', href: '/student-life/academic-clubs' },
+  { id: 'athletics', href: '/student-life/athletics' },
+  { id: 'arts-music', href: '/student-life/arts-music' },
+  { id: 'service-clubs', href: '/student-life/service-clubs' },
+  { id: 'dofe', href: '/student-life/dofe' },
+  { id: 'events', href: '/student-life/events' },
 ];
+
+const sidebarLinks: SidebarLink[] = links.map((link, index) => ({
+  ...link,
+  label: {
+    en: navigationData.navigation[index].en,
+    mn: navigationData.navigation[index].mn,
+  },
+}));
 
 interface StudentLifeLayoutProps {
   children: ReactNode;
@@ -26,7 +36,10 @@ interface StudentLifeLayoutProps {
 
 export function StudentLifeLayout({ children }: StudentLifeLayoutProps) {
   const location = useLocation();
+  const { isEnglish } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const getText = (obj: { en: string; mn: string }) => isEnglish ? obj.en : obj.mn;
 
   const getActiveSection = () => {
     const path = location.pathname;
@@ -89,7 +102,7 @@ export function StudentLifeLayout({ children }: StudentLifeLayoutProps) {
                     }`}
                   >
                     <span className="w-1 h-1 rounded-full bg-current"></span>
-                    {link.label.en}
+                    {getText(link.label)}
                   </Link>
                 </motion.div>
               );
@@ -138,7 +151,7 @@ export function StudentLifeLayout({ children }: StudentLifeLayoutProps) {
                         }`}
                       >
                         <span className="w-1 h-1 rounded-full bg-current"></span>
-                        {link.label.en}
+                        {getText(link.label)}
                       </Link>
                     </motion.div>
                   );

@@ -1,0 +1,84 @@
+{
+  "title": {
+    "en": "Athletics",
+    "mn": "Спорт"
+  },
+  "description": {
+    "en": "Build strength, teamwork, and excellence through our competitive athletic programs. From individual sports to team-based activities, we offer something for every athlete.",
+    "mn": "Манай спортын программаар дамжуулан хүч, баг сана, үзэсгэлэнтэй ажил үүсгээрэй. Хувь хүний спорт болон баг ажиллагаа хүртэл, спортчин бүрийн сонирхол үүргүүлэхээр санал болгож байна"
+  },
+  "teams": [
+    {
+      "id": "basketball",
+      "name": { "en": "Basketball", "mn": "Сагс" },
+      "description": {
+        "en": "Join our competitive basketball team and develop your skills on the court",
+        "mn": "Манай спортын сагсны баг нэмэлтэй ажилласан таны ур чадвар хөгжүүлээрэй"
+      },
+      "schedule": { "en": "MON-FRI / 16:30 - 17:30", "mn": "ДМ-ПҮ / 16:30 - 17:30" },
+      "coach": { "en": "Head Coach: Marcus Thorne", "mn": "Гл.сүрчүүлэгч: Маркус Торн" },
+      "location": { "en": "East Gymnasium / Court A", "mn": "Зүүн Спортын цэнгэлдэх газар / Цэнгэлдэх газар А" },
+      "isDofe": false
+    },
+    {
+      "id": "volleyball",
+      "name": { "en": "Volleyball", "mn": "Волейбол" },
+      "description": {
+        "en": "Team-oriented sport that builds camaraderie and athletic excellence",
+        "mn": "Баг сана, үзэсгэлэнтэй спорт, спортын чадавх үүсгэх үүргүүлэхээр байна"
+      },
+      "schedule": { "en": "TUE-THU / 16:00 - 17:00", "mn": "БУ-БҮ / 16:00 - 17:00" },
+      "coach": { "en": "Head Coach: Sarah Chen", "mn": "Гл.сүрчүүлэгч: Сара Чен" },
+      "location": { "en": "West Sports Hall / Court B", "mn": "Баруун Спортын цэнгэлдэх газар / Цэнгэлдэх газар Б" },
+      "isDofe": false
+    },
+    {
+      "id": "badminton",
+      "name": { "en": "Badminton (DofE)", "mn": "Бадминтон (DofE)" },
+      "description": {
+        "en": "Develop precision, agility, and competitive skills through badminton",
+        "mn": "Бадминтонаар нарийвчлалтай, хурдлаг ур чадвар, спортын ур чадвараа хөгжүүлээрэй"
+      },
+      "schedule": { "en": "WED-SAT / 15:00 - 16:00", "mn": "БҮ-БҮ / 15:00 - 16:00" },
+      "coach": { "en": "Coach: David Wong", "mn": "Гл.сүрчүүлэгч: Давид Вонг" },
+      "location": { "en": "Indoor Courts / Hall 3", "mn": "Дотор Цэнгэлдэх газар / Цэнгэлдэх газар 3" },
+      "isDofe": true
+    },
+    {
+      "id": "tabletennis",
+      "name": { "en": "Table Tennis (DofE)", "mn": "Шинжлэх Ухааны Сагш (DofE)" },
+      "description": {
+        "en": "Build reflexes, strategy, and competitive spirit through table tennis",
+        "mn": "Шинжлэх Ухааны сагшаар толь, стратеги, спортын сүнсийг бүрдүүлээрэй"
+      },
+      "schedule": { "en": "MON-WED / 17:00 - 18:00", "mn": "ДМ-БҮ / 17:00 - 18:00" },
+      "coach": { "en": "Coach: Emma Liu", "mn": "Гл.сүрчүүлэгч: Эмма Лиу" },
+      "location": { "en": "Recreation Center / Room 105", "mn": "Сонирхол Төв / ¶ран 105" },
+      "isDofe": true
+    },
+    {
+      "id": "yoga",
+      "name": { "en": "Yoga (DofE)", "mn": "Йога (DofE)" },
+      "description": {
+        "en": "Enhance flexibility, strength, and mental wellness through yoga",
+        "mn": "Йогаар сэлстэх, хүч бай, сэтгэцийн сайн мэнд үүсгээрэй"
+      },
+      "schedule": { "en": "TUE-THU / 16:30 - 17:30", "mn": "БУ-БҮ / 16:30 - 17:30" },
+      "coach": { "en": "Instructor: Lisa Park", "mn": "Гл.сүрчүүлэгч: Лиза Парк" },
+      "location": { "en": "Wellness Studio / Room 201", "mn": "Эрүүл Мэнд Студио / ¶ран 201" },
+      "isDofe": true
+    },
+    {
+      "id": "dance",
+      "name": { "en": "Dance (DofE)", "mn": "Бүжиг (DofE)" },
+      "description": {
+        "en": "Express yourself through dance while building coordination and confidence",
+        "mn": "Бүжгээр сонирхол илэрхийлэх, координац сайн идэвхтэй итгэл үүсгээрэй"
+      },
+      "schedule": { "en": "MON-WED / 18:00 - 19:00", "mn": "ДМ-БҮ / 18:00 - 19:00" },
+      "coach": { "en": "Choreographer: Miguel Santos", "mn": "Гл.сүрчүүлэгч: Мигель Сантос" },
+      "location": { "en": "Dance Studio / Hall 4", "mn": "Бүжгийн Студио / Цэнгэлдэх газар 4" },
+      "isDofe": true
+    }
+  ]
+}

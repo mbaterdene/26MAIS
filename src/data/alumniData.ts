@@ -1,4 +1,4 @@
-﻿import universitiesData from '../content/alumni-universities.json';
+﻿import universitiesData from '../content/alumni/alumni-universities.json';
 
 export interface University {
   id: number;

@@ -1,74 +1,20 @@
 ﻿import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
-
-interface Program {
-  id: string;
-  name: string;
-  description: string;
-  schedule: string;
-  director: string;
-  location: string;
-  isDofe?: boolean;
-}
+import artsMusicData from '../../content/student-life/artsMusic.json';
 
 export function ArtsMusicSection() {
   const { isEnglish } = useLanguage();
 
-  const programs: Program[] = [
-    {
-      id: 'creative-media',
-      name: isEnglish ? 'Creative Media' : '╨í╨╛╨╜╨│╨╕╨╜╤é╨╛╨╣ ╨£╨╡╨┤╨╕╨░',
-      description: isEnglish
-        ? 'Develop skills in photography, videography, graphic design, and digital media production'
-        : '╨ù╤â╤Ç╨░╨│╨╗╨░╨░╨╗, ╨▓╨╕╨┤╨╡╨╛ ╨▒╨╕╤ç╨╗╤ì╨│, ╨│╤Ç╨░╤ä╨╕╨╣╨╜ ╨┤╨╕╨╖╨░╨╣╨╜, ╨┤╨╕╨╢╨╕╤é╨░╨╗ ╨╝╨╡╨┤╨╕╨░ ╥»╨╣╨╗╨┤╨▓╤ì╤Ç╨╗╤ì╨╗╤é',
-      schedule: isEnglish ? 'MON / TUE / 16:00 - 17:30' : '╨ö╨É / ╨ó╨ú / 16:00 - 17:30',
-      director: isEnglish ? 'Director: James Morrison' : '╨ù╨░╤à╨╕╤Ç╨░╨╗: ╨û╨╡╨╣╨╝╤ü ╨£╨╛╤Ç╨╕╤ü╨╛╨╜',
-      location: isEnglish ? 'Media Lab / Room 301' : '╨£╨╡╨┤╨╕╨░ ╨¢╨░╨▒╨╛╤Ç╨░╤é╨╛╤Ç╨╕ / ╙¿╤Ç╙⌐╙⌐ 301',
-    },
-    {
-      id: 'crochet',
-      name: isEnglish ? 'Crochet Club' : 'Crohet ╨Ü╨╗╤â╨▒',
-      description: isEnglish
-        ? 'Learn traditional crochet techniques and create beautiful handmade pieces'
-        : '╨ú╨╗╨░╨╝╨╢╨╗╨░╨╗╤é crohet ╨░╤Ç╨│╤ï╨│ ╤ü╤â╤Ç╨╢, ╤ü╨░╨╣╤à╨░╨╜ ╨│╥»╨╣╤å╤ì╤é╨│╤ì╨╗ ╥»╥»╤ü╨│╤ì╤à',
-      schedule: isEnglish ? 'WED-THU / 16:30 - 17:30' : '╨æ╥«-╨æ╨É / 16:30 - 17:30',
-      director: isEnglish ? 'Instructor: Maria Garcia' : '╨û.╨í╤â╤Ç╨│╤â╤â╨╗╤î: ╨£╨░╤Ç╨╕╤Å ╨ô╨░╤Ç╤ü╨╕╨░',
-      location: isEnglish ? 'Arts Studio / Room 205' : '╨ú╤Ç╨╗╨░╨│ ╨í╤é╤â╨┤╨╕╨╛ / ╙¿╤Ç╙⌐╙⌐ 205',
-    },
-    {
-      id: 'calligraphy',
-      name: isEnglish ? 'Calligraphy (DofE)' : '╨ù╨░╨╗╨▒╨╕╤Ç╨╗╨░╨╗ (DofE)',
-      description: isEnglish
-        ? 'Master the art of beautiful handwriting and calligraphic techniques'
-        : '╨í╨░╨╣╤à╨░╨╜ ╨│╨░╤Ç╨░╨░ ╥»╤ü╤ì╨│ ╨▒╨╕╤ç╨╕╤à ╨▒╨░ ╨╖╨░╨╗╨▒╨╕╤Ç╨╗╨░╨╗╤ï╨╜ ╤â╤Ç ╤ç╨░╨┤╨▓╨░╤Ç╤ï╨│ ╤ü╥»╨╜╤ü╤ì╨╗╤ì╤à',
-      schedule: isEnglish ? 'SAT / 14:00 - 15:30' : '╨æ╨É / 14:00 - 15:30',
-      director: isEnglish ? 'Master: Li Wei Chen' : '╨û.╨í╤â╤Ç╨│╤â╤â╨╗╤î: ╨¢╨╕ ╨Æ╤ì╨╣ ╨º╤ì╨╜╤î',
-      location: isEnglish ? 'Art Studio / Room 210' : '╨ú╤Ç╨╗╨░╨│ ╨í╤é╤â╨┤╨╕╨╛ / ╙¿╤Ç╙⌐╙⌐ 210',
-      isDofe: true,
-    },
-    {
-      id: 'guitar',
-      name: isEnglish ? 'Guitar Ensemble (DofE)' : '╨ô╨╕╤é╨░╤Ç ╨É╨╜╤ü╨░╨╝╨▒╨╗╤î (DofE)',
-      description: isEnglish
-        ? 'All skill levels welcome - from beginner to advanced. Classical and contemporary music.'
-        : '╨æ╥»╤à ╤é╥»╨▓╤ê╨╜╤ì╤ì╤ü ╨░╨╜╤à╨╗╨░╨╜ ╤ì╤à╨╗╤ì╨│╤ç╤ì╤ì╤ü ╨░╤à╨╕╤ü╥»╥»╨╗╤ì╤à╥»╥»╨┤ ╤à╥»╤Ç╤é╤ì╨╗. ╨í╨╛╨╜╨│╨╛╨┤╨╛╨│ ╨▒╨░ ╨╛╤Ç╤ç╨╕╨╜ ╥»╨╡╨╕╨╣╨╜ ╤à╙⌐╨│╨╢╨╕╨╝.',
-      schedule: isEnglish ? 'TUE-FRI / 17:00 - 18:00' : '╨ó╨ú-╨ƒ╨ó / 17:00 - 18:00',
-      director: isEnglish ? 'Director: Paulo Silva' : '╨ù╨░╤à╨╕╤Ç╨░╨╗: ╨ƒ╨░╤â╨╗╤â ╨í╨╕╨╗╨▓╨░',
-      location: isEnglish ? 'Music Hall / Studio 1' : '╨Ñ╙⌐╨│╨╢╨╝╨╕╨╣╨╜ ╨ó╨░╨╜╤à╨╕╨╝ / ╨í╤é╤â╨┤╨╕╨╛ 1',
-      isDofe: true,
-    },
-    {
-      id: 'morin-huur',
-      name: isEnglish ? 'Morin Huur Ensemble (DofE)' : '╨£╨╛╤Ç╨╕╨╜ ╨Ñ╤â╤â╤Ç ╨É╨╜╤ü╨░╨╝╨▒╨╗╤î (DofE)',
-      description: isEnglish
-        ? 'Learn traditional Mongolian horsehead fiddle and explore Mongolian folk music'
-        : '╨ú╨╗╨░╨╝╨╢╨╗╨░╨╗╤é ╨£╨╛╨╜╨│╨╛╨╗ ╨╝╨╛╤Ç╨╕╨╜ ╤à╤â╤â╤Ç ╤ü╤â╤Ç╨╢, ╨£╨╛╨╜╨│╨╛╨╗ ╨░╤Ç╨┤╤ï╨╜ ╤à╙⌐╨│╨╢╨╝╨╕╨╣╨│ ╤ü╥»╨╜╤ü╤ì╨╗╤ì╤à',
-      schedule: isEnglish ? 'MON-THU / 18:00 - 19:00' : '╨ö╨É-╨æ╨É / 18:00 - 19:00',
-      director: isEnglish ? 'Master: Bataar Enkhbold' : '╨û.╨í╤â╤Ç╨│╤â╤â╨╗╤î: ╨æ╨░╤é╨░╨░╤Ç ╨¡╨╜╤à╨▒╨╛╨╗╨┤',
-      location: isEnglish ? 'Music Hall / Studio 2' : '╨Ñ╙⌐╨│╨╢╨╝╨╕╨╣╨╜ ╨ó╨░╨╜╤à╨╕╨╝ / ╨í╤é╤â╨┤╨╕╨╛ 2',
-      isDofe: true,
-    },
-  ];
+  const getText = (obj: { en: string; mn: string }) => isEnglish ? obj.en : obj.mn;
+
+  const programs = artsMusicData.programs.map(program => ({
+    ...program,
+    name: getText(program.name),
+    description: getText(program.description),
+    schedule: getText(program.schedule),
+    director: getText(program.director),
+    location: getText(program.location),
+  }));
 
   return (
     <div className="w-full bg-white">
@@ -81,12 +27,10 @@ export function ArtsMusicSection() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-black mb-4">
-              {isEnglish ? 'Arts & Music' : '╨ú╤Ç╨╗╨░╨│ & ╨Ñ╙⌐╨│╨╢╨╕╨╝'}
+              {getText(artsMusicData.title)}
             </h1>
             <p className="text-lg text-black text-opacity-70">
-              {isEnglish
-                ? 'Express your creativity through visual arts, performing arts, music, and traditional crafts. Discover your artistic voice with our diverse programs.'
-                : '╨ö╥»╤Ç╤ü╨╗╤ì╤à ╤â╤Ç╨╗╨░╨│, ╨╢╥»╨╢╨│╨╕╨╣╨╜ ╤â╤Ç╨╗╨░╨│, ╤à╙⌐╨│╨╢╨╕╨╝, ╤â╨╗╨░╨╝╨╢╨╗╨░╨╗╤é ╤â╤Ç╨╗╨░╨│╨░╨░╤Ç ╤ü╨╛╨╜╨│╨╕╨╜╤é╨╛╨╣ ╨╕╨╗╤ì╤Ç╤à╨╕╨╣╨╗╨╜╤ì'}
+              {getText(artsMusicData.description)}
             </p>
           </motion.div>
         </div>
@@ -117,7 +61,7 @@ export function ArtsMusicSection() {
                       <div className="text-white/30 text-8xl mb-4 font-bold">
                         {program.name.charAt(0)}
                       </div>
-                      <p className="text-white/40 text-sm">{isEnglish ? 'Program Photo' : '╨ƒ╤Ç╨╛╨│╤Ç╨░╨╝╨╝╤ï╨╜ ╨ù╤â╤Ç╨░╨│'}</p>
+                      <p className="text-white/40 text-sm">{isEnglish ? 'Program Photo' : 'Програм Зураг'}</p>
                     </div>
                   </div>
 
@@ -147,26 +91,26 @@ export function ArtsMusicSection() {
                   <div className="space-y-3 bg-gray-50 rounded-lg p-6">
                     <div>
                       <p className="text-black text-opacity-50 text-sm uppercase tracking-wider">
-                        {isEnglish ? 'Meeting Times' : '╨ú╤â╨╗╨╖╨░╨╗╤é╤ï╨╜ ╨ª╨░╨│'}
+                        {isEnglish ? 'Meeting Times' : 'Уулзалтын цаг'}
                       </p>
                       <p className="text-black font-bold">{program.schedule}</p>
                     </div>
                     <div>
                       <p className="text-black text-opacity-50 text-sm uppercase tracking-wider">
-                        {isEnglish ? 'Director' : '╨ù╨░╤à╨╕╤Ç╨░╨╗'}
+                        {isEnglish ? 'Director' : 'Захирал'}
                       </p>
                       <p className="text-black font-bold">{program.director}</p>
                     </div>
                     <div>
                       <p className="text-black text-opacity-50 text-sm uppercase tracking-wider">
-                        {isEnglish ? 'Location' : '╨æ╨░╨╣╤Ç╤ê╨╕╨╗'}
+                        {isEnglish ? 'Location' : 'Байршил'}
                       </p>
                       <p className="text-black font-bold">{program.location}</p>
                     </div>
                   </div>
 
                   <button className="w-full border-2 border-black text-black font-bold py-3 rounded hover:bg-black hover:text-white transition">
-                    {isEnglish ? 'LEARN MORE' : '╨ö╨¡╨¢╨ô╨¡╨á╥«╥«╨¢╨¡╨Ñ'}
+                    {isEnglish ? 'LEARN MORE' : 'Дэлгэрэнгүй'}
                   </button>
                 </motion.div>
               </motion.div>

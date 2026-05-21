@@ -1,0 +1,12 @@
+{
+  "navigation": [
+    { "en": "Overview", "mn": "Ерөнхий мэдээлэл" },
+    { "en": "All Clubs", "mn": "Бүх клубүүд" },
+    { "en": "Academic Clubs", "mn": "Академийн клубүүд" },
+    { "en": "Athletics", "mn": "Спорт" },
+    { "en": "Arts & Music", "mn": "Урлаг & Хөгжим" },
+    { "en": "Service Clubs", "mn": "Үйлчилгээний клубүүд" },
+    { "en": "DOFE", "mn": "DOFE" },
+    { "en": "Events", "mn": "Үйл ажиллагаа" }
+  ]
+}

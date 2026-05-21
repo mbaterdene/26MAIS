@@ -1,0 +1,235 @@
+{
+  "featuredArticle": {
+    "title": {
+      "en": "The Heart of Community",
+      "mn": "Нийтлэгийн Зүрх"
+    },
+    "subtitle": {
+      "en": "How student initiatives are shaping the MAIS experience",
+      "mn": "Оюутны санаачилга MAIS-ийн туршлагыг хэрхэн бүрдүүлэж байна"
+    },
+    "description": {
+      "en": "Our students drive innovation and community through diverse clubs, athletic excellence, and collaborative initiatives. From academic competitions to cultural events, student life at MAIS is vibrant, inclusive, and transformative.",
+      "mn": "Манай оюутнууд төрөл бүрийн клубүүд, спортын чадавхи, хамтарсан инициативаар дамжуулан инновацаа, нийтлэгийг бүхэлтгэж байна. Академийн өрсөлдөөнөөс соёлын үйл ажиллагаа хүртэл, MAIS-д оюутны амьдрал эргэлэнтэй, хүртээмжтэй, өөрчлөлтөт байдаг."
+    }
+  },
+  "featuredImagePlaceholder": {
+    "en": "Featured Image",
+    "mn": "Онцлох зураг"
+  },
+  "featuredBadge": {
+    "en": "FEATURED",
+    "mn": "ОНЦЛОХ"
+  },
+  "readFullArticleButton": {
+    "en": "READ FULL ARTICLE",
+    "mn": "БҮХ НИЙТЛЭЛИЙГ УНШИХ"
+  },
+  "clubsOfMonth": {
+    "title": {
+      "en": "Clubs of the Month",
+      "mn": "Сарын клубүүд"
+    },
+    "clubs": [
+      {
+        "name": {
+          "en": "Tech Innovation Club",
+          "mn": "Технологийн Инновацийн Клуб"
+        },
+        "members": {
+          "en": "45 Members",
+          "mn": "45 гишүүн"
+        }
+      },
+      {
+        "name": {
+          "en": "Debate Society",
+          "mn": "Маргаанчдын Нийгэмлэг"
+        },
+        "members": {
+          "en": "32 Members",
+          "mn": "32 гишүүн"
+        }
+      },
+      {
+        "name": {
+          "en": "Drama Club",
+          "mn": "Драмын Клуб"
+        },
+        "members": {
+          "en": "28 Members",
+          "mn": "28 гишүүн"
+        }
+      }
+    ],
+    "viewAllLink": {
+      "en": "View All Clubs →",
+      "mn": "Бүх клубыг үзэх →"
+    }
+  },
+  "eventsOfMonth": {
+    "title": {
+      "en": "Upcoming Events",
+      "mn": "Ирээдүйн үйл ажиллагаа"
+    },
+    "events": [
+      {
+        "date": {
+          "en": "APR 28",
+          "mn": "4-р сар 28"
+        },
+        "title": {
+          "en": "Science Fair",
+          "mn": "Шинжлэх Ухааны Нэмэлт"
+        },
+        "location": {
+          "en": "Main Hall · 14:00",
+          "mn": "Үндсэн танхим · 14:00"
+        }
+      },
+      {
+        "date": {
+          "en": "MAY 5",
+          "mn": "5-р сар 5"
+        },
+        "title": {
+          "en": "Annual Sports Day",
+          "mn": "Жилийн Спортын Өдөр"
+        },
+        "location": {
+          "en": "Stadium · All Day",
+          "mn": "Цэнгэлдэх газар · Бүхэл өдөр"
+        }
+      },
+      {
+        "date": {
+          "en": "MAY 12",
+          "mn": "5-р сар 12"
+        },
+        "title": {
+          "en": "Cultural Festival",
+          "mn": "Соёлын Наадам"
+        },
+        "location": {
+          "en": "Campus · 15:00",
+          "mn": "Кампус · 15:00"
+        }
+      }
+    ],
+    "viewCalendarLink": {
+      "en": "View Calendar →",
+      "mn": "Хуанли үзэх →"
+    }
+  },
+  "achievements": {
+    "title": {
+      "en": "Achievements",
+      "mn": "Ололт"
+    },
+    "highlights": [
+      {
+        "title": {
+          "en": "Basketball Finals",
+          "mn": "Сагсны баг Финал"
+        },
+        "result": {
+          "en": "Boys: 89 - 76 Girls: 67 - 54",
+          "mn": "Хөвгүүд: 89 - 76 Охид: 67 - 54"
+        },
+        "status": {
+          "en": "CHAMPIONS",
+          "mn": "АВАРГА"
+        }
+      },
+      {
+        "title": {
+          "en": "Debate Championship",
+          "mn": "Маргаанчдын Цомпион"
+        },
+        "result": {
+          "en": "1st Place · National Competition",
+          "mn": "1-р байр · Үндэсний Тэмцээн"
+        },
+        "status": {
+          "en": "VICTORY",
+          "mn": "ЯЛАЛТ"
+        }
+      }
+    ],
+    "viewAllLink": {
+      "en": "View All Achievements →",
+      "mn": "Бүх ололтыг үзэх →"
+    }
+  },
+  "whyStudentLifeMatters": {
+    "title": {
+      "en": "Why Student Life Matters",
+      "mn": "Оюутны амьдрал яагаад чухал вэ"
+    },
+    "description": {
+      "en": "Student life at MAIS is more than just extracurricular activities. It's where friendships are forged, leadership is developed, and memories are created. Through clubs, sports, arts, and community service, our students discover their passions and grow as individuals.",
+      "mn": "MAIS-д оюутны амьдрал зөвхөн сургалтын хүрээний үйл ажиллагаа биш юм. Энэ нь найзлал үүсэхэд, удирдлагын чадавхи хөгжихэд, сэтгэгдэл үүсэхэд байна. Клубүүд, спорт, урлаг, нийтийн үйлчилгээний дамжуулан оюутнуудаа сонирхлыг нээж, хувь хүн болгон өсөхөд нь туслана."
+    },
+    "benefits": [
+      {
+        "title": {
+          "en": "Leadership Development",
+          "mn": "Удирдлагын Хөгжүүлэлт"
+        },
+        "description": {
+          "en": "Take on leadership roles and develop essential skills for your future.",
+          "mn": "Удирдлагын үүрэг авч, ирээдүйд чухал ур чадвар хөгжүүлээрэй."
+        }
+      },
+      {
+        "title": {
+          "en": "Community Connection",
+          "mn": "Нийтлэгийн Холбоо"
+        },
+        "description": {
+          "en": "Build lasting friendships and create bonds with your peers.",
+          "mn": "Байнгын найзлал бүтээх, сургалтын нөхдүүд дээр сайтар холбоо үүсгээрэй."
+        }
+      },
+      {
+        "title": {
+          "en": "Personal Growth",
+          "mn": "Хувь хүний Бүтээлт"
+        },
+        "description": {
+          "en": "Explore your interests and discover new passions outside the classroom.",
+          "mn": "Сонирхлыг сэдлээ авч, ангид ороогүй шинэ сонирхол олж мэдээрэй."
+        }
+      }
+    ]
+  },
+  "byTheNumbers": {
+    "title": {
+      "en": "Student Life by the Numbers",
+      "mn": "Оюутны амьдрал тоонуудаар"
+    },
+    "statistics": [
+      {
+        "stat": "45+",
+        "label": {
+          "en": "Clubs & Societies",
+          "mn": "Клуб & Нийгэмлэг"
+        }
+      },
+      {
+        "stat": "250+",
+        "label": {
+          "en": "Events Per Year",
+          "mn": "Жилийн үйл ажиллагаа"
+        }
+      },
+      {
+        "stat": "1200+",
+        "label": {
+          "en": "Active Participants",
+          "mn": "Идэвхтэй оролцогчид"
+        }
+      }
+    ]
+  }
+}

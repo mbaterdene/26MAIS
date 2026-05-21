@@ -1,6 +1,7 @@
 ﻿import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import serviceClubsData from '../../content/student-life/serviceClubs.json';
 
 interface Club {
   id: string;
@@ -12,78 +13,13 @@ export function ServiceClubsSection() {
   const { isEnglish } = useLanguage();
   const [searchText, setSearchText] = useState('');
 
-  const serviceClubs: Club[] = [
-    {
-      id: 'career-compass',
-      name: isEnglish ? 'Career Compass' : 'Career Compass',
-      description: isEnglish
-        ? 'Navigate your future with career guidance and professional development workshops'
-        : '╨Ü╨░╤Ç╤î╨╡╤Ç╨╕╨╣╨╜ ╨╖╙⌐╨▓╨╗╙⌐╨│╙⌐╙⌐, ╨╝╤ì╤Ç╨│╤ì╨╢╨╗╨╕╨╣╨╜ ╤à╙⌐╨│╨╢╨╗╙⌐╙⌐╤Ç ╨╕╤Ç╤ì╤ì╨┤╥»╨╣╨│╤ì╤ì ╨╖╨╛╤Ç╨╕╤â╨╗╨░╤à',
-    },
-    {
-      id: 'clean-mais',
-      name: isEnglish ? 'Clean MAIS' : 'Clean MAIS',
-      description: isEnglish
-        ? 'Promote environmental sustainability and maintain a clean campus'
-        : '╨æ╨░╨╣╨│╨░╨╗╤î╤ï╨╜ ╤ì╤Ç╨│╥»╥»╨╗╤ì╨╗╨╕╨╣╨│ ╤ü╥»╥»╨┤╥»╥»╨╗╨╢, ╤å╤ì╨╜╨│╤ì╨╗╤ì╨╜ ╨║╨░╨╝╨┐╤â╤ü╤ï╨╜ ╨╛╤Ç╤ç╨╜╤ï╨│ ╤à╨░╨┤╨│╨░╨╗╨░╤à',
-    },
-    {
-      id: 'mab',
-      name: isEnglish ? 'MAB' : 'MAB',
-      description: isEnglish
-        ? 'Build leadership skills through mentoring and peer support programs'
-        : '╨Ñ╨░╤Ç╨╕╨╗╤å╤ï╨╜ ╤é╤â╤ü╨╗╨░╨╗╤å╨░╨░, ╤ü╤â╤Ç╨│╨░╨╗╤é╨░╨░╤Ç ╤â╨┤╨╕╤Ç╨┤╨╗╨░╨│╤ï╨╜ ╤â╤Ç ╤ç╨░╨┤╨▓╨░╤Ç ╤à╙⌐╨│╨╢╥»╥»╨╗╤ì╤à',
-    },
-    {
-      id: 'multimedia',
-      name: isEnglish ? 'Multimedia' : 'Multimedia',
-      description: isEnglish
-        ? 'Create engaging content through photography, videography, and digital media'
-        : '╨ù╤â╤Ç╨│╨╕╨╣╨╜ ╨▒╨╛╨╗╨╛╨╜ ╨▓╨╕╨┤╨╡╨╛╨│╨╕╨╣╨╜ ╤ç╨░╨┤╨▓╨░╤Ç╤ï╨│ ╤à╙⌐╨│╨╢╥»╥»╨╗╤ì╤à',
-    },
-    {
-      id: 'model-aspiration',
-      name: isEnglish ? 'Model Aspiration' : 'Model Aspiration',
-      description: isEnglish
-        ? 'Develop diplomacy and public speaking skills through Model UN and international forums'
-        : 'Model UN-╨░╨░╤Ç ╨┤╨╕╨┐╨╗╨╛╨╝╨░╤é╨╕╨╣╨╜ ╤â╤Ç ╤ç╨░╨┤╨▓╨░╤Ç, ╨╛╨╗╨╛╨╜ ╤é╙⌐╤Ç╨╗╨╕╨╣╨╜ ╤ü╤ì╤é╨│╤ì╨╗╨│╤ì╤ì ╤à╙⌐╨│╨╢╥»╥»╨╗╤ì╤à',
-    },
-    {
-      id: 'study-simple',
-      name: isEnglish ? 'Study Simple' : 'Study Simple',
-      description: isEnglish
-        ? 'Provide peer tutoring and academic support for struggling students'
-        : '╨í╤â╤Ç╨│╨░╨╗╤é╤ï╨╜ ╤é╤â╤ü╨╗╨░╨╗╤å╨░╨░, ╤ü╤â╤Ç╨░╨╗╤å╨░╨│╤ç╨┤╤ï╨│ ╨┤╤ì╨╝╨╢╨╕╤à',
-    },
-    {
-      id: 'red-cross',
-      name: isEnglish ? 'Red Cross' : 'Red Cross',
-      description: isEnglish
-        ? 'Develop humanitarian values and first aid skills through community service'
-        : '╨¡╤à╨╜╨╕╨╣ ╤é╤â╤ü╨╗╨░╨╝╨╢, ╨╜╨╕╨╣╨│╨╝╨╕╨╣╨╜ ╥»╨╣╨╗╤ç╨╕╨╗╨│╤ì╤ì╨│╤ì╤ì╤Ç ╤à╥»╨╝╥»╥»╨╜╨╗╤ì╨│╨╕╨╣╨╜ ╥»╨╜╤ì╤é╥»╥»╨╗╤ì╨╗╤é╤ì╨╣ ╨▒╨░╨╣╤à',
-    },
-    {
-      id: 'futuregivers',
-      name: isEnglish ? 'FutureGivers' : 'FutureGivers',
-      description: isEnglish
-        ? 'Create positive social impact through fundraising and charitable initiatives'
-        : '╨¥╨╕╨╣╨│╨╝╨╕╨╣╨╜ ╥»╨╣╨╗ ╨░╨╢╨╕╨╗╨│╨░╨░,σïƒΘçæφÖ£σïò∞£╝δí£ Ω╕ì∞áò∞áü∞¥╕ ∞ÿüφûÑ ∞░╜∞╢£',
-    },
-    {
-      id: 'minds-matter',
-      name: isEnglish ? 'Minds Matter' : 'Minds Matter',
-      description: isEnglish
-        ? 'Promote mental health awareness and well-being support across campus'
-        : '╨í╤ì╤é╨│╤ì╤å╨╕╨╣╨╜ ╤ì╤Ç╥»╥»╨╗ ╨╝╤ì╨╜╨┤╨╕╨╣╨╜ ╤â╤à╨░╨╝╤ü╨░╤Ç ╤ê╨╕╤Ç╥»╥»╨╗╤ì╤à, ╤ü╨░╨╣╨╜ ╤ü╨░╨╣╤à╨╜╤ï ╤é╙⌐╨╗╙⌐╨▓',
-    },
-    {
-      id: 'earth-science',
-      name: isEnglish ? 'Earth Science' : 'Earth Science',
-      description: isEnglish
-        ? 'Champion environmental conservation and climate change awareness initiatives'
-        : '╨æ╨░╨╣╨│╨░╨╗╤î╤ï╨╜ ╤â╤à╨░╨░╨╗, ╤â╤â╤Ç ╨░╨╝╤î╤ü╨│╨░╨╗╤ï╨╜ ╙⌐╙⌐╤Ç╤ç╨╗╙⌐╨╗╤é╨╕╨╣╨╜ ╤é╨░╨╗╨░╨░╤Ç ╤â╤à╨░╨╝╤ü╨░╤Ç ╤ê╨╕╤Ç╥»╥»╨╗╤ì╤à',
-    },
-  ];
+  const getText = (obj: { en: string; mn: string }) => isEnglish ? obj.en : obj.mn;
+
+  const serviceClubs: Club[] = serviceClubsData.clubs.map(club => ({
+    ...club,
+    name: getText(club.name),
+    description: getText(club.description),
+  }));
 
   const filteredClubs = searchText
     ? serviceClubs.filter(club =>
@@ -103,12 +39,10 @@ export function ServiceClubsSection() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-black mb-4">
-              {isEnglish ? 'Service & Leadership' : '╥«╨╣╨╗╤ç╨╕╨╗╨│╤ì╤ì & ╨ú╨┤╨╕╤Ç╨┤╨╗╨░╨│╨░'}
+              {getText(serviceClubsData.title)}
             </h1>
             <p className="text-lg text-black text-opacity-70">
-              {isEnglish
-                ? 'Make a positive impact through service-oriented clubs that build leadership skills and foster community engagement.'
-                : '╥«╨╣╨╗╤ç╨╕╨╗╨│╤ì╤ì╨╜╨╕╨╣ ╨║╨╗╤â╨▒╤â╤â╨┤╨░╨░╤Ç ╤â╨┤╨╕╤Ç╨┤╨╗╨░╨│╤ï╨╜ ╤â╤Ç ╤ç╨░╨┤╨▓╨░╤Ç ╤à╙⌐╨│╨╢╥»╥»╨╗╨╢, ╨╜╨╕╨╣╨│╨╝╨╕╨╣╨╜ ╨╛╤Ç╨╛╨╗╤å╨╛╨╛╨│ ╨╕╨┤╤ì╨▓╤à╨╢╥»╥»╨╗╤ì╤à'}
+              {getText(serviceClubsData.description)}
             </p>
           </motion.div>
         </div>
@@ -119,7 +53,7 @@ export function ServiceClubsSection() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <input
             type="text"
-            placeholder={isEnglish ? 'Search clubs...' : '╨Ü╨╗╤â╨▒ ╤à╨░╨╣╤à...'}
+            placeholder={isEnglish ? 'Search clubs...' : 'Клубыг хайх...'}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="w-full max-w-md px-4 py-3 border-2 border-cardinal-red rounded-lg focus:outline-none focus:ring-2 focus:ring-cardinal-red"

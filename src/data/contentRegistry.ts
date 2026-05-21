@@ -4,7 +4,7 @@
  */
 
 import aboutData from '../content/about.json';
-import alumniData from '../content/alumni.json';
+import alumniData from '../content/alumni/alumni.json';
 import clubsData from '../content/clubs.json';
 import subjectsData from '../content/subjects.json';
 import eventsData from '../content/events.json';

@@ -1,0 +1,150 @@
+{
+  "awardLevels": [
+    {
+      "name": { "en": "Bronze", "mn": "Бүлтүүл" },
+      "age": "14+",
+      "duration": { "en": "6 months minimum", "mn": "6 сарын доош" },
+      "badge": "BRONZE",
+      "color": "bg-gray-100 border-gray-300"
+    },
+    {
+      "name": { "en": "Silver", "mn": "Мөнгө" },
+      "age": "15+",
+      "duration": { "en": "12 months minimum", "mn": "12 сарын доош" },
+      "badge": "SILVER",
+      "color": "bg-gray-50 border-gray-200"
+    },
+    {
+      "name": { "en": "Gold", "mn": "Алт" },
+      "age": "16+",
+      "duration": { "en": "18 months minimum", "mn": "18 сарын доош" },
+      "badge": "GOLD",
+      "color": "bg-red-50 border-cardinal-red"
+    }
+  ],
+  "objectives": [
+    {
+      "en": "Encourage self-development and independence",
+      "mn": "¶өрийн хөгжил, бие даасан байдлыг уралгаа болгогдох"
+    },
+    {
+      "en": "Build leadership and teamwork skills",
+      "mn": "Удирдлага, баг ажилласны ур чадвар бүрдүүлэх"
+    },
+    {
+      "en": "Promote physical and mental well-being",
+      "mn": "Биелэх, сэтгэцийн сайн мэнд уралгаа болгогдох"
+    },
+    {
+      "en": "Develop a sense of responsibility and community involvement",
+      "mn": "Үүргийн даалал, нийтлэгийн оролцоо хөгжүүлэх"
+    },
+    {
+      "en": "Foster perseverance and commitment",
+      "mn": "Бүтээлт, сахих ур чадвар хөгжүүлэх"
+    }
+  ],
+  "awardSections": [
+    {
+      "number": "1",
+      "title": { "en": "Physical Recreation", "mn": "Биелэх Сонирхол" },
+      "description": {
+        "en": "Improving physical fitness through sports or active hobbies.",
+        "mn": "Спортын болон идэвхтэй сонирхлоор физикийн сайн байдлаа сайжруулах"
+      },
+      "activities": [
+        { "en": "Running, swimming, gym training", "mn": "Гүйлт, сургалтын сургалт, дасгал" },
+        { "en": "Team sports", "mn": "Баг спорт" }
+      ]
+    },
+    {
+      "number": "2",
+      "title": { "en": "Skill", "mn": "Ур Чадвар" },
+      "description": {
+        "en": "Developing a skill over a sustained period.",
+        "mn": "Удаан хугацааны ур чадвар хөгжүүлэх"
+      },
+      "activities": [
+        { "en": "Musical instruments, languages, arts & crafts", "mn": "Хөгжмийн зэвсэг, хэл, урлаг ба ремесл" },
+        { "en": "Technology, coding, design", "mn": "Технологи, коддинг, дизайн" }
+      ]
+    },
+    {
+      "number": "3",
+      "title": { "en": "Service", "mn": "Үйлчилгээ" },
+      "description": {
+        "en": "Undertaking service for others and the community.",
+        "mn": "Бусдын ажилыг нийтлэгийн үйлчилгээ эхлүүлэх"
+      },
+      "activities": [
+        { "en": "Volunteering in the school", "mn": "Сургуульд сайн үйлс хийх" },
+        { "en": "Community service projects", "mn": "Нийтлэгийн ажил төсөл" }
+      ]
+    },
+    {
+      "number": "4",
+      "title": { "en": "Expedition", "mn": "Нэмэлт" },
+      "description": {
+        "en": "Completing an expedition in a wild or wilderness environment.",
+        "mn": "Дэлгэцийн орчинд нэмэлт төслийн туршилтанд орох"
+      },
+      "activities": [
+        { "en": "Multi-day hiking or trekking", "mn": "Олон өдрийн алхалт эсвэл явал" },
+        { "en": "Camping and outdoor survival skills", "mn": "Палаа өрөлсөн, байгаль амьдралын ур чадвар" }
+      ]
+    }
+  ],
+  "howItWorks": [
+    {
+      "step": "01",
+      "title": { "en": "Choose Your Level", "mn": "Түвшингээ сонгоно уу" },
+      "description": { "en": "Select Bronze, Silver, or Gold based on your age and commitment", "mn": "Өмөрийн нас, үүргийн даалалд үндэслэн сонгоно уу" }
+    },
+    {
+      "step": "02",
+      "title": { "en": "Select Activities", "mn": "Үйл ажиллагаа сонгоно уу" },
+      "description": { "en": "Pick from all four sections according to your interests", "mn": "Бүх дөрөв хэсгээс сонирхол сонгоно уу" }
+    },
+    {
+      "step": "03",
+      "title": { "en": "Get Skills", "mn": "Ур чадвар авна уу" },
+      "description": { "en": "Develop new skills under the guidance of mentors", "mn": "Сургалтын удирдамжаар шинэ ур чадвар хөгжүүлэлтээ" }
+    },
+    {
+      "step": "04",
+      "title": { "en": "Complete Tasks", "mn": "Даалгавар гүйцэтгэнэ үү" },
+      "description": { "en": "Finish all required activities and make a record", "mn": "Бүх үйл ажиллагаа гүйцэтгээд бүртгэлээ хийнэ" }
+    },
+    {
+      "step": "05",
+      "title": { "en": "Receive Award", "mn": "Одол авна уу" },
+      "description": { "en": "Earn your DofE badge and certificate of achievement", "mn": "DofE одол, ололтын гэрчилгээ аван гуйчээ" }
+    }
+  ],
+  "benefits": [
+    {
+      "title": { "en": "International Recognition", "mn": "Олон улсын нэр төрийн чинээ" },
+      "description": { "en": "The DofE Award is recognized by universities and employers worldwide", "mn": "DofE Одал дэлхийн их сургууль, ажилтнаар хүлээн зөвшөөрөгддөг" }
+    },
+    {
+      "title": { "en": "University Advantage", "mn": "Их сургуулийн давуу тал" },
+      "description": { "en": "Strengthens university applications with a proven achievement", "mn": "Их сургуульд орохдоо батлагдсан ололтоор сайтар өрүүлнэ" }
+    },
+    {
+      "title": { "en": "Life Skills", "mn": "Амьдралын ур чадвар" },
+      "description": { "en": "Develop resilience, confidence, and independence", "mn": "Чамлаа сэргээх, итгэл, бие даасан байдлаа хөгжүүлнэ" }
+    },
+    {
+      "title": { "en": "Confidence & Character", "mn": "Итгэл & Төлөвшил" },
+      "description": { "en": "Build self-belief and discover your true potential", "mn": "Өнөө өөрийг итгүүлэх, жинхэнэ чадавхыг нээлээрэй" }
+    },
+    {
+      "title": { "en": "Social Connection", "mn": "Нийтлэгийн холбоо" },
+      "description": { "en": "Make lifelong friendships with people from diverse backgrounds", "mn": "Төрөл бүрийн түмхүүтэй байнгын найзлал бүтээлтээ" }
+    },
+    {
+      "title": { "en": "Personal Achievement", "mn": "Хувь хүний ололт" },
+      "description": { "en": "Overcome challenges and celebrate your personal growth", "mn": "Сорилцоо даван туулаа, хувь хүний бүтээлтээ үнэлээрэй" }
+    }
+  ]
+}

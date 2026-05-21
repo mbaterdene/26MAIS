@@ -1,0 +1,72 @@
+{
+  "title": {
+    "en": "Arts & Music",
+    "mn": "Урлаг & Хөгжим"
+  },
+  "description": {
+    "en": "Express your creativity through visual arts, performing arts, music, and traditional crafts. Discover your artistic voice with our diverse programs.",
+    "mn": "Дүрсэлх урлаг, гүйцүүлэх урлаг, хөгжим, уламжлалт урлаг дээр сонирхол илэрхийлээрэй. Уралгаа хэмжээлэх урлагдаа олж мэдээрэй"
+  },
+  "programs": [
+    {
+      "id": "creative-media",
+      "name": { "en": "Creative Media", "mn": "Сонирхолтой Мэдиа" },
+      "description": {
+        "en": "Develop skills in photography, videography, graphic design, and digital media production",
+        "mn": "Зурагтай, видео бичих, график зохион байгуулалт, дижитал мэдиа үйлдэл ур чадвар хөгжүүлээрэй"
+      },
+      "schedule": { "en": "MON / TUE / 16:00 - 17:30", "mn": "ДМ / БУ / 16:00 - 17:30" },
+      "director": { "en": "Director: James Morrison", "mn": "Захирал: Жеймс Морисон" },
+      "location": { "en": "Media Lab / Room 301", "mn": "Мэдиа Лаборатори / ¶ран 301" },
+      "isDofe": false
+    },
+    {
+      "id": "crochet",
+      "name": { "en": "Crochet Club", "mn": "Crohet Клуб" },
+      "description": {
+        "en": "Learn traditional crochet techniques and create beautiful handmade pieces",
+        "mn": "Уламжлалт crohet ажил сурах, сайхан гараар хийсэн зүйл үүсгээрэй"
+      },
+      "schedule": { "en": "WED-THU / 16:30 - 17:30", "mn": "БҮ-БҮ / 16:30 - 17:30" },
+      "director": { "en": "Instructor: Maria Garcia", "mn": "Гл.сүрчүүлэгч: Мария Гарсиа" },
+      "location": { "en": "Arts Studio / Room 205", "mn": "Урлаг Студио / ¶ран 205" },
+      "isDofe": false
+    },
+    {
+      "id": "calligraphy",
+      "name": { "en": "Calligraphy (DofE)", "mn": "Сайрлалт (DofE)" },
+      "description": {
+        "en": "Master the art of beautiful handwriting and calligraphic techniques",
+        "mn": "Сайн сүлтүүлэлтийн сайн үсэг, сайрлалтийн ур чадвар сүнсийг эзэмшээрэй"
+      },
+      "schedule": { "en": "SAT / 14:00 - 15:30", "mn": "БҮ / 14:00 - 15:30" },
+      "director": { "en": "Master: Li Wei Chen", "mn": "Гл.сүрчүүлэгч: Ли Вей Чэнь" },
+      "location": { "en": "Art Studio / Room 210", "mn": "Урлаг Студио / ¶ран 210" },
+      "isDofe": true
+    },
+    {
+      "id": "guitar",
+      "name": { "en": "Guitar Ensemble (DofE)", "mn": "Гитар Ансамбль (DofE)" },
+      "description": {
+        "en": "All skill levels welcome - from beginner to advanced. Classical and contemporary music.",
+        "mn": "Бүх түвшинг санал болгож байна эхлэгч зэрэглэлээс эмхэтгэл ажил хүртэл. Сонгодог ба орчин үйчүүлэх хөгжим."
+      },
+      "schedule": { "en": "TUE-FRI / 17:00 - 18:00", "mn": "БУ-ПҮ / 17:00 - 18:00" },
+      "director": { "en": "Director: Paulo Silva", "mn": "Захирал: Паулу Силва" },
+      "location": { "en": "Music Hall / Studio 1", "mn": "Хөгжмийн Танхим / Студио 1" },
+      "isDofe": true
+    },
+    {
+      "id": "morin-huur",
+      "name": { "en": "Morin Huur Ensemble (DofE)", "mn": "Морин Хуур Ансамбль (DofE)" },
+      "description": {
+        "en": "Learn traditional Mongolian horsehead fiddle and explore Mongolian folk music",
+        "mn": "Уламжлалт Монгол морин хуур сурах, Монгол ardiin hөгжмийн сүнс нээлээрэй"
+      },
+      "schedule": { "en": "MON-THU / 18:00 - 19:00", "mn": "ДМ-БҮ / 18:00 - 19:00" },
+      "director": { "en": "Master: Bataar Enkhbold", "mn": "Гл.сүрчүүлэгч: Батаар Энхболд" },
+      "location": { "en": "Music Hall / Studio 2", "mn": "Хөгжмийн Танхим / Студио 2" },
+      "isDofe": true
+    }
+  ]
+}

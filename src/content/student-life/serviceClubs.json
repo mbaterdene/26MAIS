@@ -1,0 +1,52 @@
+{
+  "title": {
+    "en": "Service Clubs",
+    "mn": "Үйлчилгээний клубүүд"
+  },
+  "description": {
+    "en": "Make a meaningful impact through community service and leadership development",
+    "mn": "Нийтлэгийн үйлчилгээ, удирдлагын хөгжлээр сайнаа дотоохон нөлөө үүсгээрэй"
+  },
+  "clubs": [
+    {
+      "id": "career-compass",
+      "name": { "en": "Career Compass", "mn": "Career Compass" },
+      "description": {
+        "en": "Navigate your future with career guidance and professional development workshops",
+        "mn": "Карьерийн зөвлөгөө, мэргэжлийн хөгжлийн семинаржимаар ирээдүйг чиглүүлээрэй"
+      }
+    },
+    {
+      "id": "clean-mais",
+      "name": { "en": "Clean MAIS", "mn": "Clean MAIS" },
+      "description": {
+        "en": "Promote environmental sustainability and maintain a clean campus",
+        "mn": "Байгаль орчны байдлыг сүүлүүлүүлэх, цэнгэлдэх газрын өрнөлийн хадсалалаа"
+      }
+    },
+    {
+      "id": "mab",
+      "name": { "en": "MAB", "mn": "MAB" },
+      "description": {
+        "en": "Build leadership skills through mentoring and peer support programs",
+        "mn": "Сургалтын дэлгэрүүлэлт, сургалтын ажилласны ур чадвар бүрдүүлээрэй"
+      }
+    },
+    {
+      "id": "multimedia",
+      "name": { "en": "Multimedia", "mn": "Multimedia" },
+      "description": {
+        "en": "Create engaging content through photography, videography, and digital media",
+        "mn": "Зургийн болон видеосийн ажилласны ур чадвар бүрдүүлээрэй"
+      }
+    },
+    {
+      "id": "model-aspiration",
+      "name": { "en": "Model Aspiration", "mn": "Model Aspiration" },
+      "description": {
+        "en": "Develop diplomacy and public speaking skills through Model UN and international forums",
+        "mn": "Model UN-аар дипломатийн ур чадвар, олон түмний сүнсийн ур чадвар бүрдүүлээрэй"
+      }
+    }
+  ]
+}
