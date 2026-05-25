@@ -40,7 +40,7 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
   // Filter staff based on search
   const filteredStaffList = useMemo(() => {
     if (!searchTerm.trim()) return staffList;
-    
+
     const searchText = searchTerm.toLowerCase();
     return staffList.filter(staff =>
       staff.full_name.toLowerCase().includes(searchText) ||
@@ -62,7 +62,7 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
     };
     const newList = [newStaff, ...staffList];  // Prepend instead of append
     setLocalStaffList(newList);
-    
+
     // Track change for the new item with all its fields
     onUpdate(`[0].full_name`, newStaff.full_name);
   };
@@ -71,7 +71,7 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
     if (window.confirm('Are you sure you want to delete this staff member?')) {
       const newList = staffList.filter(s => s.id !== id);
       setLocalStaffList(newList);
-      
+
       // Track deletion by updating with the filtered list
       // Notify parent by updating the first item (to trigger change)
       if (newList.length > 0) {
@@ -83,13 +83,13 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
   const handleUpdateStaffField = (staffId: number, field: keyof StaffMember, value: any) => {
     const staffIndex = staffList.findIndex(s => s.id === staffId);
     if (staffIndex === -1) return;
-    
+
     // Update local state immediately for UI responsiveness
     const newList = staffList.map(s =>
       s.id === staffId ? { ...s, [field]: value } : s
     );
     setLocalStaffList(newList);
-    
+
     // Use array index notation for proper path tracking
     const path = `[${staffIndex}].${field}`;
     onUpdate(path, value);
@@ -114,21 +114,19 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
       <div className="sticky top-24 z-40 bg-white border-b-2 border-black px-4 sm:px-6 lg:px-8 py-3 flex justify-end gap-2">
         <button
           onClick={() => setIsEnglish(true)}
-          className={`px-4 py-2 font-bold uppercase text-sm ${
-            isEnglish
+          className={`px-4 py-2 font-bold uppercase text-sm ${isEnglish
               ? 'bg-cardinal-red text-white'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          } transition-colors`}
+            } transition-colors`}
         >
           {t('English', 'Англи')}
         </button>
         <button
           onClick={() => setIsEnglish(false)}
-          className={`px-4 py-2 font-bold uppercase text-sm ${
-            !isEnglish
+          className={`px-4 py-2 font-bold uppercase text-sm ${!isEnglish
               ? 'bg-cardinal-red text-white'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          } transition-colors`}
+            } transition-colors`}
         >
           {t('Mongolian', 'Монгол')}
         </button>
@@ -140,7 +138,7 @@ export function StaffContentEditor({ content, onUpdate }: StaffContentEditorProp
           {isEnglish ? 'Staff Management' : 'Багш нарын удирдлага'}
         </h1>
         <p className="text-gray-600">
-          {isEnglish 
+          {isEnglish
             ? 'Add, edit, and manage staff members. All changes will be saved to the system.'
             : 'Багш нарыг нэмэх, засах, удирдах. Бүх өөрчлөлтүүд системд хадгалагдана.'}
         </p>
