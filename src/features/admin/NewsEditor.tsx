@@ -5,6 +5,7 @@ import { TiptapEditor } from '../../components/admin/TiptapEditor';
 import { NewsPreview } from './NewsPreview';
 import { ImageUpload } from './ImageUpload';
 import { useCreateNews, useUpdateNews, useNewsById } from '../../hooks/useNews';
+import { useAuth } from '../../context/AuthContext';
 
 interface NewsEditorPageProps {
   mode?: 'create' | 'edit';
@@ -13,6 +14,8 @@ interface NewsEditorPageProps {
 export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { admin } = useAuth();
+  const canPublish = admin?.role !== 'news_drafter';
   const [language, setLanguage] = useState<'en' | 'mn'>('en');
   const [formData, setFormData] = useState({
     title_en: '',
@@ -21,6 +24,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
     content_mn: '',
     image: '' as string,
     status: 'draft' as 'draft' | 'pending' | 'published',
+    publishedDate: '' as string, // YYYY-MM-DD format
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +44,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
         content_mn: existingNews.content_mn || '',
         image: existingNews.image || '',
         status: existingNews.status || 'draft',
+        publishedDate: existingNews.publishedDate || '',
       });
     }
   }, [existingNews]);
@@ -218,12 +223,26 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
           >
             <option value="draft">Draft (Work in Progress)</option>
             <option value="pending">Pending (Awaiting Approval)</option>
-            <option value="published">Published (Live on Site)</option>
+            {canPublish && <option value="published">Published (Live on Site)</option>}
           </select>
           <p className="text-xs text-gray-500 mt-2">
             {formData.status === 'draft' && 'Saved as draft. Only visible to admins.'}
             {formData.status === 'pending' && 'Submitted for approval. Waiting for admin confirmation.'}
             {formData.status === 'published' && 'Articles will be visible on the public news page.'}
+          </p>
+        </div>
+
+        {/* Published Date */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Publication Date</label>
+          <input
+            type="date"
+            value={formData.publishedDate}
+            onChange={(e) => setFormData({ ...formData, publishedDate: e.target.value })}
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-cardinal-red/20 focus:border-cardinal-red outline-none transition-all text-gray-900"
+          />
+          <p className="text-xs text-gray-500 mt-2">
+            Set a custom publication date (YYYY-MM-DD format). Leave blank to use the current system date.
           </p>
         </div>
       </div>
@@ -261,6 +280,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
           content_en={formData.content_en}
           content_mn={formData.content_mn}
           image={formData.image}
+          publishedDate={formData.publishedDate}
           onClose={() => setShowPreview(false)}
         />
       )}

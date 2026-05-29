@@ -5,7 +5,8 @@
 
 // ==================== Authentication Types ====================
 
-export type AdminRole = 'super_admin' | 'admin' | 'news_editor';
+export type AdminRole = 'super_admin' | 'content_editor' | 'news_editor' | 'news_drafter';
+export type AssignableRole = Exclude<AdminRole, 'super_admin'>;
 
 export interface AdminProfile {
   id: string;
@@ -35,7 +36,16 @@ export interface CreateAdminRequest {
   username: string;
   password: string;
   displayName: string;
-  role: AdminRole;
+  role: AssignableRole;
+}
+
+export interface UpdateAdminRequest {
+  displayName?: string;
+  role?: AssignableRole;
+}
+
+export interface ResetPasswordRequest {
+  newPassword: string;
 }
 
 // ==================== News Types ====================

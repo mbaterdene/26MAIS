@@ -26,6 +26,7 @@ import { ContentEditorPage } from './features/admin/ContentEditorPage';
 import { AdminLogin } from './features/admin/AdminLogin';
 import { AdminCloudConfig } from './features/admin/AdminCloudConfig';
 import { AdminBrandColors } from './features/admin/AdminBrandColors';
+import { AdminUsers } from './features/admin/AdminUsers';
 
 // Providers
 import { QueryProvider } from './context/QueryProvider';
@@ -79,11 +80,42 @@ function App() {
                 </ProtectedRoute>
               }>
                 <Route index element={<AdminDashboard />} />
-                <Route path="news" element={<AdminNewsList />} />
-                <Route path="news/new" element={<NewsEditorPage mode="create" />} />
-                <Route path="news/:id/edit" element={<NewsEditorPage mode="edit" />} />                <Route path="content" element={<ContentEditorPage />} />
-                <Route path="clouds" element={<AdminCloudConfig />} />
-                <Route path="brand" element={<AdminBrandColors />} />                <Route path="*" element={
+                <Route path="news" element={
+                  <ProtectedRoute allowedRoles={['super_admin', 'news_editor', 'news_drafter']}>
+                    <AdminNewsList />
+                  </ProtectedRoute>
+                } />
+                <Route path="news/new" element={
+                  <ProtectedRoute allowedRoles={['super_admin', 'news_editor', 'news_drafter']}>
+                    <NewsEditorPage mode="create" />
+                  </ProtectedRoute>
+                } />
+                <Route path="news/:id/edit" element={
+                  <ProtectedRoute allowedRoles={['super_admin', 'news_editor', 'news_drafter']}>
+                    <NewsEditorPage mode="edit" />
+                  </ProtectedRoute>
+                } />
+                <Route path="content" element={
+                  <ProtectedRoute allowedRoles={['super_admin', 'content_editor']}>
+                    <ContentEditorPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="users" element={
+                  <ProtectedRoute allowedRoles={['super_admin']}>
+                    <AdminUsers />
+                  </ProtectedRoute>
+                } />
+                <Route path="clouds" element={
+                  <ProtectedRoute allowedRoles={['super_admin']}>
+                    <AdminCloudConfig />
+                  </ProtectedRoute>
+                } />
+                <Route path="brand" element={
+                  <ProtectedRoute allowedRoles={['super_admin']}>
+                    <AdminBrandColors />
+                  </ProtectedRoute>
+                } />
+                <Route path="*" element={
                   <div className="p-8"><h2 className="text-2xl font-bold">Module coming soon</h2></div>
                 } />
               </Route>

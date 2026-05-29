@@ -6,7 +6,10 @@ import mongoose from "mongoose";
 import { config } from "./config.js";
 import {
   ADMIN_ROLES,
+  ASSIGNABLE_ROLES,
   createAdmin,
+  updateAdminById,
+  resetAdminPassword,
   deleteAdminById,
   ensureInitialSuperAdmin,
   listAdminsPublic,
@@ -80,7 +83,11 @@ app.use(
 );
 app.use(express.json({ limit: "5mb" }));
 
-const CONTENT_WRITE_ROLES = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN, ADMIN_ROLES.NEWS_EDITOR];
+// Role arrays — keep in sync with ADMIN_ROLES in adminStore.js
+const ALL_ADMIN_ROLES     = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.CONTENT_EDITOR, ADMIN_ROLES.NEWS_EDITOR, ADMIN_ROLES.NEWS_DRAFTER];
+const CONTENT_WRITE_ROLES = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.CONTENT_EDITOR];
+const NEWS_WRITE_ROLES    = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.NEWS_EDITOR, ADMIN_ROLES.NEWS_DRAFTER];
+const NEWS_PUBLISH_ROLES  = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.NEWS_EDITOR];
 
 function signAuthToken(payload) {
   const base64Payload = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
@@ -159,12 +166,12 @@ function requireSuperAdmin(req, res, next) {
   return next();
 }
 
-function canWritePath(role, path) {
-  if (role === ADMIN_ROLES.SUPER_ADMIN || role === ADMIN_ROLES.ADMIN) {
+function canWritePath(role, contentPath) {
+  if (role === ADMIN_ROLES.SUPER_ADMIN || role === ADMIN_ROLES.CONTENT_EDITOR) {
     return true;
   }
   if (role === ADMIN_ROLES.NEWS_EDITOR) {
-    return path === "news.json";
+    return contentPath === "news.json";
   }
   return false;
 }
@@ -200,10 +207,11 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true, service: "mais-backend" });
 });
 
+// Only assignable roles — super_admin cannot be assigned via API
 const roleSchema = z.enum([
-  ADMIN_ROLES.SUPER_ADMIN,
-  ADMIN_ROLES.ADMIN,
+  ADMIN_ROLES.CONTENT_EDITOR,
   ADMIN_ROLES.NEWS_EDITOR,
+  ADMIN_ROLES.NEWS_DRAFTER,
 ]);
 
 const loginSchema = z.object({
@@ -240,7 +248,7 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-app.get("/api/auth/me", requireRole(CONTENT_WRITE_ROLES), (req, res) => {
+app.get("/api/auth/me", requireRole(ALL_ADMIN_ROLES), (req, res) => {
   return res.json({
     admin: {
       id: req.auth.adminId,
@@ -267,7 +275,10 @@ app.post("/api/auth/admins", requireSuperAdmin, async (req, res) => {
   if (!parsed.success) {
     return res.status(400).json({ error: "Invalid admin payload", details: parsed.error.flatten() });
   }
-
+  // Guard: cannot create a super_admin
+  if (parsed.data.role === ADMIN_ROLES.SUPER_ADMIN) {
+    return res.status(403).json({ error: "Cannot create super_admin accounts." });
+  }
   try {
     const admin = await createAdmin({
       username: parsed.data.username,
@@ -279,6 +290,44 @@ app.post("/api/auth/admins", requireSuperAdmin, async (req, res) => {
     return res.json({ ok: true, admin });
   } catch (error) {
     return res.status(400).json({ error: error instanceof Error ? error.message : "Failed to create admin" });
+  }
+});
+
+const updateAdminSchema = z.object({
+  displayName: z.string().min(2).max(120).optional(),
+  role: roleSchema.optional(), // roleSchema already excludes super_admin
+});
+
+app.put("/api/auth/admins/:id", requireSuperAdmin, async (req, res) => {
+  const parsed = updateAdminSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  }
+  if (req.params.id === req.auth.adminId) {
+    return res.status(400).json({ error: "Cannot change your own role or display name via this endpoint." });
+  }
+  try {
+    const updated = await updateAdminById(req.params.id, parsed.data);
+    return res.json({ ok: true, admin: updated });
+  } catch (error) {
+    return res.status(400).json({ error: error instanceof Error ? error.message : "Failed to update admin" });
+  }
+});
+
+const resetPasswordSchema = z.object({
+  newPassword: z.string().min(6).max(200),
+});
+
+app.put("/api/auth/admins/:id/password", requireSuperAdmin, async (req, res) => {
+  const parsed = resetPasswordSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  }
+  try {
+    await resetAdminPassword(req.params.id, parsed.data.newPassword);
+    return res.json({ ok: true, message: "Password reset successfully." });
+  } catch (error) {
+    return res.status(400).json({ error: error instanceof Error ? error.message : "Failed to reset password" });
   }
 });
 
@@ -294,7 +343,7 @@ app.delete("/api/auth/admins/:id", requireSuperAdmin, async (req, res) => {
   }
 });
 
-app.get("/api/cloudinary/config", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (_req, res) => {
+app.get("/api/cloudinary/config", requireRole(ALL_ADMIN_ROLES), async (_req, res) => {
   try {
     const uploadConfig = await getCachedUploadConfig();
     res.json({
@@ -315,7 +364,7 @@ const signSchema = z.object({
   overwrite: z.boolean().optional(),
 });
 
-app.post("/api/cloudinary/sign-upload", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+app.post("/api/cloudinary/sign-upload", requireRole(ALL_ADMIN_ROLES), async (req, res) => {
   const parsed = signSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
@@ -377,8 +426,8 @@ const newsCreateSchema = z.object({
   status: z.enum(["draft", "pending", "published"]).optional(),
 });
 
-// GET /api/news/fetch - Get all news (admin only, include all statuses)
-app.get("/api/news/fetch", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// GET /api/news/fetch - Get all news (all admin roles)
+app.get("/api/news/fetch", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const { status = "all", search } = req.query;
 
@@ -399,8 +448,8 @@ app.get("/api/news/fetch", requireRole(CONTENT_WRITE_ROLES), async (req, res) =>
   }
 });
 
-// GET /api/news/fetch/:id - Get single news by ID (admin only)
-app.get("/api/news/fetch/:id", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// GET /api/news/fetch/:id - Get single news by ID (all news roles)
+app.get("/api/news/fetch/:id", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const news = await getNewsById(id);
@@ -415,8 +464,8 @@ app.get("/api/news/fetch/:id", requireRole(CONTENT_WRITE_ROLES), async (req, res
   }
 });
 
-// POST /api/news/create - Create new news
-app.post("/api/news/create", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// POST /api/news/create - Create new news (all news roles)
+app.post("/api/news/create", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const parsed = newsCreateSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -435,8 +484,8 @@ app.post("/api/news/create", requireRole(CONTENT_WRITE_ROLES), async (req, res) 
   }
 });
 
-// PUT /api/news/:id/update - Update existing news
-app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// PUT /api/news/:id/update - Update existing news (all news roles)
+app.put("/api/news/:id/update", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const parsed = newsCreateSchema.partial().safeParse(req.body);
@@ -450,9 +499,14 @@ app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, re
       return res.status(404).json({ error: "News not found" });
     }
 
-    // Check permissions: only creator or admin can edit
-    if (req.auth.role === "news_editor" && existing.createdBy !== req.auth.adminId) {
+    // news_drafter and news_editor can only edit their own articles
+    const restrictedRoles = [ADMIN_ROLES.NEWS_EDITOR, ADMIN_ROLES.NEWS_DRAFTER];
+    if (restrictedRoles.includes(req.auth.role) && existing.createdBy !== req.auth.adminId) {
       return res.status(403).json({ error: "You can only edit your own articles" });
+    }
+    // news_drafter cannot publish
+    if (req.auth.role === ADMIN_ROLES.NEWS_DRAFTER && parsed.data.status === "published") {
+      return res.status(403).json({ error: "News drafters cannot publish articles directly." });
     }
 
     const updated = await updateNews(id, parsed.data);
@@ -462,8 +516,8 @@ app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, re
   }
 });
 
-// DELETE /api/news/:id - Delete news (admin only)
-app.delete("/api/news/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// DELETE /api/news/:id - Delete news (super_admin and news_editor only)
+app.delete("/api/news/:id", requireRole(NEWS_PUBLISH_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const deleted = await deleteNews(id);
@@ -474,8 +528,8 @@ app.delete("/api/news/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.AD
   }
 });
 
-// PUT /api/news/:id/submit - Submit for approval (draft → pending)
-app.put("/api/news/:id/submit", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// PUT /api/news/:id/submit - Submit for approval (all news roles)
+app.put("/api/news/:id/submit", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const updated = await submitForApproval(id);
@@ -486,8 +540,8 @@ app.put("/api/news/:id/submit", requireRole(CONTENT_WRITE_ROLES), async (req, re
   }
 });
 
-// PUT /api/news/:id/approve - Approve news (pending → published)
-app.put("/api/news/:id/approve", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// PUT /api/news/:id/approve - Approve news (pending → published) — news_drafter excluded
+app.put("/api/news/:id/approve", requireRole(NEWS_PUBLISH_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const updated = await approveNews(id, req.auth.adminId);
@@ -498,8 +552,8 @@ app.put("/api/news/:id/approve", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROL
   }
 });
 
-// PUT /api/news/:id/reject - Reject news (pending → draft)
-app.put("/api/news/:id/reject", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// PUT /api/news/:id/reject - Reject news (pending → draft) — news_drafter excluded
+app.put("/api/news/:id/reject", requireRole(NEWS_PUBLISH_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const updated = await rejectNews(id);
@@ -555,8 +609,8 @@ const brandColorSchema = z.object({
   black:        z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
 });
 
-// GET /api/brand/colors — read current colors from tailwind.config.js in repo
-app.get("/api/brand/colors", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (_req, res) => {
+// GET /api/brand/colors — read current colors from tailwind.config.js in repo (super_admin only)
+app.get("/api/brand/colors", requireSuperAdmin, async (_req, res) => {
   try {
     const apiPath = `/repos/${config.github.owner}/${config.github.repo}/contents/${TAILWIND_CONFIG_PATH}?ref=${config.github.branch}`;
     const resp = await githubRequest(apiPath, { method: "GET" });
@@ -609,8 +663,8 @@ app.put("/api/brand/colors", requireSuperAdmin, async (req, res) => {
 
 // ==================== ANALYTICS ENDPOINTS ====================
 
-// GET /api/analytics/overview - Analytics overview (admin+)
-app.get("/api/analytics/overview", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// GET /api/analytics/overview - Analytics overview (super_admin + content_editor)
+app.get("/api/analytics/overview", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
     const allNews = await getAllNews();
     const publishedNews = allNews.filter((n) => n.status === "published");
@@ -636,8 +690,8 @@ app.get("/api/analytics/overview", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_R
   }
 });
 
-// GET /api/analytics/top-articles - Top performing articles (admin+)
-app.get("/api/analytics/top-articles", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// GET /api/analytics/top-articles - Top performing articles (super_admin + content_editor)
+app.get("/api/analytics/top-articles", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
     const published = await getNewsByStatus("published");
     const limit = parseInt(req.query.limit) || 5;
@@ -657,8 +711,8 @@ app.get("/api/analytics/top-articles", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADM
   }
 });
 
-// GET /api/analytics/activity - Activity timeline (admin+)
-app.get("/api/analytics/activity", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// GET /api/analytics/activity - Activity timeline (super_admin + content_editor)
+app.get("/api/analytics/activity", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
     const allNews = await getAllNews();
 
