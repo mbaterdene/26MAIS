@@ -156,6 +156,30 @@ export interface CloudUsage {
   bandwidth?: { usage: number; limit: number; used_percent: number };
 }
 
+// ==================== Brand Color Types ====================
+
+export interface BrandColors {
+  cardinalRed:  string | null;
+  digitalRed:   string | null;
+  digitalBlue:  string | null;
+  sand:         string | null;
+  black:        string | null;
+}
+
+export interface BrandColorsResponse {
+  ok: boolean;
+  colors?: BrandColors;
+  error?: string;
+}
+
+export interface UpdateBrandColorsRequest {
+  cardinalRed?:  string;
+  digitalRed?:   string;
+  digitalBlue?:  string;
+  sand?:         string;
+  black?:        string;
+}
+
 // ==================== Request/Response Payloads ====================
 
 export interface NewsListResponse {

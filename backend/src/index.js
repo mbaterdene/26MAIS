@@ -510,6 +510,103 @@ app.put("/api/news/:id/reject", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLE
   }
 });
 
+// ==================== BRAND COLOR ENDPOINTS ====================
+
+const TAILWIND_CONFIG_PATH = "tailwind.config.js";
+
+function parseBrandColors(fileContent) {
+  const extract = (name) => {
+    const m = fileContent.match(new RegExp(`'${name}':\\s*'(#[0-9A-Fa-f]{6})'`));
+    return m ? m[1] : null;
+  };
+  return {
+    cardinalRed:  extract("cardinal-red"),
+    digitalRed:   extract("digital-red"),
+    digitalBlue:  extract("digital-blue"),
+    sand:         extract("sand"),
+    black:        extract("black"),
+  };
+}
+
+function applyBrandColors(fileContent, colors) {
+  let out = fileContent;
+  const pairs = [
+    ["cardinal-red",  colors.cardinalRed],
+    ["digital-red",   colors.digitalRed],
+    ["digital-blue",  colors.digitalBlue],
+    ["sand",          colors.sand],
+    ["black",         colors.black],
+  ];
+  for (const [name, hex] of pairs) {
+    if (!hex) continue;
+    out = out.replace(
+      new RegExp(`('${name}':\\s*')(#[0-9A-Fa-f]{6})'`),
+      `$1${hex}'`
+    );
+  }
+  return out;
+}
+
+const brandColorSchema = z.object({
+  cardinalRed:  z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  digitalRed:   z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  digitalBlue:  z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  sand:         z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  black:        z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+});
+
+// GET /api/brand/colors — read current colors from tailwind.config.js in repo
+app.get("/api/brand/colors", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (_req, res) => {
+  try {
+    const apiPath = `/repos/${config.github.owner}/${config.github.repo}/contents/${TAILWIND_CONFIG_PATH}?ref=${config.github.branch}`;
+    const resp = await githubRequest(apiPath, { method: "GET" });
+    const data = await resp.json();
+    const content = Buffer.from(data.content, "base64").toString("utf-8");
+    const colors = parseBrandColors(content);
+    return res.json({ ok: true, colors });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Failed to read brand colors" });
+  }
+});
+
+// PUT /api/brand/colors — write updated colors back to tailwind.config.js via GitHub commit
+app.put("/api/brand/colors", requireSuperAdmin, async (req, res) => {
+  const parsed = brandColorSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid color values", details: parsed.error.flatten() });
+
+  try {
+    const apiPath = `/repos/${config.github.owner}/${config.github.repo}/contents/${TAILWIND_CONFIG_PATH}?ref=${config.github.branch}`;
+    const readResp = await githubRequest(apiPath, { method: "GET" });
+    const readData = await readResp.json();
+    const currentContent = Buffer.from(readData.content, "base64").toString("utf-8");
+    const updatedContent = applyBrandColors(currentContent, parsed.data);
+
+    if (updatedContent === currentContent) {
+      return res.json({ ok: true, message: "No changes detected" });
+    }
+
+    const writePath = `/repos/${config.github.owner}/${config.github.repo}/contents/${TAILWIND_CONFIG_PATH}`;
+    const writeResp = await githubRequest(writePath, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: "brand: update primary color palette via admin",
+        content: Buffer.from(updatedContent, "utf-8").toString("base64"),
+        sha: readData.sha,
+        branch: config.github.branch,
+      }),
+    });
+    const writeData = await writeResp.json();
+    return res.json({
+      ok: true,
+      commitSha: writeData.commit?.sha,
+      commitUrl: writeData.commit?.html_url,
+      colors: parseBrandColors(updatedContent),
+    });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Failed to update brand colors" });
+  }
+});
+
 // ==================== ANALYTICS ENDPOINTS ====================
 
 // GET /api/analytics/overview - Analytics overview (admin+)

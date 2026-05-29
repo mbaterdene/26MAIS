@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Newspaper, Users, LogOut, Cloud, FileText } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Users, LogOut, Cloud, FileText, Palette } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const sidebarLinks = [
@@ -8,6 +8,7 @@ const sidebarLinks = [
   { label: 'Content', href: '/admin/content', icon: <FileText size={18} /> },
   { label: 'Users', href: '/admin/users', icon: <Users size={18} /> },
   { label: 'Clouds', href: '/admin/clouds', icon: <Cloud size={18} /> },
+  { label: 'Brand', href: '/admin/brand', icon: <Palette size={18} /> },
 ];
 
 export function AdminLayout() {
