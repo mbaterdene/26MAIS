@@ -59,7 +59,8 @@ export interface News {
   title_en: string;
   content_mn: string; // HTML from Tiptap
   content_en: string; // HTML from Tiptap
-  image: string; // Cloudinary URL
+  images: string[];   // Cloudinary URLs (multi-image, new)
+  image: string | null; // first image, kept for backward compat
   category?: string;
   author: string; // admin username or display name
   status: NewsStatus;
@@ -76,11 +77,11 @@ export interface CreateNewsRequest {
   title_en: string;
   content_mn: string;
   content_en: string;
-  image: string;
+  images: string[];
   category?: string;
   author?: string;
   status?: NewsStatus;
-  publishedDate?: string; // Custom publication date (YYYY-MM-DD format)
+  publishedDate?: string;
 }
 
 export interface UpdateNewsRequest {
@@ -88,11 +89,11 @@ export interface UpdateNewsRequest {
   title_en?: string;
   content_mn?: string;
   content_en?: string;
-  image: string;
+  images: string[];
   category?: string;
   author?: string;
   status?: NewsStatus;
-  publishedDate?: string; // Custom publication date (YYYY-MM-DD format)
+  publishedDate?: string;
 }
 
 export interface NewsFilters {
@@ -242,7 +243,7 @@ export interface NewsEditorState {
   title_en: string;
   content_mn: string;
   content_en: string;
-  image: string | null;
+  images: string[];
   category: string;
   status: NewsStatus;
   author: string;

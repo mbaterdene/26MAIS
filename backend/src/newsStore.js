@@ -8,7 +8,8 @@ const newsSchema = new mongoose.Schema(
     title_en: { type: String, required: true },
     content_mn: { type: String, required: true },
     content_en: { type: String, required: true },
-    image: { type: String, required: true },
+    image: { type: String, default: null },   // legacy single-image (kept for compat)
+    images: { type: [String], default: [] }, // multi-image (new)
     category: { type: String, default: "news" },
     author: { type: String, default: "Anonymous" },
     status: { type: String, enum: ["draft", "pending", "published"], default: "draft" },
@@ -35,13 +36,23 @@ function generateSlug(text) {
     .replace(/-+/g, "-");
 }
 
-// Transform MongoDB document to include 'id' field
+// Transform MongoDB document to include 'id' field and normalise image fields.
+// Backward compat: if a legacy doc has only `image` (string), expose it as images[0].
+// New docs use `images` array; `image` is kept as images[0] for any consumers still reading it.
 function transformNews(doc) {
   if (!doc) return null;
   const obj = doc.toObject ? doc.toObject() : doc;
+
+  // Resolve canonical images array
+  let images = Array.isArray(obj.images) && obj.images.length > 0
+    ? obj.images
+    : obj.image ? [obj.image] : [];
+
   return {
     ...obj,
     id: obj._id.toString(),
+    images,
+    image: images[0] || null, // first image for backward-compat consumers
   };
 }
 
@@ -93,7 +104,8 @@ export async function createNews(data) {
     title_en,
     content_mn,
     content_en,
-    image,
+    images,
+    image, // legacy fallback
     category,
     author,
     status = "draft",
@@ -105,6 +117,11 @@ export async function createNews(data) {
     throw new Error("Missing required fields: title_mn, title_en, content_mn, content_en");
   }
 
+  // Resolve images array (accept either new `images` array or legacy `image` string)
+  const resolvedImages = Array.isArray(images) && images.length > 0
+    ? images
+    : image ? [image] : [];
+
   try {
     const slug = generateSlug(title_en);
 
@@ -114,7 +131,8 @@ export async function createNews(data) {
       title_en,
       content_mn,
       content_en,
-      image: image || null,
+      images: resolvedImages,
+      image: resolvedImages[0] || null, // keep legacy field in sync
       category: category || "news",
       author: author || "Anonymous",
       status: status || "draft",

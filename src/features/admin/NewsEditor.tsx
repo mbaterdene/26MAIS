@@ -3,9 +3,9 @@ import { X, FileText, AlertCircle, Loader2, Eye } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TiptapEditor } from '../../components/admin/TiptapEditor';
 import { NewsPreview } from './NewsPreview';
-import { ImageUpload } from './ImageUpload';
 import { useCreateNews, useUpdateNews, useNewsById } from '../../hooks/useNews';
 import { useAuth } from '../../context/AuthContext';
+import { MultiImageUpload } from './MultiImageUpload';
 
 interface NewsEditorPageProps {
   mode?: 'create' | 'edit';
@@ -22,7 +22,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
     title_mn: '',
     content_en: '',
     content_mn: '',
-    image: '' as string,
+    images: [] as string[],
     status: 'draft' as 'draft' | 'pending' | 'published',
     publishedDate: '' as string, // YYYY-MM-DD format
   });
@@ -42,7 +42,10 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
         title_mn: existingNews.title_mn || '',
         content_en: existingNews.content_en || '',
         content_mn: existingNews.content_mn || '',
-        image: existingNews.image || '',
+        // Normalise: prefer images array, fall back to legacy single image
+        images: existingNews.images?.length
+          ? existingNews.images
+          : existingNews.image ? [existingNews.image] : [],
         status: existingNews.status || 'draft',
         publishedDate: existingNews.publishedDate || '',
       });
@@ -80,8 +83,8 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
       setError('Both English and Mongolian content are required.');
       return;
     }
-    if (!formData.image) {
-      setError('Cover image is required.');
+    if (formData.images.length === 0) {
+      setError('At least one cover image is required.');
       return;
     }
 
@@ -207,10 +210,10 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-6">
         <h2 className="text-lg font-bold text-gray-900">Article Settings</h2>
 
-        {/* Cover Image Upload */}
-        <ImageUpload
-          value={formData.image}
-          onChange={(url: string) => setFormData({ ...formData, image: url })}
+        {/* Cover Images Upload */}
+        <MultiImageUpload
+          value={formData.images}
+          onChange={(urls: string[]) => setFormData({ ...formData, images: urls })}
         />
 
         {/* Status */}

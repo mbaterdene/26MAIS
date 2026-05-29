@@ -420,10 +420,12 @@ const newsCreateSchema = z.object({
   title_en: z.string().min(1).max(200),
   content_mn: z.string().min(1),
   content_en: z.string().min(1),
-  image: z.string().optional(),
+  images: z.array(z.string()).optional(), // multi-image (new)
+  image: z.string().optional(),           // legacy single-image (still accepted for compat)
   category: z.string().optional(),
   author: z.string().optional(),
   status: z.enum(["draft", "pending", "published"]).optional(),
+  publishedDate: z.string().optional(),
 });
 
 // GET /api/news/fetch - Get all news (all admin roles)

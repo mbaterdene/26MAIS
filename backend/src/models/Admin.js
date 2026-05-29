@@ -37,7 +37,6 @@ const adminSchema = new mongoose.Schema(
       default: () => new Date().toISOString(),
     },
   },
-  { _id: false }
 );
 
 export const Admin = mongoose.model("Admin", adminSchema);
