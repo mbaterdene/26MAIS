@@ -58,6 +58,7 @@ export interface News {
   approvedAt?: string | null; // ISO timestamp
   created_at: string; // ISO timestamp
   updated_at: string; // ISO timestamp
+  publishedDate?: string; // Custom publication date (YYYY-MM-DD format)
 }
 
 export interface CreateNewsRequest {
@@ -69,6 +70,7 @@ export interface CreateNewsRequest {
   category?: string;
   author?: string;
   status?: NewsStatus;
+  publishedDate?: string; // Custom publication date (YYYY-MM-DD format)
 }
 
 export interface UpdateNewsRequest {
@@ -80,6 +82,7 @@ export interface UpdateNewsRequest {
   category?: string;
   author?: string;
   status?: NewsStatus;
+  publishedDate?: string; // Custom publication date (YYYY-MM-DD format)
 }
 
 export interface NewsFilters {
@@ -115,6 +118,42 @@ export interface PaginatedResponse<T> {
   total: number;
   page: number;
   limit: number;
+}
+
+// ==================== Cloud Config Types ====================
+
+export interface CloudConfig {
+  id: string;
+  label: string;
+  cloudName: string;
+  apiKeyMasked: string;      // e.g. "879636••••••••"
+  hasCredentials: boolean;   // true if apiKey + apiSecret are stored
+  isPrimary: boolean;
+  order: number;
+  active: boolean;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface CreateCloudConfigRequest {
+  label: string;
+  cloudName: string;
+  apiKey?: string;
+  apiSecret?: string;
+  isPrimary?: boolean;
+  order?: number;
+  active?: boolean;
+}
+
+export interface UpdateCloudConfigRequest extends Partial<CreateCloudConfigRequest> {}
+
+export interface CloudUsage {
+  ok: boolean;
+  error?: string;
+  plan?: string;
+  storage?: { usage: number; limit: number; used_percent: number };
+  objects?: { usage: number; limit: number };
+  bandwidth?: { usage: number; limit: number; used_percent: number };
 }
 
 // ==================== Request/Response Payloads ====================
@@ -173,6 +212,7 @@ export interface NewsEditorState {
   category: string;
   status: NewsStatus;
   author: string;
+  publishedDate?: string; // Custom publication date (YYYY-MM-DD format)
   isPreviewOpen: boolean;
   isSaving: boolean;
 }

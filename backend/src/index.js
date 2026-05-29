@@ -24,9 +24,41 @@ import {
   rejectNews,
   searchNews,
 } from "./newsStore.js";
+import {
+  listCloudConfigsPublic,
+  createCloudConfig,
+  updateCloudConfig,
+  deleteCloudConfig,
+  setPrimaryCloud,
+  getPrimaryUploadConfig,
+  getCloudConfigWithSecret,
+  seedFromEnvIfEmpty,
+} from "./cloudConfigStore.js";
 
 const app = express();
 const authSecret = config.authSecret || crypto.randomBytes(48).toString("hex");
+
+// ── Upload config cache ───────────────────────────────────────────────────────
+// Avoids a DB hit on every signed-upload request. Invalidated on any CRUD change.
+let _uploadConfigCache = null;
+let _uploadConfigCacheTime = 0;
+const UPLOAD_CACHE_TTL = 60_000; // 60 seconds
+
+function invalidateUploadCache() {
+  _uploadConfigCache = null;
+  _uploadConfigCacheTime = 0;
+}
+
+async function getCachedUploadConfig() {
+  const now = Date.now();
+  if (_uploadConfigCache && now - _uploadConfigCacheTime < UPLOAD_CACHE_TTL) {
+    return _uploadConfigCache;
+  }
+  _uploadConfigCache = await getPrimaryUploadConfig();
+  _uploadConfigCacheTime = now;
+  return _uploadConfigCache;
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 const corsOrigins = config.corsOrigins;
 app.use(
@@ -262,12 +294,16 @@ app.delete("/api/auth/admins/:id", requireSuperAdmin, async (req, res) => {
   }
 });
 
-app.get("/api/cloudinary/config", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), (_req, res) => {
-  const clouds = [config.cloudinary.primary.name, ...config.cloudinary.fallbackNames];
-  res.json({
-    primary: config.cloudinary.primary.name,
-    fallbackOrder: clouds,
-  });
+app.get("/api/cloudinary/config", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (_req, res) => {
+  try {
+    const uploadConfig = await getCachedUploadConfig();
+    res.json({
+      primary: uploadConfig.cloudName,
+      fallbackOrder: [uploadConfig.cloudName, ...uploadConfig.fallbackNames],
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to get cloud config" });
+  }
 });
 
 const signSchema = z.object({
@@ -279,10 +315,19 @@ const signSchema = z.object({
   overwrite: z.boolean().optional(),
 });
 
-app.post("/api/cloudinary/sign-upload", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), (req, res) => {
+app.post("/api/cloudinary/sign-upload", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
   const parsed = signSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  }
+
+  let uploadConfig;
+  try {
+    uploadConfig = await getCachedUploadConfig();
+  } catch (err) {
+    return res.status(500).json({
+      error: err instanceof Error ? err.message : "No primary upload cloud configured",
+    });
   }
 
   const payload = parsed.data;
@@ -305,17 +350,17 @@ app.post("/api/cloudinary/sign-upload", requireRole([ADMIN_ROLES.SUPER_ADMIN, AD
 
   const signature = crypto
     .createHash("sha1")
-    .update(`${signingString}${config.cloudinary.primary.secret}`)
+    .update(`${signingString}${uploadConfig.secret}`)
     .digest("hex");
 
   return res.json({
-    cloudName: config.cloudinary.primary.name,
-    apiKey: config.cloudinary.primary.key,
+    cloudName: uploadConfig.cloudName,
+    apiKey: uploadConfig.apiKey,
     timestamp,
     signature,
     folder: payload.folder,
     publicId: payload.publicId,
-    fallbackClouds: config.cloudinary.fallbackNames,
+    fallbackClouds: uploadConfig.fallbackNames,
   });
 });
 
@@ -545,6 +590,131 @@ app.get("/api/analytics/activity", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_R
   }
 });
 
+// ==================== CLOUD CONFIG ENDPOINTS ====================
+
+const cloudConfigCreateSchema = z.object({
+  label:     z.string().min(1).max(100),
+  cloudName: z.string().min(1).max(100),
+  apiKey:    z.string().default(""),
+  apiSecret: z.string().default(""),
+  isPrimary: z.boolean().default(false),
+  order:     z.number().int().min(0).default(0),
+  active:    z.boolean().default(true),
+});
+const cloudConfigUpdateSchema = cloudConfigCreateSchema.partial();
+
+// GET /api/cloud-configs — list all clouds with masked secrets
+app.get("/api/cloud-configs", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (_req, res) => {
+  try {
+    const configs = await listCloudConfigsPublic();
+    return res.json({ data: configs });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to list cloud configs" });
+  }
+});
+
+// POST /api/cloud-configs — add a new cloud
+app.post("/api/cloud-configs", requireRole([ADMIN_ROLES.SUPER_ADMIN]), async (req, res) => {
+  const parsed = cloudConfigCreateSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  try {
+    const created = await createCloudConfig(parsed.data);
+    invalidateUploadCache();
+    return res.status(201).json({ ok: true, data: created });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to create cloud config" });
+  }
+});
+
+// PUT /api/cloud-configs/:id — update a cloud
+app.put("/api/cloud-configs/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN]), async (req, res) => {
+  const parsed = cloudConfigUpdateSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  try {
+    const updated = await updateCloudConfig(req.params.id, parsed.data);
+    if (!updated) return res.status(404).json({ error: "Cloud config not found" });
+    invalidateUploadCache();
+    return res.json({ ok: true, data: updated });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to update cloud config" });
+  }
+});
+
+// DELETE /api/cloud-configs/:id — remove a cloud
+app.delete("/api/cloud-configs/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN]), async (req, res) => {
+  try {
+    const deleted = await deleteCloudConfig(req.params.id);
+    if (!deleted) return res.status(404).json({ error: "Cloud config not found" });
+    invalidateUploadCache();
+    return res.json({ ok: true });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to delete cloud config" });
+  }
+});
+
+// PATCH /api/cloud-configs/:id/primary — set as primary upload cloud
+app.patch("/api/cloud-configs/:id/primary", requireRole([ADMIN_ROLES.SUPER_ADMIN]), async (req, res) => {
+  try {
+    const updated = await setPrimaryCloud(req.params.id);
+    if (!updated) return res.status(404).json({ error: "Cloud config not found" });
+    invalidateUploadCache();
+    return res.json({ ok: true, data: updated });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to set primary cloud" });
+  }
+});
+
+// POST /api/cloud-configs/:id/test — verify Cloudinary credentials are valid
+app.post("/api/cloud-configs/:id/test", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+  try {
+    const cfg = await getCloudConfigWithSecret(req.params.id);
+    if (!cfg) return res.status(404).json({ ok: false, error: "Cloud config not found" });
+    if (!cfg.apiKey || !cfg.secret) {
+      return res.json({ ok: false, error: "No credentials stored for this cloud" });
+    }
+    const creds = Buffer.from(`${cfg.apiKey}:${cfg.secret}`).toString("base64");
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloudName}/usage`, {
+      headers: { Authorization: `Basic ${creds}` },
+    });
+    if (response.ok) {
+      return res.json({ ok: true });
+    }
+    const body = await response.json().catch(() => ({}));
+    return res.json({ ok: false, error: body.error?.message || `HTTP ${response.status}` });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Test failed" });
+  }
+});
+
+// GET /api/cloud-configs/:id/usage — fetch live storage usage from Cloudinary
+app.get("/api/cloud-configs/:id/usage", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+  try {
+    const cfg = await getCloudConfigWithSecret(req.params.id);
+    if (!cfg) return res.status(404).json({ ok: false, error: "Cloud config not found" });
+    if (!cfg.apiKey || !cfg.secret) {
+      return res.json({ ok: false, error: "No credentials for this cloud" });
+    }
+    const creds = Buffer.from(`${cfg.apiKey}:${cfg.secret}`).toString("base64");
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloudName}/usage`, {
+      headers: { Authorization: `Basic ${creds}` },
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      return res.json({ ok: false, error: body.error?.message || `HTTP ${response.status}` });
+    }
+    const data = await response.json();
+    return res.json({
+      ok: true,
+      plan: data.plan,
+      storage: data.storage,   // { usage: bytes, limit: bytes, used_percent: number }
+      objects: data.objects,   // { usage: count, limit: count }
+      bandwidth: data.bandwidth,
+    });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Failed to fetch usage" });
+  }
+});
+
 // ==================== PUBLIC NEWS ENDPOINT ====================
 
 // GET /api/news - Public endpoint (only published news)
@@ -687,6 +857,7 @@ async function start() {
     // eslint-disable-next-line no-console
     console.log("Connected to MongoDB");
 
+    await seedFromEnvIfEmpty();
     const seeded = await ensureInitialSuperAdmin();
     if (seeded) {
       // eslint-disable-next-line no-console
