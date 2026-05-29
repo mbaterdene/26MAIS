@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import {
-  Cloud, Plus, Edit2, Trash2, Star, Loader2, CheckCircle2,
+  Cloud, Plus, Trash2, Star, Loader2, CheckCircle2,
   XCircle, HardDrive, Lock, AlertCircle, RefreshCw,
 } from 'lucide-react';
 import {
   useCloudConfigs,
   useCloudUsage,
   useCreateCloudConfig,
-  useUpdateCloudConfig,
   useDeleteCloudConfig,
   useSetPrimaryCloud,
   useTestCloudConfig,
@@ -63,11 +62,10 @@ function StorageBar({ cloudId }: { cloudId: string }) {
 
 interface CloudCardProps {
   cloud: CloudConfig;
-  onEdit: (cloud: CloudConfig) => void;
   onDelete: (cloud: CloudConfig) => void;
 }
 
-function CloudCard({ cloud, onEdit, onDelete }: CloudCardProps) {
+function CloudCard({ cloud, onDelete }: CloudCardProps) {
   const setPrimary = useSetPrimaryCloud();
   const testMutation = useTestCloudConfig();
   const [testState, setTestState] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
@@ -122,13 +120,6 @@ function CloudCard({ cloud, onEdit, onDelete }: CloudCardProps) {
               {setPrimary.isPending ? <Loader2 size={15} className="animate-spin" /> : <Star size={15} />}
             </button>
           )}
-          <button
-            onClick={() => onEdit(cloud)}
-            title="Edit"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition-colors"
-          >
-            <Edit2 size={15} />
-          </button>
           <button
             onClick={() => onDelete(cloud)}
             title="Delete"
@@ -206,19 +197,13 @@ interface FormState {
 const EMPTY_FORM: FormState = { label: '', cloudName: '', apiKey: '', apiSecret: '' };
 
 interface CloudFormModalProps {
-  editing: CloudConfig | null; // null = create mode
   onClose: () => void;
 }
 
-function CloudFormModal({ editing, onClose }: CloudFormModalProps) {
+function CloudFormModal({ onClose }: CloudFormModalProps) {
   const createMutation = useCreateCloudConfig();
-  const updateMutation = useUpdateCloudConfig();
 
-  const [form, setForm] = useState<FormState>(
-    editing
-      ? { label: editing.label, cloudName: editing.cloudName, apiKey: '', apiSecret: '' }
-      : EMPTY_FORM
-  );
+  const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [error, setError] = useState('');
 
   function set(key: keyof FormState, value: string) {
@@ -233,44 +218,28 @@ function CloudFormModal({ editing, onClose }: CloudFormModalProps) {
       return;
     }
     try {
-      if (editing) {
-        await updateMutation.mutateAsync({
-          id: editing.id,
-          data: {
-            label: form.label,
-            cloudName: form.cloudName,
-            ...(form.apiKey    ? { apiKey:    form.apiKey }    : {}),
-            ...(form.apiSecret ? { apiSecret: form.apiSecret } : {}),
-          },
-        });
-      } else {
-        await createMutation.mutateAsync({
-          label:     form.label,
-          cloudName: form.cloudName,
-          apiKey:    form.apiKey,
-          apiSecret: form.apiSecret,
-          active:    true,
-        });
-      }
+      await createMutation.mutateAsync({
+        label:     form.label,
+        cloudName: form.cloudName,
+        apiKey:    form.apiKey,
+        apiSecret: form.apiSecret,
+        active:    true,
+      });
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     }
   }
 
-  const isLoading = createMutation.isPending || updateMutation.isPending;
+  const isLoading = createMutation.isPending;
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
         <div className="p-6 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900">
-            {editing ? 'Edit Cloud' : 'Add Cloud'}
-          </h2>
+          <h2 className="text-lg font-bold text-gray-900">Add Cloud</h2>
           <p className="text-sm text-gray-500 mt-0.5">
-            {editing
-              ? 'Leave API Key / Secret blank to keep existing values.'
-              : 'API Key and Secret are optional for name-only (read/display) clouds.'}
+            API Key and Secret are optional — only the Cloud Name is needed to display existing images.
           </p>
         </div>
 
@@ -314,7 +283,7 @@ function CloudFormModal({ editing, onClose }: CloudFormModalProps) {
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">API Key</label>
             <input
               type="text"
-              placeholder={editing && editing.hasCredentials ? 'Leave blank to keep existing' : 'e.g. 879636425963594'}
+              placeholder="e.g. 879636425963594"
               value={form.apiKey}
               onChange={(e) => set('apiKey', e.target.value)}
               className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-cardinal-red/20 focus:border-cardinal-red outline-none text-sm font-mono"
@@ -330,7 +299,7 @@ function CloudFormModal({ editing, onClose }: CloudFormModalProps) {
             </label>
             <input
               type="password"
-              placeholder={editing && editing.hasCredentials ? 'Leave blank to keep existing' : 'Paste API secret'}
+              placeholder="Paste API secret"
               value={form.apiSecret}
               onChange={(e) => set('apiSecret', e.target.value)}
               className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-cardinal-red/20 focus:border-cardinal-red outline-none text-sm"
@@ -351,7 +320,7 @@ function CloudFormModal({ editing, onClose }: CloudFormModalProps) {
               className="flex-1 px-4 py-2.5 text-sm font-bold text-white bg-cardinal-red hover:bg-red-800 disabled:opacity-50 rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               {isLoading && <Loader2 size={14} className="animate-spin" />}
-              {editing ? 'Save Changes' : 'Add Cloud'}
+              Add Cloud
             </button>
           </div>
         </form>
@@ -367,17 +336,10 @@ export function AdminCloudConfig() {
   const deleteMutation = useDeleteCloudConfig();
 
   const [showForm, setShowForm] = useState(false);
-  const [editingCloud, setEditingCloud] = useState<CloudConfig | null>(null);
   const [deleteError, setDeleteError] = useState('');
-
-  function handleEdit(cloud: CloudConfig) {
-    setEditingCloud(cloud);
-    setShowForm(true);
-  }
 
   function handleCloseForm() {
     setShowForm(false);
-    setEditingCloud(null);
   }
 
   function handleDelete(cloud: CloudConfig) {
@@ -386,7 +348,8 @@ export function AdminCloudConfig() {
       setTimeout(() => setDeleteError(''), 5000);
       return;
     }
-    if (!confirm(`Delete "${cloud.label}" (${cloud.cloudName})? This cannot be undone.`)) return;
+    if (!confirm(`Delete "${cloud.label}" (${cloud.cloudName})?\n\nThis removes the cloud from your config. Any images already hosted on this Cloudinary account will still be accessible via their URLs — but you will lose the ability to manage or upload to this account from here.\n\nContinue?`)) return;
+    if (!confirm(`Second confirmation: permanently delete "${cloud.label}"? This cannot be undone.`)) return;
     deleteMutation.mutateAsync(cloud.id).then(() => refetch());
   }
 
@@ -409,7 +372,7 @@ export function AdminCloudConfig() {
           </p>
         </div>
         <button
-          onClick={() => { setEditingCloud(null); setShowForm(true); }}
+          onClick={() => setShowForm(true)}
           className="flex items-center gap-2 bg-cardinal-red hover:bg-red-800 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-colors"
         >
           <Plus size={16} /> Add Cloud
@@ -451,7 +414,7 @@ export function AdminCloudConfig() {
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
                 Primary Upload Cloud
               </h2>
-              <CloudCard cloud={primary} onEdit={handleEdit} onDelete={handleDelete} />
+              <CloudCard cloud={primary} onDelete={handleDelete} />
             </div>
           )}
 
@@ -463,7 +426,7 @@ export function AdminCloudConfig() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {others.map((cloud) => (
-                  <CloudCard key={cloud.id} cloud={cloud} onEdit={handleEdit} onDelete={handleDelete} />
+                  <CloudCard key={cloud.id} cloud={cloud} onDelete={handleDelete} />
                 ))}
               </div>
             </div>
@@ -473,7 +436,7 @@ export function AdminCloudConfig() {
 
       {/* Add/Edit modal */}
       {showForm && (
-        <CloudFormModal editing={editingCloud} onClose={handleCloseForm} />
+        <CloudFormModal onClose={handleCloseForm} />
       )}
     </div>
   );
