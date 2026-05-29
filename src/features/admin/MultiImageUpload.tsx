@@ -22,34 +22,22 @@ async function uploadToCloudinary(
 ): Promise<string> {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8787';
   const token = localStorage.getItem('auth_token');
-  const publicId = `${folder}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-  const signingResponse = await fetch(`${BACKEND_URL}/api/cloudinary/sign-upload`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ folder, publicId }),
-  });
-
-  if (!signingResponse.ok) throw new Error('Failed to get upload authorization');
-  const signedData = await signingResponse.json();
 
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('api_key', signedData.apiKey);
-  formData.append('signature', signedData.signature);
-  formData.append('timestamp', signedData.timestamp.toString());
-  formData.append('public_id', signedData.publicId);
-  formData.append('folder', signedData.folder);
+  formData.append('folder', folder);
 
-  const uploadUrl = `https://api.cloudinary.com/v1_1/${signedData.cloudName}/image/upload`;
-  const uploadResponse = await fetch(uploadUrl, { method: 'POST', body: formData });
-  if (!uploadResponse.ok) throw new Error('Failed to upload image');
+  const response = await fetch(`${BACKEND_URL}/api/media/upload`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
 
-  const result = await uploadResponse.json();
-  return result.secure_url as string;
+  if (!response.ok) throw new Error('Failed to upload image');
+  const result = await response.json();
+  return result.url as string;
 }
 
 export function MultiImageUpload({

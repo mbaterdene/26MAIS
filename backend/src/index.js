@@ -3,7 +3,10 @@ import express from "express";
 import cors from "cors";
 import { z } from "zod";
 import mongoose from "mongoose";
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
 import { config } from "./config.js";
+import { compressImageIfNeeded } from "./imageProcessor.js";
 import {
   ADMIN_ROLES,
   ASSIGNABLE_ROLES,
@@ -82,6 +85,15 @@ app.use(
   })
 );
 app.use(express.json({ limit: "5mb" }));
+
+// ── Multer configuration for file uploads ─────────────────────────────────────
+// Stores files in memory (not on disk) for streaming to Cloudinary
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit for raw file
+});
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Role arrays — keep in sync with ADMIN_ROLES in adminStore.js
 const ALL_ADMIN_ROLES     = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.CONTENT_EDITOR, ADMIN_ROLES.NEWS_EDITOR, ADMIN_ROLES.NEWS_DRAFTER];
@@ -411,6 +423,69 @@ app.post("/api/cloudinary/sign-upload", requireRole(ALL_ADMIN_ROLES), async (req
     publicId: payload.publicId,
     fallbackClouds: uploadConfig.fallbackNames,
   });
+});
+
+// POST /api/media/upload - Upload and compress images via backend
+app.post("/api/media/upload", requireRole(ALL_ADMIN_ROLES), upload.single("file"), async (req, res) => {
+  try {
+    const file = req.file;
+    const { folder = "news" } = req.body;
+
+    // Validate file
+    if (!file) {
+      return res.status(400).json({ error: "No file provided" });
+    }
+
+    // Compress image if needed (>5MB)
+    let buffer = file.buffer;
+    try {
+      buffer = await compressImageIfNeeded(file.buffer);
+    } catch (err) {
+      console.error("[/api/media/upload] Compression error:", err.message);
+      // Continue with original buffer if compression fails
+    }
+
+    // Get primary upload config
+    let uploadConfig;
+    try {
+      uploadConfig = await getCachedUploadConfig();
+    } catch (err) {
+      return res.status(500).json({
+        error: err instanceof Error ? err.message : "No primary upload cloud configured",
+      });
+    }
+
+    // Configure Cloudinary with primary cloud credentials
+    cloudinary.config({
+      cloud_name: uploadConfig.cloudName,
+      api_key: uploadConfig.apiKey,
+      api_secret: uploadConfig.secret,
+    });
+
+    // Upload to Cloudinary via SDK
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder,
+          resource_type: "auto",
+          quality: "auto",
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+
+      uploadStream.end(buffer);
+    });
+
+    return res.json({ ok: true, url: result.secure_url });
+  } catch (error) {
+    console.error("[/api/media/upload] Error:", error.message);
+    return res.status(500).json({
+      error: error instanceof Error ? error.message : "Upload failed",
+    });
+  }
 });
 
 // ==================== NEWS ENDPOINTS ====================

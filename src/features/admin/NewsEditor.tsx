@@ -214,6 +214,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
         <MultiImageUpload
           value={formData.images}
           onChange={(urls: string[]) => setFormData({ ...formData, images: urls })}
+          max={Infinity}
         />
 
         {/* Status */}
