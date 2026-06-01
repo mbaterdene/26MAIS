@@ -88,7 +88,12 @@ export function AdminNewsList() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{article.author}</td>
-                  <td className="px-6 py-4 text-sm text-gray-400">{new Date(article.created_at).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-sm text-gray-400">
+                    {article.publishedDate
+                      ? new Date(article.publishedDate).toLocaleDateString()
+                      : new Date(article.created_at).toLocaleDateString()
+                    }
+                  </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1">
                       <button
@@ -160,6 +165,7 @@ export function AdminNewsList() {
           content_en={previewArticle.content_en}
           content_mn={previewArticle.content_mn}
           image={previewArticle.image}
+          publishedDate={previewArticle.publishedDate}
           onClose={() => setPreviewArticle(null)}
         />
       )}

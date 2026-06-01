@@ -71,16 +71,30 @@ export function NewsPage() {
                 >
                   <div className="h-48 overflow-hidden">
                     <img
-                      src={article.image || '/placeholder.png'}
+                      src={
+                        (Array.isArray(article.images) && article.images[0])
+                          ? article.images[0]
+                          : article.image || '/placeholder.png'
+                      }
                       alt={bil(isEnglish, article.title_en, article.title_mn)}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/placeholder.png';
                       }}
                     />
                   </div>
                   <div className="p-8 flex-1 flex flex-col">
-                    <span className="text-sm text-gray-400 font-medium mb-4">{formatDate(article.created_at)}</span>
+                    <span className="text-sm text-gray-400 font-medium mb-4">
+                      {article.publishedDate
+                        ? new Date(article.publishedDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })
+                        : formatDate(article.created_at)
+                      }
+                    </span>
                     <h3 className="text-2xl font-serif font-bold text-black mb-4 group-hover:text-cardinal-red transition-colors">
                       <Link to={`/news/${article.slug}`}>
                         {bil(isEnglish, article.title_en, article.title_mn)}

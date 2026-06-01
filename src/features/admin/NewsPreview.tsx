@@ -8,10 +8,11 @@ interface NewsPreviewProps {
   content_en: string;
   content_mn: string;
   image: string;
+  publishedDate?: string;
   onClose: () => void;
 }
 
-export function NewsPreview({ title_en, title_mn, content_en, content_mn, image, onClose }: NewsPreviewProps) {
+export function NewsPreview({ title_en, title_mn, content_en, content_mn, image, publishedDate, onClose }: NewsPreviewProps) {
   const { isEnglish } = useLanguage();
   const title = bil(isEnglish, title_en, title_mn);
   const content = bil(isEnglish, content_en, content_mn);
@@ -42,7 +43,16 @@ export function NewsPreview({ title_en, title_mn, content_en, content_mn, image,
                 />
               </div>
             )}
-            <h1 className="text-3xl font-serif font-bold text-gray-900 mb-6">{title}</h1>
+            <h1 className="text-3xl font-serif font-bold text-gray-900 mb-4">{title}</h1>
+            {publishedDate && (
+              <p className="text-sm text-gray-500 mb-6">
+                Published: {new Date(publishedDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+            )}
             <div
               className="text-gray-700 leading-relaxed space-y-4"
               dangerouslySetInnerHTML={{ __html: content }}

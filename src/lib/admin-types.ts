@@ -5,7 +5,8 @@
 
 // ==================== Authentication Types ====================
 
-export type AdminRole = 'super_admin' | 'admin' | 'news_editor';
+export type AdminRole = 'super_admin' | 'content_editor' | 'news_editor' | 'news_drafter';
+export type AssignableRole = Exclude<AdminRole, 'super_admin'>;
 
 export interface AdminProfile {
   id: string;
@@ -35,7 +36,16 @@ export interface CreateAdminRequest {
   username: string;
   password: string;
   displayName: string;
-  role: AdminRole;
+  role: AssignableRole;
+}
+
+export interface UpdateAdminRequest {
+  displayName?: string;
+  role?: AssignableRole;
+}
+
+export interface ResetPasswordRequest {
+  newPassword: string;
 }
 
 // ==================== News Types ====================
@@ -49,7 +59,8 @@ export interface News {
   title_en: string;
   content_mn: string; // HTML from Tiptap
   content_en: string; // HTML from Tiptap
-  image: string; // Cloudinary URL
+  images: string[];   // Cloudinary URLs (multi-image, new)
+  image: string | null; // first image, kept for backward compat
   category?: string;
   author: string; // admin username or display name
   status: NewsStatus;
@@ -58,6 +69,7 @@ export interface News {
   approvedAt?: string | null; // ISO timestamp
   created_at: string; // ISO timestamp
   updated_at: string; // ISO timestamp
+  publishedDate?: string; // Custom publication date (YYYY-MM-DD format)
 }
 
 export interface CreateNewsRequest {
@@ -65,10 +77,11 @@ export interface CreateNewsRequest {
   title_en: string;
   content_mn: string;
   content_en: string;
-  image: string;
+  images: string[];
   category?: string;
   author?: string;
   status?: NewsStatus;
+  publishedDate?: string;
 }
 
 export interface UpdateNewsRequest {
@@ -76,10 +89,11 @@ export interface UpdateNewsRequest {
   title_en?: string;
   content_mn?: string;
   content_en?: string;
-  image: string;
+  images: string[];
   category?: string;
   author?: string;
   status?: NewsStatus;
+  publishedDate?: string;
 }
 
 export interface NewsFilters {
@@ -115,6 +129,66 @@ export interface PaginatedResponse<T> {
   total: number;
   page: number;
   limit: number;
+}
+
+// ==================== Cloud Config Types ====================
+
+export interface CloudConfig {
+  id: string;
+  label: string;
+  cloudName: string;
+  apiKeyMasked: string;      // e.g. "879636••••••••"
+  hasCredentials: boolean;   // true if apiKey + apiSecret are stored
+  isPrimary: boolean;
+  order: number;
+  active: boolean;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface CreateCloudConfigRequest {
+  label: string;
+  cloudName: string;
+  apiKey?: string;
+  apiSecret?: string;
+  isPrimary?: boolean;
+  order?: number;
+  active?: boolean;
+}
+
+export interface UpdateCloudConfigRequest extends Partial<CreateCloudConfigRequest> {}
+
+export interface CloudUsage {
+  ok: boolean;
+  error?: string;
+  plan?: string;
+  storage?: { usage: number; limit: number; used_percent: number };
+  objects?: { usage: number; limit: number };
+  bandwidth?: { usage: number; limit: number; used_percent: number };
+}
+
+// ==================== Brand Color Types ====================
+
+export interface BrandColors {
+  cardinalRed:  string | null;
+  digitalRed:   string | null;
+  digitalBlue:  string | null;
+  sand:         string | null;
+  black:        string | null;
+}
+
+export interface BrandColorsResponse {
+  ok: boolean;
+  colors?: BrandColors;
+  error?: string;
+}
+
+export interface UpdateBrandColorsRequest {
+  cardinalRed?:  string;
+  digitalRed?:   string;
+  digitalBlue?:  string;
+  sand?:         string;
+  black?:        string;
 }
 
 // ==================== Request/Response Payloads ====================
@@ -169,10 +243,11 @@ export interface NewsEditorState {
   title_en: string;
   content_mn: string;
   content_en: string;
-  image: string | null;
+  images: string[];
   category: string;
   status: NewsStatus;
   author: string;
+  publishedDate?: string; // Custom publication date (YYYY-MM-DD format)
   isPreviewOpen: boolean;
   isSaving: boolean;
 }

@@ -3,10 +3,16 @@ import express from "express";
 import cors from "cors";
 import { z } from "zod";
 import mongoose from "mongoose";
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
 import { config } from "./config.js";
+import { compressImageIfNeeded } from "./imageProcessor.js";
 import {
   ADMIN_ROLES,
+  ASSIGNABLE_ROLES,
   createAdmin,
+  updateAdminById,
+  resetAdminPassword,
   deleteAdminById,
   ensureInitialSuperAdmin,
   listAdminsPublic,
@@ -24,9 +30,41 @@ import {
   rejectNews,
   searchNews,
 } from "./newsStore.js";
+import {
+  listCloudConfigsPublic,
+  createCloudConfig,
+  updateCloudConfig,
+  deleteCloudConfig,
+  setPrimaryCloud,
+  getPrimaryUploadConfig,
+  getCloudConfigWithSecret,
+  seedFromEnvIfEmpty,
+} from "./cloudConfigStore.js";
 
 const app = express();
 const authSecret = config.authSecret || crypto.randomBytes(48).toString("hex");
+
+// ── Upload config cache ───────────────────────────────────────────────────────
+// Avoids a DB hit on every signed-upload request. Invalidated on any CRUD change.
+let _uploadConfigCache = null;
+let _uploadConfigCacheTime = 0;
+const UPLOAD_CACHE_TTL = 60_000; // 60 seconds
+
+function invalidateUploadCache() {
+  _uploadConfigCache = null;
+  _uploadConfigCacheTime = 0;
+}
+
+async function getCachedUploadConfig() {
+  const now = Date.now();
+  if (_uploadConfigCache && now - _uploadConfigCacheTime < UPLOAD_CACHE_TTL) {
+    return _uploadConfigCache;
+  }
+  _uploadConfigCache = await getPrimaryUploadConfig();
+  _uploadConfigCacheTime = now;
+  return _uploadConfigCache;
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 const corsOrigins = config.corsOrigins;
 app.use(
@@ -48,7 +86,20 @@ app.use(
 );
 app.use(express.json({ limit: "5mb" }));
 
-const CONTENT_WRITE_ROLES = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN, ADMIN_ROLES.NEWS_EDITOR];
+// ── Multer configuration for file uploads ─────────────────────────────────────
+// Stores files in memory (not on disk) for streaming to Cloudinary
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit for raw file
+});
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Role arrays — keep in sync with ADMIN_ROLES in adminStore.js
+const ALL_ADMIN_ROLES     = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.CONTENT_EDITOR, ADMIN_ROLES.NEWS_EDITOR, ADMIN_ROLES.NEWS_DRAFTER];
+const CONTENT_WRITE_ROLES = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.CONTENT_EDITOR];
+const NEWS_WRITE_ROLES    = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.NEWS_EDITOR, ADMIN_ROLES.NEWS_DRAFTER];
+const NEWS_PUBLISH_ROLES  = [ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.NEWS_EDITOR];
 
 function signAuthToken(payload) {
   const base64Payload = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
@@ -127,12 +178,12 @@ function requireSuperAdmin(req, res, next) {
   return next();
 }
 
-function canWritePath(role, path) {
-  if (role === ADMIN_ROLES.SUPER_ADMIN || role === ADMIN_ROLES.ADMIN) {
+function canWritePath(role, contentPath) {
+  if (role === ADMIN_ROLES.SUPER_ADMIN || role === ADMIN_ROLES.CONTENT_EDITOR) {
     return true;
   }
   if (role === ADMIN_ROLES.NEWS_EDITOR) {
-    return path === "news.json";
+    return contentPath === "news.json";
   }
   return false;
 }
@@ -168,10 +219,11 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true, service: "mais-backend" });
 });
 
+// Only assignable roles — super_admin cannot be assigned via API
 const roleSchema = z.enum([
-  ADMIN_ROLES.SUPER_ADMIN,
-  ADMIN_ROLES.ADMIN,
+  ADMIN_ROLES.CONTENT_EDITOR,
   ADMIN_ROLES.NEWS_EDITOR,
+  ADMIN_ROLES.NEWS_DRAFTER,
 ]);
 
 const loginSchema = z.object({
@@ -208,7 +260,7 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-app.get("/api/auth/me", requireRole(CONTENT_WRITE_ROLES), (req, res) => {
+app.get("/api/auth/me", requireRole(ALL_ADMIN_ROLES), (req, res) => {
   return res.json({
     admin: {
       id: req.auth.adminId,
@@ -235,7 +287,10 @@ app.post("/api/auth/admins", requireSuperAdmin, async (req, res) => {
   if (!parsed.success) {
     return res.status(400).json({ error: "Invalid admin payload", details: parsed.error.flatten() });
   }
-
+  // Guard: cannot create a super_admin
+  if (parsed.data.role === ADMIN_ROLES.SUPER_ADMIN) {
+    return res.status(403).json({ error: "Cannot create super_admin accounts." });
+  }
   try {
     const admin = await createAdmin({
       username: parsed.data.username,
@@ -247,6 +302,44 @@ app.post("/api/auth/admins", requireSuperAdmin, async (req, res) => {
     return res.json({ ok: true, admin });
   } catch (error) {
     return res.status(400).json({ error: error instanceof Error ? error.message : "Failed to create admin" });
+  }
+});
+
+const updateAdminSchema = z.object({
+  displayName: z.string().min(2).max(120).optional(),
+  role: roleSchema.optional(), // roleSchema already excludes super_admin
+});
+
+app.put("/api/auth/admins/:id", requireSuperAdmin, async (req, res) => {
+  const parsed = updateAdminSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  }
+  if (req.params.id === req.auth.adminId) {
+    return res.status(400).json({ error: "Cannot change your own role or display name via this endpoint." });
+  }
+  try {
+    const updated = await updateAdminById(req.params.id, parsed.data);
+    return res.json({ ok: true, admin: updated });
+  } catch (error) {
+    return res.status(400).json({ error: error instanceof Error ? error.message : "Failed to update admin" });
+  }
+});
+
+const resetPasswordSchema = z.object({
+  newPassword: z.string().min(6).max(200),
+});
+
+app.put("/api/auth/admins/:id/password", requireSuperAdmin, async (req, res) => {
+  const parsed = resetPasswordSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  }
+  try {
+    await resetAdminPassword(req.params.id, parsed.data.newPassword);
+    return res.json({ ok: true, message: "Password reset successfully." });
+  } catch (error) {
+    return res.status(400).json({ error: error instanceof Error ? error.message : "Failed to reset password" });
   }
 });
 
@@ -262,12 +355,16 @@ app.delete("/api/auth/admins/:id", requireSuperAdmin, async (req, res) => {
   }
 });
 
-app.get("/api/cloudinary/config", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), (_req, res) => {
-  const clouds = [config.cloudinary.primary.name, ...config.cloudinary.fallbackNames];
-  res.json({
-    primary: config.cloudinary.primary.name,
-    fallbackOrder: clouds,
-  });
+app.get("/api/cloudinary/config", requireRole(ALL_ADMIN_ROLES), async (_req, res) => {
+  try {
+    const uploadConfig = await getCachedUploadConfig();
+    res.json({
+      primary: uploadConfig.cloudName,
+      fallbackOrder: [uploadConfig.cloudName, ...uploadConfig.fallbackNames],
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to get cloud config" });
+  }
 });
 
 const signSchema = z.object({
@@ -279,10 +376,19 @@ const signSchema = z.object({
   overwrite: z.boolean().optional(),
 });
 
-app.post("/api/cloudinary/sign-upload", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), (req, res) => {
+app.post("/api/cloudinary/sign-upload", requireRole(ALL_ADMIN_ROLES), async (req, res) => {
   const parsed = signSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  }
+
+  let uploadConfig;
+  try {
+    uploadConfig = await getCachedUploadConfig();
+  } catch (err) {
+    return res.status(500).json({
+      error: err instanceof Error ? err.message : "No primary upload cloud configured",
+    });
   }
 
   const payload = parsed.data;
@@ -305,18 +411,81 @@ app.post("/api/cloudinary/sign-upload", requireRole([ADMIN_ROLES.SUPER_ADMIN, AD
 
   const signature = crypto
     .createHash("sha1")
-    .update(`${signingString}${config.cloudinary.primary.secret}`)
+    .update(`${signingString}${uploadConfig.secret}`)
     .digest("hex");
 
   return res.json({
-    cloudName: config.cloudinary.primary.name,
-    apiKey: config.cloudinary.primary.key,
+    cloudName: uploadConfig.cloudName,
+    apiKey: uploadConfig.apiKey,
     timestamp,
     signature,
     folder: payload.folder,
     publicId: payload.publicId,
-    fallbackClouds: config.cloudinary.fallbackNames,
+    fallbackClouds: uploadConfig.fallbackNames,
   });
+});
+
+// POST /api/media/upload - Upload and compress images via backend
+app.post("/api/media/upload", requireRole(ALL_ADMIN_ROLES), upload.single("file"), async (req, res) => {
+  try {
+    const file = req.file;
+    const { folder = "news" } = req.body;
+
+    // Validate file
+    if (!file) {
+      return res.status(400).json({ error: "No file provided" });
+    }
+
+    // Compress image if needed (>5MB)
+    let buffer = file.buffer;
+    try {
+      buffer = await compressImageIfNeeded(file.buffer);
+    } catch (err) {
+      console.error("[/api/media/upload] Compression error:", err.message);
+      // Continue with original buffer if compression fails
+    }
+
+    // Get primary upload config
+    let uploadConfig;
+    try {
+      uploadConfig = await getCachedUploadConfig();
+    } catch (err) {
+      return res.status(500).json({
+        error: err instanceof Error ? err.message : "No primary upload cloud configured",
+      });
+    }
+
+    // Configure Cloudinary with primary cloud credentials
+    cloudinary.config({
+      cloud_name: uploadConfig.cloudName,
+      api_key: uploadConfig.apiKey,
+      api_secret: uploadConfig.secret,
+    });
+
+    // Upload to Cloudinary via SDK
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder,
+          resource_type: "auto",
+          quality: "auto",
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+
+      uploadStream.end(buffer);
+    });
+
+    return res.json({ ok: true, url: result.secure_url });
+  } catch (error) {
+    console.error("[/api/media/upload] Error:", error.message);
+    return res.status(500).json({
+      error: error instanceof Error ? error.message : "Upload failed",
+    });
+  }
 });
 
 // ==================== NEWS ENDPOINTS ====================
@@ -326,14 +495,16 @@ const newsCreateSchema = z.object({
   title_en: z.string().min(1).max(200),
   content_mn: z.string().min(1),
   content_en: z.string().min(1),
-  image: z.string().optional(),
+  images: z.array(z.string()).optional(), // multi-image (new)
+  image: z.string().optional(),           // legacy single-image (still accepted for compat)
   category: z.string().optional(),
   author: z.string().optional(),
   status: z.enum(["draft", "pending", "published"]).optional(),
+  publishedDate: z.string().optional(),
 });
 
-// GET /api/news/fetch - Get all news (admin only, include all statuses)
-app.get("/api/news/fetch", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// GET /api/news/fetch - Get all news (all admin roles)
+app.get("/api/news/fetch", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const { status = "all", search } = req.query;
 
@@ -354,8 +525,8 @@ app.get("/api/news/fetch", requireRole(CONTENT_WRITE_ROLES), async (req, res) =>
   }
 });
 
-// GET /api/news/fetch/:id - Get single news by ID (admin only)
-app.get("/api/news/fetch/:id", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// GET /api/news/fetch/:id - Get single news by ID (all news roles)
+app.get("/api/news/fetch/:id", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const news = await getNewsById(id);
@@ -370,8 +541,8 @@ app.get("/api/news/fetch/:id", requireRole(CONTENT_WRITE_ROLES), async (req, res
   }
 });
 
-// POST /api/news/create - Create new news
-app.post("/api/news/create", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// POST /api/news/create - Create new news (all news roles)
+app.post("/api/news/create", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const parsed = newsCreateSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -390,8 +561,8 @@ app.post("/api/news/create", requireRole(CONTENT_WRITE_ROLES), async (req, res) 
   }
 });
 
-// PUT /api/news/:id/update - Update existing news
-app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// PUT /api/news/:id/update - Update existing news (all news roles)
+app.put("/api/news/:id/update", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const parsed = newsCreateSchema.partial().safeParse(req.body);
@@ -405,9 +576,14 @@ app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, re
       return res.status(404).json({ error: "News not found" });
     }
 
-    // Check permissions: only creator or admin can edit
-    if (req.auth.role === "news_editor" && existing.createdBy !== req.auth.adminId) {
+    // news_drafter and news_editor can only edit their own articles
+    const restrictedRoles = [ADMIN_ROLES.NEWS_EDITOR, ADMIN_ROLES.NEWS_DRAFTER];
+    if (restrictedRoles.includes(req.auth.role) && existing.createdBy !== req.auth.adminId) {
       return res.status(403).json({ error: "You can only edit your own articles" });
+    }
+    // news_drafter cannot publish
+    if (req.auth.role === ADMIN_ROLES.NEWS_DRAFTER && parsed.data.status === "published") {
+      return res.status(403).json({ error: "News drafters cannot publish articles directly." });
     }
 
     const updated = await updateNews(id, parsed.data);
@@ -417,8 +593,8 @@ app.put("/api/news/:id/update", requireRole(CONTENT_WRITE_ROLES), async (req, re
   }
 });
 
-// DELETE /api/news/:id - Delete news (admin only)
-app.delete("/api/news/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// DELETE /api/news/:id - Delete news (super_admin and news_editor only)
+app.delete("/api/news/:id", requireRole(NEWS_PUBLISH_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const deleted = await deleteNews(id);
@@ -429,8 +605,8 @@ app.delete("/api/news/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.AD
   }
 });
 
-// PUT /api/news/:id/submit - Submit for approval (draft → pending)
-app.put("/api/news/:id/submit", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
+// PUT /api/news/:id/submit - Submit for approval (all news roles)
+app.put("/api/news/:id/submit", requireRole(NEWS_WRITE_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const updated = await submitForApproval(id);
@@ -441,8 +617,8 @@ app.put("/api/news/:id/submit", requireRole(CONTENT_WRITE_ROLES), async (req, re
   }
 });
 
-// PUT /api/news/:id/approve - Approve news (pending → published)
-app.put("/api/news/:id/approve", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// PUT /api/news/:id/approve - Approve news (pending → published) — news_drafter excluded
+app.put("/api/news/:id/approve", requireRole(NEWS_PUBLISH_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const updated = await approveNews(id, req.auth.adminId);
@@ -453,8 +629,8 @@ app.put("/api/news/:id/approve", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROL
   }
 });
 
-// PUT /api/news/:id/reject - Reject news (pending → draft)
-app.put("/api/news/:id/reject", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// PUT /api/news/:id/reject - Reject news (pending → draft) — news_drafter excluded
+app.put("/api/news/:id/reject", requireRole(NEWS_PUBLISH_ROLES), async (req, res) => {
   try {
     const id = req.params.id;
     const updated = await rejectNews(id);
@@ -465,10 +641,107 @@ app.put("/api/news/:id/reject", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLE
   }
 });
 
+// ==================== BRAND COLOR ENDPOINTS ====================
+
+const TAILWIND_CONFIG_PATH = "tailwind.config.js";
+
+function parseBrandColors(fileContent) {
+  const extract = (name) => {
+    const m = fileContent.match(new RegExp(`'${name}':\\s*'(#[0-9A-Fa-f]{6})'`));
+    return m ? m[1] : null;
+  };
+  return {
+    cardinalRed:  extract("cardinal-red"),
+    digitalRed:   extract("digital-red"),
+    digitalBlue:  extract("digital-blue"),
+    sand:         extract("sand"),
+    black:        extract("black"),
+  };
+}
+
+function applyBrandColors(fileContent, colors) {
+  let out = fileContent;
+  const pairs = [
+    ["cardinal-red",  colors.cardinalRed],
+    ["digital-red",   colors.digitalRed],
+    ["digital-blue",  colors.digitalBlue],
+    ["sand",          colors.sand],
+    ["black",         colors.black],
+  ];
+  for (const [name, hex] of pairs) {
+    if (!hex) continue;
+    out = out.replace(
+      new RegExp(`('${name}':\\s*')(#[0-9A-Fa-f]{6})'`),
+      `$1${hex}'`
+    );
+  }
+  return out;
+}
+
+const brandColorSchema = z.object({
+  cardinalRed:  z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  digitalRed:   z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  digitalBlue:  z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  sand:         z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  black:        z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+});
+
+// GET /api/brand/colors — read current colors from tailwind.config.js in repo (super_admin only)
+app.get("/api/brand/colors", requireSuperAdmin, async (_req, res) => {
+  try {
+    const apiPath = `/repos/${config.github.owner}/${config.github.repo}/contents/${TAILWIND_CONFIG_PATH}?ref=${config.github.branch}`;
+    const resp = await githubRequest(apiPath, { method: "GET" });
+    const data = await resp.json();
+    const content = Buffer.from(data.content, "base64").toString("utf-8");
+    const colors = parseBrandColors(content);
+    return res.json({ ok: true, colors });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Failed to read brand colors" });
+  }
+});
+
+// PUT /api/brand/colors — write updated colors back to tailwind.config.js via GitHub commit
+app.put("/api/brand/colors", requireSuperAdmin, async (req, res) => {
+  const parsed = brandColorSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid color values", details: parsed.error.flatten() });
+
+  try {
+    const apiPath = `/repos/${config.github.owner}/${config.github.repo}/contents/${TAILWIND_CONFIG_PATH}?ref=${config.github.branch}`;
+    const readResp = await githubRequest(apiPath, { method: "GET" });
+    const readData = await readResp.json();
+    const currentContent = Buffer.from(readData.content, "base64").toString("utf-8");
+    const updatedContent = applyBrandColors(currentContent, parsed.data);
+
+    if (updatedContent === currentContent) {
+      return res.json({ ok: true, message: "No changes detected" });
+    }
+
+    const writePath = `/repos/${config.github.owner}/${config.github.repo}/contents/${TAILWIND_CONFIG_PATH}`;
+    const writeResp = await githubRequest(writePath, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: "brand: update primary color palette via admin",
+        content: Buffer.from(updatedContent, "utf-8").toString("base64"),
+        sha: readData.sha,
+        branch: config.github.branch,
+      }),
+    });
+    const writeData = await writeResp.json();
+    return res.json({
+      ok: true,
+      commitSha: writeData.commit?.sha,
+      commitUrl: writeData.commit?.html_url,
+      colors: parseBrandColors(updatedContent),
+    });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Failed to update brand colors" });
+  }
+});
+
 // ==================== ANALYTICS ENDPOINTS ====================
 
-// GET /api/analytics/overview - Analytics overview (admin+)
-app.get("/api/analytics/overview", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// GET /api/analytics/overview - Analytics overview (super_admin + content_editor)
+app.get("/api/analytics/overview", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
     const allNews = await getAllNews();
     const publishedNews = allNews.filter((n) => n.status === "published");
@@ -494,8 +767,8 @@ app.get("/api/analytics/overview", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_R
   }
 });
 
-// GET /api/analytics/top-articles - Top performing articles (admin+)
-app.get("/api/analytics/top-articles", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// GET /api/analytics/top-articles - Top performing articles (super_admin + content_editor)
+app.get("/api/analytics/top-articles", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
     const published = await getNewsByStatus("published");
     const limit = parseInt(req.query.limit) || 5;
@@ -515,8 +788,8 @@ app.get("/api/analytics/top-articles", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADM
   }
 });
 
-// GET /api/analytics/activity - Activity timeline (admin+)
-app.get("/api/analytics/activity", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+// GET /api/analytics/activity - Activity timeline (super_admin + content_editor)
+app.get("/api/analytics/activity", requireRole(CONTENT_WRITE_ROLES), async (req, res) => {
   try {
     const allNews = await getAllNews();
 
@@ -542,6 +815,131 @@ app.get("/api/analytics/activity", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_R
     return res.json({ data: activity });
   } catch (error) {
     return res.status(500).json({ error: error instanceof Error ? error.message : "Failed to fetch activity" });
+  }
+});
+
+// ==================== CLOUD CONFIG ENDPOINTS ====================
+
+const cloudConfigCreateSchema = z.object({
+  label:     z.string().min(1).max(100),
+  cloudName: z.string().min(1).max(100),
+  apiKey:    z.string().default(""),
+  apiSecret: z.string().default(""),
+  isPrimary: z.boolean().default(false),
+  order:     z.number().int().min(0).default(0),
+  active:    z.boolean().default(true),
+});
+const cloudConfigUpdateSchema = cloudConfigCreateSchema.partial();
+
+// GET /api/cloud-configs — list all clouds with masked secrets
+app.get("/api/cloud-configs", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (_req, res) => {
+  try {
+    const configs = await listCloudConfigsPublic();
+    return res.json({ data: configs });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to list cloud configs" });
+  }
+});
+
+// POST /api/cloud-configs — add a new cloud
+app.post("/api/cloud-configs", requireRole([ADMIN_ROLES.SUPER_ADMIN]), async (req, res) => {
+  const parsed = cloudConfigCreateSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  try {
+    const created = await createCloudConfig(parsed.data);
+    invalidateUploadCache();
+    return res.status(201).json({ ok: true, data: created });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to create cloud config" });
+  }
+});
+
+// PUT /api/cloud-configs/:id — update a cloud
+app.put("/api/cloud-configs/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN]), async (req, res) => {
+  const parsed = cloudConfigUpdateSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid payload", details: parsed.error.flatten() });
+  try {
+    const updated = await updateCloudConfig(req.params.id, parsed.data);
+    if (!updated) return res.status(404).json({ error: "Cloud config not found" });
+    invalidateUploadCache();
+    return res.json({ ok: true, data: updated });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to update cloud config" });
+  }
+});
+
+// DELETE /api/cloud-configs/:id — remove a cloud
+app.delete("/api/cloud-configs/:id", requireRole([ADMIN_ROLES.SUPER_ADMIN]), async (req, res) => {
+  try {
+    const deleted = await deleteCloudConfig(req.params.id);
+    if (!deleted) return res.status(404).json({ error: "Cloud config not found" });
+    invalidateUploadCache();
+    return res.json({ ok: true });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to delete cloud config" });
+  }
+});
+
+// PATCH /api/cloud-configs/:id/primary — set as primary upload cloud
+app.patch("/api/cloud-configs/:id/primary", requireRole([ADMIN_ROLES.SUPER_ADMIN]), async (req, res) => {
+  try {
+    const updated = await setPrimaryCloud(req.params.id);
+    if (!updated) return res.status(404).json({ error: "Cloud config not found" });
+    invalidateUploadCache();
+    return res.json({ ok: true, data: updated });
+  } catch (err) {
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Failed to set primary cloud" });
+  }
+});
+
+// POST /api/cloud-configs/:id/test — verify Cloudinary credentials are valid
+app.post("/api/cloud-configs/:id/test", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+  try {
+    const cfg = await getCloudConfigWithSecret(req.params.id);
+    if (!cfg) return res.status(404).json({ ok: false, error: "Cloud config not found" });
+    if (!cfg.apiKey || !cfg.secret) {
+      return res.json({ ok: false, error: "No credentials stored for this cloud" });
+    }
+    const creds = Buffer.from(`${cfg.apiKey}:${cfg.secret}`).toString("base64");
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloudName}/usage`, {
+      headers: { Authorization: `Basic ${creds}` },
+    });
+    if (response.ok) {
+      return res.json({ ok: true });
+    }
+    const body = await response.json().catch(() => ({}));
+    return res.json({ ok: false, error: body.error?.message || `HTTP ${response.status}` });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Test failed" });
+  }
+});
+
+// GET /api/cloud-configs/:id/usage — fetch live storage usage from Cloudinary
+app.get("/api/cloud-configs/:id/usage", requireRole([ADMIN_ROLES.SUPER_ADMIN, ADMIN_ROLES.ADMIN]), async (req, res) => {
+  try {
+    const cfg = await getCloudConfigWithSecret(req.params.id);
+    if (!cfg) return res.status(404).json({ ok: false, error: "Cloud config not found" });
+    if (!cfg.apiKey || !cfg.secret) {
+      return res.json({ ok: false, error: "No credentials for this cloud" });
+    }
+    const creds = Buffer.from(`${cfg.apiKey}:${cfg.secret}`).toString("base64");
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloudName}/usage`, {
+      headers: { Authorization: `Basic ${creds}` },
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      return res.json({ ok: false, error: body.error?.message || `HTTP ${response.status}` });
+    }
+    const data = await response.json();
+    return res.json({
+      ok: true,
+      plan: data.plan,
+      storage: data.storage,   // { usage: bytes, limit: bytes, used_percent: number }
+      objects: data.objects,   // { usage: count, limit: count }
+      bandwidth: data.bandwidth,
+    });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Failed to fetch usage" });
   }
 });
 
@@ -687,6 +1085,7 @@ async function start() {
     // eslint-disable-next-line no-console
     console.log("Connected to MongoDB");
 
+    await seedFromEnvIfEmpty();
     const seeded = await ensureInitialSuperAdmin();
     if (seeded) {
       // eslint-disable-next-line no-console

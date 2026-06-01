@@ -1,19 +1,32 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Newspaper, Users, LogOut, BarChart2, FileText } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Users, LogOut, Cloud, FileText, Palette } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import type { AdminRole } from '../../lib/admin-types';
 
-const sidebarLinks = [
-  { label: 'Dashboard', href: '/admin', icon: <LayoutDashboard size={18} /> },
-  { label: 'News', href: '/admin/news', icon: <Newspaper size={18} /> },
-  { label: 'Content', href: '/admin/content', icon: <FileText size={18} /> },
-  { label: 'Users', href: '/admin/users', icon: <Users size={18} /> },
-  { label: 'Analytics', href: '/admin/analytics', icon: <BarChart2 size={18} /> },
+interface SidebarLink {
+  label: string;
+  href: string;
+  icon: React.ReactNode;
+  visibleTo?: AdminRole[];
+}
+
+const sidebarLinks: SidebarLink[] = [
+  { label: 'Dashboard', href: '/admin',         icon: <LayoutDashboard size={18} /> },
+  { label: 'News',      href: '/admin/news',    icon: <Newspaper size={18} />,  visibleTo: ['super_admin', 'news_editor', 'news_drafter'] },
+  { label: 'Content',   href: '/admin/content', icon: <FileText size={18} />,   visibleTo: ['super_admin', 'content_editor'] },
+  { label: 'Users',     href: '/admin/users',   icon: <Users size={18} />,      visibleTo: ['super_admin'] },
+  { label: 'Clouds',    href: '/admin/clouds',  icon: <Cloud size={18} />,      visibleTo: ['super_admin'] },
+  { label: 'Brand',     href: '/admin/brand',   icon: <Palette size={18} />,    visibleTo: ['super_admin'] },
 ];
 
 export function AdminLayout() {
   const { admin, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const visibleLinks = sidebarLinks.filter(
+    l => !l.visibleTo || (admin?.role && l.visibleTo.includes(admin.role))
+  );
 
   function handleLogout() {
     logout();
@@ -29,7 +42,7 @@ export function AdminLayout() {
           <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
         </div>
         <nav className="flex-1 p-4 space-y-1">
-          {sidebarLinks.map((link) => {
+          {visibleLinks.map((link) => {
             const isActive = location.pathname === link.href;
             return (
               <Link
