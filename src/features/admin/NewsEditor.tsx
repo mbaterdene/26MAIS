@@ -283,7 +283,7 @@ export function NewsEditorPage({ mode = 'create' }: NewsEditorPageProps) {
           title_mn={formData.title_mn}
           content_en={formData.content_en}
           content_mn={formData.content_mn}
-          image={formData.image}
+          image={formData.images[0] || ''}
           publishedDate={formData.publishedDate}
           onClose={() => setShowPreview(false)}
         />

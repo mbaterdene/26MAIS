@@ -143,13 +143,13 @@ export function HomePage() {
             >
               <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4 leading-tight">
                 {isEnglish
-                  ? 'The 2026-27 Application is Now Closed'
-                  : '2026-27 оны элсэлт хаагдлаа'}
+                  ? 'The 2026-27 Application is Opening Soon'
+                  : '2026-27 оны элсэлт удахгүй нээгдэнэ'}
               </h2>
               <p className="text-lg text-white/90 font-sans mb-6 max-w-2xl mx-auto">
                 {isEnglish
-                  ? 'Thank you for your interest in Mongol Aspiration School. We received an overwhelming response to this year\'s application. Registration for next year will open in June.'
-                  : 'Монгол Тэмүүлэл сургуульд сонирхож үзсэний төлөө баярлалаа. Энэ жилийн элсэлтэд маш их хүн хүсэлтийн гүйцэтгэл илгээсэн. Дараа жилийн бүртгэл 6-р сарын үед нээгдэх болно.'}
+                  ? 'Thank you for your interest in Mongol Aspiration School. Registration for the 2026-27 academic year will be opening soon. Please check back later for updates.'
+                  : 'Монгол Тэмүүлэл сургуулийг сонирхож буй танд баярлалаа. 2026-27 оны хичээлийн жилийн элсэлтийн бүртгэл удахгүй нээгдэх тул та мэдээллийг эргэж шалгана уу.'}
               </p>
               <Link
                 to="/admissions"
