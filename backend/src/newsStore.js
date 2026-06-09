@@ -16,6 +16,7 @@ const newsSchema = new mongoose.Schema(
     createdBy: { type: String, default: null },
     approvedBy: { type: String, default: null },
     approvedAt: { type: Date, default: null },
+    publishedDate: { type: String, default: null }, // User-entered publication date (YYYY-MM-DD format)
   },
   {
     timestamps: {
@@ -110,6 +111,7 @@ export async function createNews(data) {
     author,
     status = "draft",
     createdBy,
+    publishedDate,
   } = data;
 
   // Validate required fields
@@ -137,6 +139,7 @@ export async function createNews(data) {
       author: author || "Anonymous",
       status: status || "draft",
       createdBy: createdBy || null,
+      publishedDate: publishedDate || null,
     });
 
     const savedArticle = await newArticle.save();

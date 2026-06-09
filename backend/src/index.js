@@ -40,6 +40,13 @@ import {
   getCloudConfigWithSecret,
   seedFromEnvIfEmpty,
 } from "./cloudConfigStore.js";
+import {
+  initializeSettings,
+  getSetting,
+  getAllSettings,
+  updateSetting,
+  updateMultipleSettings,
+} from "./settingsStore.js";
 
 const app = express();
 const authSecret = config.authSecret || crypto.randomBytes(48).toString("hex");
@@ -738,6 +745,62 @@ app.put("/api/brand/colors", requireSuperAdmin, async (req, res) => {
   }
 });
 
+// ==================== SETTINGS ENDPOINTS ====================
+
+// GET /api/settings - Get all settings (public, no auth required)
+app.get("/api/settings", async (_req, res) => {
+  try {
+    const settings = await getAllSettings();
+    return res.json({ ok: true, settings });
+  } catch (error) {
+    return res.status(500).json({ ok: false, error: error instanceof Error ? error.message : "Failed to get settings" });
+  }
+});
+
+// GET /api/settings/:key - Get specific setting (public, no auth required)
+app.get("/api/settings/:key", async (req, res) => {
+  try {
+    const { key } = req.params;
+    const value = await getSetting(key);
+    return res.json({ ok: true, [key]: value });
+  } catch (error) {
+    return res.status(500).json({ ok: false, error: error instanceof Error ? error.message : "Failed to get setting" });
+  }
+});
+
+// PUT /api/settings/:key - Update specific setting (super_admin only)
+app.put("/api/settings/:key", requireSuperAdmin, async (req, res) => {
+  try {
+    const { key } = req.params;
+    const { value } = req.body;
+
+    if (value === undefined) {
+      return res.status(400).json({ error: "value is required" });
+    }
+
+    const updated = await updateSetting(key, value, req.userId);
+    return res.json({ ok: true, [key]: updated.value });
+  } catch (error) {
+    return res.status(400).json({ ok: false, error: error instanceof Error ? error.message : "Failed to update setting" });
+  }
+});
+
+// PUT /api/settings - Update multiple settings (super_admin only)
+app.put("/api/settings", requireSuperAdmin, async (req, res) => {
+  try {
+    const updates = req.body;
+
+    if (!updates || typeof updates !== "object") {
+      return res.status(400).json({ error: "Request body must be an object" });
+    }
+
+    const updated = await updateMultipleSettings(updates, req.userId);
+    return res.json({ ok: true, settings: updated });
+  } catch (error) {
+    return res.status(400).json({ ok: false, error: error instanceof Error ? error.message : "Failed to update settings" });
+  }
+});
+
 // ==================== ANALYTICS ENDPOINTS ====================
 
 // GET /api/analytics/overview - Analytics overview (super_admin + content_editor)
@@ -1091,6 +1154,10 @@ async function start() {
       // eslint-disable-next-line no-console
       console.log(`Initial super admin created: ${seeded.displayName} (${seeded.role})`);
     }
+
+    await initializeSettings();
+    // eslint-disable-next-line no-console
+    console.log("Settings initialized");
 
     // Global error handling middleware (must be last)
     app.use((err, req, res, next) => {
